@@ -1,0 +1,78 @@
+<div class="row">
+    <div class="col-sm-12">
+        <div class="page-header-title linear-progress-container-row">
+            <h4 class="page-title">Live Orders</h4>
+        </div>
+    </div>
+</div>
+
+<div class="customer-service-live-orders" ng-show="!customer_service.first_search">
+    <div class="panel panel-primary">
+        <div class="panel-heading with-loader">
+            <h3 class="panel-title">Orders</h3>
+            <div class="loader-container" ng-show="live_orders.loading">
+                <div class="filter-loader"></div>
+            </div>
+            <div style="width: 49px"></div>
+        </div>
+        <div class="panel-body">
+            <div class="row">
+                <table id="live_order_table" class="table table-hover content-table">
+                    <thead>
+                    <tr>
+                        <th>Order ID</th>
+                        <th>First</th>
+                        <th>Last</th>
+                        <th>Merchant ID</th>
+                        <th>Merchant Name</th>
+                        <th>Address</th>
+                        <th>Date</th>
+                        <th>Qty</th>
+                        <th>Total</th>
+                        <th>Cash</th>
+                        <th>Order Type</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr class="fade-in" ng-repeat="order in live_orders.orders" ng-click="live_orders.viewOrder(order)">
+                        <td ng-bind-html="order.order_id"></td>
+                        <td class="text-wrap-word-break">{{order.first_name}}</td>
+                        <td class="text-wrap-word-break">{{order.last_name}}</td>
+                        <td>{{order.merchant_id}}</td>
+                        <td class="text-wrap-word-break">{{order.name}}</td>
+                        <td>{{order.address1}}</td>
+                        <td>{{order.order_dt_tm}}</td>
+                        <td>{{order.order_qty}}</td>
+                        <td>{{order.grand_total}}</td>
+                        <td>{{order.cash}}</td>
+                        <td>{{order.order_type}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+                <div class="content-responsive">
+                    <div class="fade-in" ng-repeat="order in live_orders.orders">
+                        <div class="panel panel-body row-table">
+                            <div class="name" ng-show="!!order.name">
+                                <h5 class="dark-grey"><b>{{order.name}}</b></h5>
+                            </div>
+                            <div class="id" ng-show="!!order.order_id">
+                                <h5 class="dark-grey id-title">Order ID <span class="id-number" ng-bind-html="order.order_id"></span>
+                                </h5>
+                            </div>
+                            <div class="description clear">
+                                <div ng-show="!!order.merchant_id">Merchant ID:&nbsp;{{order.merchant_id}}</div>
+                                <div ng-show="!!order.first_name">Name: {{order.first_name}} {{order.last_name}}</div>
+                                <div class="merchant-address" ng-show="{{!!order.address1}}">{{order.address1}}</div>
+                                <div  ng-show="!!order.order_dt_tm">Date: {{order.order_dt_tm}}</div>
+                                <div  ng-show="!!order.order_qty">Qty: {{order.order_qty}}</div>
+                                <div  ng-show="!!order.grand_total">Total: {{order.grand_total}}</div>
+                                <div  ng-show="!!order.cash">Cash: {{order.cash}}</div>
+                                <div  ng-show="!!order.order_type">Type: {{order.order_type}}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

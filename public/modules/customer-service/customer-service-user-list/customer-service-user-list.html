@@ -1,0 +1,105 @@
+<div class="row">
+    <div class="col-sm-12">
+        <div class="page-header-title">
+            <h4 class="page-title">Users</h4>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">Search Users</h3>
+            </div>
+            <div class="panel-body">
+                <form name="user.search_form" novalidate ng-submit="user.searchUsers()">
+                    <div class="form-group">
+                        <div class="flex-init flex-align-items-center">
+                            <div class="search-box" style="width: 270px">
+                                <input type="text" class="form-control" name="search_text"
+                                       placeholder=""
+                                       ng-model="user.search.text">
+                            </div>
+                            <button type="submit" class='btn-default btn m-l-10'>Search</button>
+                        </div>
+
+                        <div class="alert alert-danger ng-hide alert-reg-position"
+                             ng-show="(user.search_form.search_text.$error.required && user.search_form.search_text.$touched) ||
+                                                user.search_form.search_text.$error.required && user.search_form.$submitted"
+                             role="alert">
+                            You must type at least one letter into the Users Search field.
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6" ng-class="user.hasSearchResult()">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">Recently Visited</h3>
+            </div>
+            <div class="panel-body recently-visited-container">
+                <div class="panel panel-body row-table"
+                     ng-repeat="recent_user in user.recently_visited_users"
+                     ng-click="user.viewUser(recent_user)">
+                    <div>
+                        <h5 class="bold">{{recent_user.user_id}} - {{recent_user.first_name}}
+                            {{recent_user.last_name}}</h5>
+                    </div>
+                    <div class="text-wrap-word-break">
+                        {{recent_user.email}}
+                    </div>
+                    <div>
+                        {{user.formatPhone(recent_user.contact_no)}}
+                    </div>
+                </div>
+                <div ng-show="user.recently_visited_users.length %2 == 1" class="fake-div"></div>
+                <div ng-show="user.recently_visited_users.length == 1" class="fix-div-1"></div>
+                <div ng-show="user.recently_visited_users.length >= 4" class="fake-div"></div>
+                <div ng-show="user.recently_visited_users.length >= 4" class="fake-div"></div>
+                <div ng-show="user.recently_visited_users.length == 5"></div>
+                <div ng-show="user.recently_visited_users.length == 5"></div>
+                <div ng-show="user.recently_visited_users.length == 5"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="customer-service-user-list row">
+    <div class="col-md-12">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">Search Results</h3>
+            </div>
+            <div class="panel-body">
+                <paginated-table container-id="'customer-user-search-results-table'"
+                                 field-names="user.fieldNames" params="user.searchParams"
+                                 click-event="user.viewUser" endpoint-string="'/user_search'">
+                    <content-responsive>
+                        <div class="panel panel-body row-table" ng-click="user.viewUser($parent.item)">
+                            <div class="name">
+                                <h5 class="dark-grey text-wrap-word-break"><b>{{$parent.item.email}}</b>
+                                </h5>
+                            </div>
+                            <div class="id">
+                                <h5 class="dark-grey id-title">User ID
+                                    <span class="id-number">{{$parent.item.user_id}}</span>
+                                </h5>
+                            </div>
+                            <div class="description clear">
+                                <div>{{$parent.item.first_name}}</div>
+                                <div>{{$parent.item.last_name}}</div>
+                                <div>Balance: {{$parent.item.balance}}</div>
+                                <div>Orders: {{$parent.item.orders}}</div>
+                                <div>Phone: {{user.formatPhone($parent.item.contact_no)}}</div>
+                                <div>Created: {{$parent.item.created}}</div>
+                            </div>
+                        </div>
+                    </content-responsive>
+                </paginated-table>
+            </div>
+        </div>
+    </div>
+</div>

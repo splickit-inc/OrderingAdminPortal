@@ -1,0 +1,27 @@
+<div class="left side-menu">
+    <div class="sidebar-inner slimscrollleft">
+        <!-- Divider -->
+        <div id="sidebar-menu" ng-controller="SideNavValueAddedResellerController">
+            <div class="user-details hidden-xs">
+                <div class="user-info" ng-cloak>
+                    Value Added Resellers
+                </div>
+            </div>
+            <ul>
+                <li>
+                    <a href="#/vars/manage" class="waves-effect" ng-click="set_hover('manage')" ng-class="{'active': active.manage}">
+                        <i class="fa fa-address-card" aria-hidden="true"></i>
+                        <span> Manage Vars </span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#/var/create" class="waves-effect" ng-click="set_hover('create')" ng-class="{'active': active.create}">
+                        <i class="fa fa-user-o" aria-hidden="true"></i>
+                        <span> Create New Var </span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <div class="clearfix"></div>
+    </div> <!-- end sidebarinner -->
+</div>

@@ -1,0 +1,51 @@
+.hours-heading {
+  width: 100%;
+}
+
+#hours-default-section {
+  .col-md-7, .col-md-5 {
+    @media (max-width: 1275px) {
+      width: 100%;
+    }
+  }
+
+  span.label {
+    padding: 0;
+  }
+  .alert-danger {
+    margin-top: 10px;
+    margin-bottom: 0px;
+  }
+  .input-micro {
+    width: 65px;
+    margin: 0px 4px;
+    @media (max-width: 768px) {
+      width: 55px;
+    }
+  }
+
+  .closed-all-day-checkbox{
+    padding-top: 10px;
+    margin-left: 15px;
+  }
+
+  .hours-rows-2{
+    .flex-init;
+    .flex-justify-content-start;
+    margin-left: 5px;
+    align-items: center;
+  }
+  @max-small-cards: 375px;
+  @min-medium-cards: 376px;
+  @max-medium-cards: 860px;
+  @min-table-screen: 861px;
+
+  .content-table
+  {
+    .content-table(@min-table-screen);
+  }
+
+  .content-responsive{
+    .content-responsive(@max-small-cards, @min-medium-cards, @max-medium-cards);
+  }
+}

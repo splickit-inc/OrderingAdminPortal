@@ -1,0 +1,241 @@
+<div class="row">
+    <div class="col-sm-12">
+        <div class="page-header-title">
+            <h4 class="page-title">User Management</h4>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Basic example -->
+    <div class="col-md-12">
+        <div class="panel panel-primary">
+            <div class="panel-heading"><h3 class="panel-title" ng-click="test()">Users</h3></div>
+            <div class="panel-body">
+                <div class="col-md-12">
+                    <div class="form-horizontal">
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">Search:</label>
+                            <div class="col-md-10">
+                                <input class="input-large form-control" type="text" name="user_filter"
+                                       ng-model="user_filter_text" ng-fade placeholder="Filter">
+                                <div class="pre-load-text">Search by name, email, or role.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="user-list-page">
+                    <table class="table table-hover content-table">
+                        <thead>
+                        <tr>
+                            <th ng-click="orderByChange('full_name')">Name
+                                <span class="sort-order"
+                                      ng-class="[{activesort: order_by === 'full_name'},{reverse: reverse}]"></span>
+                            </th>
+                            <th ng-click="orderByChange('email')">Email
+                                <span class="sort-order"
+                                      ng-class="[{activesort: order_by === 'email'},{reverse: reverse}]"></span>
+                            </th>
+                            <th ng-click="orderByChange('role_name')">Role
+                                <span class="sort-order"
+                                      ng-class="[{activesort: order_by === 'role_name'},{reverse: reverse}]"></span>
+                            </th>
+                            <th>Remove</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="user in users | filter : filterUsers |orderBy: order_by:reverse"
+                            ng-click="openEditUserModal(user, $index)">
+                            <td>
+                                {{user.full_name}}
+                            </td>
+                            <td>
+                                {{user.email}}
+                            </td>
+                            <td>
+                                {{user.role_name}}
+                            </td>
+                            <td class="delete-icon">
+                                <i class="fa fa-times" aria-hidden="true"
+                                   ng-click="deleteUserDialog(user, $index); $event.stopPropagation();"></i>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <div class="content-responsive">
+                        <div ng-repeat="user in users | filter : user_filter_text"
+                             ng-click="openEditUserModal(user, $index)">
+                            <div class="panel panel-body row-table">
+                                <div class="name">
+                                    <h5 class="dark-grey"><b>{{user.email}}</b></h5>
+                                </div>
+                                <div class="description clear">
+                                    <div>
+                                        Name: {{user.first_name}} {{user.last_name}}
+                                    </div>
+                                    <div class="last-row-container-with-delete-icon">
+                                        <div>
+                                            Role: {{user.role_name}}
+                                        </div>
+                                        <i class="fa fa-times delete-icon-small-screen" aria-hidden="true"
+                                           ng-click="deleteUserDialog(user, $index); $event.stopPropagation();"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div><!-- panel-body -->
+        </div> <!-- panel -->
+    </div> <!-- col-->
+</div>
+
+
+<!-- Delete User Modal -->
+<div id="delete-user-modal" class="modal fade" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Delete User</h4>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to remove the user
+                <span class="bold-red">{{delete_user_name}}</span>?
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" ng-disabled class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button class="btn btn-danger" ng-click="confirmDeleteUser()">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Delete User Modal -->
+<div id="edit-user-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <form name="edit_user_form" novalidate ng-submit="editUser()">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title">Edit User</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="control-label">Name</label>
+                        <div>
+                            <input id='first_name' name="first_name" class='input-large form-control' type='text'
+                                   ng-required="true" ng-model="edit_user_new.first_name" ng-fade placeholder="First">
+                            <div class="alert alert-danger ng-hide alert-reg-position"
+                                 ng-show="(edit_user_form.first_name.$error.required && edit_user_form.first_name.$touched) || (edit_user_form.first_name.$error.required && edit_user_form.$submitted)"
+                                 role="alert">First Name is required.
+                            </div>
+                            <input id='last_name' name="last_name" class='input-large form-control margin-top'
+                                   type='text'
+                                   ng-required="true" ng-model="edit_user_new.last_name" ng-fade placeholder="Last">
+                            <div class="alert alert-danger ng-hide alert-reg-position"
+                                 ng-show="(edit_user_form.last_name.$error.required && edit_user_form.last_name.$touched) || (edit_user_form.last_name.$error.required && edit_user_form.$submitted)"
+                                 role="alert">Last Name is required.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div ng-show="user_service.hasPermission('change_user_role')" class="form-group">
+                        <label class="control-label">User Role</label>
+                        <div class="input-large">
+                            <select name="role" class="form-control" ng-required="true"
+                                    ng-model="edit_user_new.role_id" ng-fade
+                                    ng-options="role.id as role.name for role in roles"
+                            >
+                                <option class="placeholder-color" value="" selected disabled>Select</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label">Email</label>
+                        <div>
+                            <input name="email" class='input-large form-control' type='email'
+                                   ng-required="true" ng-model="edit_user_new.email" ng-fade placeholder="Email">
+
+                            <div class="alert alert-danger ng-hide alert-reg-position"
+                                 ng-show="edit_user_form.email.$error.required && (edit_user_form.email.$faded || uc.submit)"
+                                 role="alert">Email is required.
+                            </div>
+
+                            <div class="alert alert-danger ng-hide alert-reg-position"
+                                 ng-show="(edit_user_form.email.$error.email && !edit_user_form.email.$error.required) && (edit_user_form.email.$faded || uc.submit)"
+                                 role="alert">Entered email is invalid.
+                            </div>
+
+                            <div class="alert alert-danger alert-reg-position ng-hide"
+                                 ng-show="edit_user_new.email_exist">This email has already been registered.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="checkbox">
+                        <label class="ng-binding">
+                            <input type="checkbox" name="setPassword" ng-init="edit_user_new.setPassword = false"
+                                   ng-model="edit_user_new.setPassword">
+                            Change Password?
+                            <span></span>
+                        </label>
+                    </div>
+
+                    <div ng-show="user_service.hasPermission('login_as_user')" class="form-group">
+                        <label class="control-label"><a href="javascript:void(0)" ng-click="logInAsUser()">Log In As
+                            User</a></label>
+                    </div>
+
+                    <div class="form-group" ng-if="edit_user_new.setPassword">
+                        <label class="control-label">Password</label>
+                        <div>
+                            <input type="password" name="password" class="input-large form-control "
+                                   placeholder="Password"
+                                   ng-model="edit_user_new.password" ng-fade ng-required="true">
+                            <div class="alert alert-danger ng-hide alert-reg-position"
+                                 ng-show="(edit_user_form.password.$error.required && edit_user_form.retype_password.$error.required)
+                                                    && (edit_user_form.retype_password.$faded || edit_user_form.$submitted)"
+                                 role="alert">Password is a required field.
+                            </div>
+                            <input type="password" name="retype_password"
+                                   class="input-large form-control inline margin-top" ng-fade
+                                   match="edit_user_new.password" placeholder="Confirm Password"
+                                   ng-model="edit_user_new.retype_password" ng-required="true">
+
+                            <div class="alert alert-danger alert-reg-position ng-hide"
+                                 ng-show="edit_user_form.retype_password.$error.mismatch && (edit_user_form.retype_password.$faded || edit_user_form.$submitted)">
+                                Passwords do not match.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="alert alert-danger alert-reg-position ng-hide"
+                         ng-show="!!edit_user_new.error">
+                        {{edit_user_new.error}}
+                    </div>
+
+                    <div ng-show="edit_user_new_processing" class="form-loader">
+                        <div class="line"></div>
+                        <div class="line"></div>
+                        <div class="line"></div>
+                        <div class="line"></div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" ng-disabled class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <button class="btn btn-danger">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

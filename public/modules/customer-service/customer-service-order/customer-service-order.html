@@ -1,0 +1,634 @@
+<div class="row">
+    <div class="col-sm-12">
+        <div class="page-header-title customer-service-bg">
+            <h4 class="page-title">Customer Service</h4>
+            <ol class="breadcrumb">
+                <li><a href="#/customer_service">Customer Service</a></li>
+                <li><a href="javascript:void(0);">Order #{{order.current_order.order_id}}</a></li>
+            </ol>
+        </div>
+    </div>
+</div>
+
+<div class="row order-summary">
+    <div class="col-md-9">
+        <div class="panel panel-primary">
+            <div class="panel-heading"><h3 class="panel-title">Order Summary
+                #{{order.current_order.order_id}}</h3>
+            </div>
+            <div class="panel-body">
+                <div class="row order-btn">
+                    <div class="tooltip-help">
+                        <button type="button" data-toggle="modal" data-target="#resend-order-modal"
+                                class="btn btn-success waves-effect waves-light">Resend
+                        </button>
+
+                        <span class="tool-tip-text-responsive button-popup">{{ 'CUSTOMER_SERVICE.TOOLTIP.ORDER.RESENT' | translate }}</span>
+                    </div>
+                    <!--<div class="tooltip-help">-->
+                        <!--<button type="button" data-toggle="modal" data-target="#reassign-order-modal"-->
+                                <!--class="btn btn-dark waves-effect waves-light">Reassign-->
+                        <!--</button>-->
+                        <!--<span class="tool-tip-text-responsive button-popup">{{ 'CUSTOMER_SERVICE.TOOLTIP.ORDER.REASSIGN' | translate }}</span>-->
+                    <!--</div>-->
+                    <div ng-show="!order.current_order.refunded" class="tooltip-help">
+                        <button type="button" data-toggle="modal" data-target="#refund-order-modal"
+                                class="btn btn-danger waves-effect waves-light">Refund
+                        </button>
+                        <span class="tool-tip-text-right button-popup">{{ 'CUSTOMER_SERVICE.TOOLTIP.ORDER.REFUND' | translate }}</span>
+                    </div>
+                    <div ng-show="order.current_order.refunded" class="tooltip-help">
+                        <button type="button" data-toggle="modal"
+                                class="btn btn-danger waves-effect waves-light fifty-opacity">Refund
+                        </button>
+                        <span class="tool-tip-text-right button-popup">{{order.current_order.refund_note}}</span>
+                    </div>
+                </div>
+                <div class="row m-t-15">
+                    <div class="col-md-2"></div>
+                    <div class="col-md-8">
+                        <div class="alert alert-success alert-reg-position form-submit-success"
+                             ng-show="order.resend_order.success"
+                             role="alert">
+                            <i class="fa fa-check-circle" aria-hidden="true"></i>
+                            Order <strong>#{{order.current_order.order_id}}</strong> has been
+                            resent!
+                        </div>
+
+                        <div class="alert alert-success alert-reg-position form-submit-success"
+                             ng-show="order.change_status_order.success"
+                             role="alert">
+                            <i class="fa fa-check-circle" aria-hidden="true"></i>
+                            Order status has changed!
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <table class="table m-t-30">
+                            <thead>
+                            <tr>
+                                <th>ORDER</th>
+                                <th></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td><a href="javascript:void(0);" data-toggle="modal"
+                                       data-target="#order-detail-modal"
+                                       ng-click="order.getOrderDetail()">Order Detail</a>
+                                </td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <a ng-href="https://device.splickit.com/app2/messagemanager/getorderbyid/{{order.current_order.order_id}}/email/"
+                                        target="_blank">
+                                        Order Detail Email Link
+                                    </a>
+                                </td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>Order Time</td>
+                                <td>{{order.current_order.order_dt_tm}}</td>
+                            </tr>
+                            <tr>
+                                <td>Pickup Time</td>
+                                <td>{{order.current_order.pickup_dt_tm}}</td>
+                            </tr>
+                            <tr>
+                                <td>Status</td>
+                                <td>{{order.current_order.status}}</td>
+                            </tr>
+                            <tr>
+                                <td>Promo Code</td>
+                                <td>{{order.current_order.promo_code}}</td>
+                            </tr>
+                            <tr>
+                                <td>Cash</td>
+                                <td>{{order.current_order.cash}}</td>
+                            </tr>
+                            <tr>
+                                <td>Quantity</td>
+                                <td>{{order.current_order.order_qty}}</td>
+                            </tr>
+                            <tr>
+                                <td>Amount</td>
+                                <td>{{order.current_order.order_amt}}</td>
+                            </tr>
+                            <tr>
+                                <td>Promo</td>
+                                <td>{{order.current_order.promo_amt}}</td>
+                            </tr>
+                            <tr>
+                                <td>Delivery</td>
+                                <td>{{order.current_order.delivery_amt}}</td>
+                            </tr>
+                            <tr>
+                                <td>Tip</td>
+                                <td>{{order.current_order.tip_amt}}</td>
+                            </tr>
+                            <tr>
+                                <td>Transaction Fees</td>
+                                <td>{{order.current_order.trans_fee_amt}}</td>
+                            </tr>
+                            <tr>
+                                <td>Tax</td>
+                                <td>{{order.current_order.total_tax_amt}}</td>
+                            </tr>
+                            <tr>
+                                <td>Grand Total</td>
+                                <td>{{order.current_order.grand_total}}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col-md-6">
+                        <table class="table m-t-30">
+                            <thead>
+                            <tr>
+                                <th>MERCHANT</th>
+                                <th></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>ID</td>
+                                <td>
+                                    <a href="javascript:void(0);"
+                                       ng-click="order.viewMerchant(order.current_order.merchant)">
+                                        {{order.current_order.merchant.merchant_id}}
+                                    </a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>External ID</td>
+                                <td>
+                                    {{order.current_order.merchant.merchant_external_id}}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Name</td>
+                                <td>{{order.current_order.merchant.name}}</td>
+                            </tr>
+                            <tr>
+                                <td>Address</td>
+                                <td>{{order.current_order.merchant.address1}}</td>
+                            </tr>
+                            <tr>
+                                <td>Phone</td>
+                                <td>{{order.current_order.merchant.phone_no}}</td>
+                            </tr>
+                            <tr>
+                                <td>Email</td>
+                                <td class="text-wrap-word-break">
+                                    {{order.current_order.merchant.shop_email}}
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+
+                        <table class="table m-t-30">
+                            <thead>
+                            <tr>
+                                <th>CUSTOMER</th>
+                                <th></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>User ID</td>
+                                <td>
+                                    <a href="javascript:void(0);"
+                                       ng-click="order.viewUser(order.current_order.order_user)">
+                                        {{order.current_order.order_user.user_id}}
+                                    </a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>First Name</td>
+                                <td>{{order.current_order.order_user.first_name}}</td>
+                            </tr>
+                            <tr>
+                                <td>Last Name</td>
+                                <td>{{order.current_order.order_user.last_name}}</td>
+                            </tr>
+                            <tr>
+                                <td>Email</td>
+                                <td class="text-wrap-word-break">
+                                    {{order.current_order.order_user.email}}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Note</td>
+                                <td>{{order.current_order.note}}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div><!-- panel-body -->
+        </div> <!-- panel -->
+    </div> <!-- col-->
+
+</div>
+
+<div class="row order-summary">
+    <div class="col-md-9">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">
+                    Merchant Message History
+                </h3>
+            </div>
+            <div class="panel-body">
+                <table class="table table-hover content-table">
+                    <thead>
+                    <tr>
+                        <th>Message Format</th>
+                        <th>Next Message DT</th>
+                        <th>Send DT</th>
+                        <th colspan="2">Response</th>
+                        <th>Viewed</th>
+                        <th>Status</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="merchant_message in order.merchant_message_history"
+                        ng-click="order.viewMerchantMessageResponse(merchant_message.response)">
+                        <td>{{merchant_message.message_format.type_id_name}}</td>
+                        <td>{{merchant_message.next_message_dt_tm}}</td>
+                        <td>{{merchant_message.sent_dt_tm}}</td>
+                        <td colspan="2">{{merchant_message.truncated_response}}</td>
+                        <td>{{merchant_message.viewed}}</td>
+                        <td>{{merchant_message.locked}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div><!-- panel-body -->
+        </div> <!-- panel -->
+    </div> <!-- col-->
+
+</div>
+
+<div id="send-now-modal" class="modal fade" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                    aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="myModalLabel">Resend Order
+                    #{{order.current_order.order_id}}</h4>
+            </div>
+            <form name="order.change_order_status_form" class="form-horizontal" novalidate
+                  ng-submit="order.changeOrderStatus()">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="block col-md-3">Status</label>
+                        <div class="col-md-9">
+                            <div class="select input-med">
+                                <select name="new_status" class="form-control"
+                                        ng-model="order.change_status_order.new_status"
+                                        ng-required="true" ng-fade
+                                        ng-options="status.id as status.name for status in order.statuses">
+                                    <option class="placeholder-color" value="" selected disabled>New
+                                        Status
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="alert alert-danger ng-hide alert-reg-position"
+                             ng-show="order.change_order_status_form.new_status.$error.required
+                                     && (order.change_order_status_form.new_status.$faded
+                                     || order.change_status_order.submit)"
+                             role="alert">
+                            A new status required.
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" ng-disabled class="btn btn-default" data-dismiss="modal">
+                        Cancel
+                    </button>
+                    <button class="btn btn-success">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div id="resend-order-modal" class="modal fade" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                    aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">Resend/Send Now Order</h4>
+            </div>
+            <form name="order.resend_order_form" novalidate ng-submit="order.resendOrder()">
+                <div class="modal-body">
+                    <div class="form-group m-l-10">
+                        <label class="block">Order ID: </label>
+                        <span>{{order.current_order.order_id}}</span>
+                    </div>
+
+                    <div class="form-group m-l-10">
+                        <label class="block">Send Order to Email or Fax? (optional) </label>
+                        <div class="input-large">
+                            <input type="text" class="form-control"
+                                   name="resend_order_new_destination_address"
+                                   ng-model="order.resend_order.new_destination_address" ng-fade
+                                   placeholder="Enter Email or Fax Number">
+                            <div class="alert alert-info">
+                                Make sure you definitely want to resend the order before clicking
+                                <strong>Submit</strong>!
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" ng-disabled class="btn btn-default" data-dismiss="modal">
+                        Cancel
+                    </button>
+                    <button class="btn btn-success">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!--<div id="reassign-order-modal" class="modal fade" tabindex="-1" role="dialog"-->
+     <!--aria-labelledby="myModalLabel" aria-hidden="true">-->
+    <!--<div class="modal-dialog modal-md">-->
+        <!--<div class="modal-content">-->
+            <!--<div class="modal-header">-->
+                <!--<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span-->
+                    <!--aria-hidden="true">&times;</span>-->
+                <!--</button>-->
+                <!--<h4 class="modal-title">Reassign Order #{{order.current_order.order_id}}</h4>-->
+            <!--</div>-->
+            <!--<form name="order.reassign_order_form" novalidate ng-submit="order.reassignOrder()">-->
+                <!--<div class="modal-body">-->
+                    <!--<div class="form-group m-l-10">-->
+                        <!--<label class="block">Merchant ID</label>-->
+                        <!--<div class="input-large">-->
+                            <!--<input type="text" class="form-control" name="new_merchant_id"-->
+                                   <!--ng-model="order.reassign_order.merchant_id" ng-fade-->
+                                   <!--ng-required="true"-->
+                                   <!--placeholder="Enter ID">-->
+                            <!--<div class="alert alert-danger ng-hide alert-reg-position"-->
+                                 <!--ng-show="order.reassign_order_form.new_merchant_id.$error.required-->
+                                     <!--&& (order.reassign_order_form.new_merchant_id.$faded-->
+                                     <!--|| order.reassign_order_form.$submitted)"-->
+                                 <!--role="alert">-->
+                                <!--Merchant ID is required.-->
+                            <!--</div>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                <!--</div>-->
+                <!--<div class="modal-footer">-->
+                    <!--<button type="button" ng-disabled class="btn btn-default" data-dismiss="modal">-->
+                        <!--Cancel-->
+                    <!--</button>-->
+                    <!--<button class="btn btn-success">Submit</button>-->
+                <!--</div>-->
+            <!--</form>-->
+        <!--</div>-->
+    <!--</div>-->
+<!--</div>-->
+
+<div id="order-detail-modal" class="modal fade" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                    aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">Order Detail #{{order.order_detail.order_id}}</h4>
+            </div>
+            <div class="modal-body" ng-show="!order.order_detail_loading">
+                <div>
+                    <h4 class="dark-grey">{{order.order_detail.customer_full_name}}</h4>
+                    <div>Phone: {{order.order_detail.user_phone_no}}</div>
+                    <div>Loyalty No: {{order.order_detail.loyalty_number}}</div>
+                </div>
+
+                <div>
+                    <h4 class="dark-grey">Store Info</h4>
+                    <div>{{order.order_detail.merchant_name}}</div>
+                    <div>{{order.order_detail.merchant_addr}}</div>
+                    <div>{{order.order_detail.merchant_city_st_zip}}</div>
+                    <div>Merchant ID: {{order.order_detail.merchant_id}}</div>
+                </div>
+
+                <div ng-show="!!order.order_detail.delivery_info">
+                    <h4 class="dark-grey">Delivery</h4>
+                    <div class="well well-sm">
+                        <div>Delivery To: {{order.order_detail.delivery_info.name}}</div>
+                        <div>{{order.order_detail.delivery_info.address1}}</div>
+                        <div>{{order.order_detail.delivery_info.city}},
+                            {{order.order_detail.delivery_info.state}}
+                            {{order.order_detail.delivery_info.zip}}
+                        </div>
+                        <div>{{order.formatPhone(order.order_detail.delivery_info.phone_no)}}</div>
+                        <div ng-if="!!order.order_detail.delivery_info.instructions">Delivery Notes:
+                            {{order.order_detail.delivery_info.instructions}}
+                        </div>
+                    </div>
+                </div>
+
+                <h4 class="dark-grey">Items</h4>
+                <div class="row" ng-repeat="order_item in order.order_detail.order_details">
+                    <hr/>
+                    <div class="item">
+                        <strong>{{order_item.quantity}} {{order_item.item_name}} {{order_item.size_name}}
+                            </strong>
+                        <div>{{order_item.item_total_w_mods}}</div>
+                    </div>
+
+                    <div
+                        ng-show="order_item.order_detail_hold_it_modifiers.length > 0 || order_item.order_detail_added_modifiers.length > 0">
+                        <div ng-show="order_item.order_detail_hold_it_modifiers.length > 0"
+                             class="dark-grey-2 m-l-10">HOLD THE:
+                        </div>
+                        <div class="m-l-20"
+                             ng-show="order_item.order_detail_hold_it_modifiers.length > 0">
+                            <span
+                                ng-repeat="hold_modifier in order_item.order_detail_hold_it_modifiers">
+                                {{hold_modifier.mod_name}},
+                            </span>
+                        </div>
+                        <div ng-show="order_item.order_detail_added_modifiers.length > 0"
+                             class="dark-grey-2 m-l-10">WITH:
+                        </div>
+                        <div class="m-l-20"
+                             ng-show="order_item.order_detail_added_modifiers.length > 0">
+                            <span
+                                ng-repeat="add_modifier in order_item.order_detail_added_modifiers">
+                                {{add_modifier.mod_name}},
+                            </span>
+                        </div>
+                        <div ng-if="!!order_item.note">
+                            <h5 class="dark-grey bold">Item Notes:</h5>
+                            <div>{{order_item.note}}</div>
+                        </div>
+                    </div>
+                </div>
+                <div ng-if="!!order.order_detail.note">
+                    <hr>
+                    <h5 class="dark-grey bold">Order Notes:</h5>
+                    <div>{{order.order_detail.note}}</div>
+                </div>
+                <div class="total-container">
+                    <div class="payment-numbers">
+                        <div>Sales Total:</div>
+                        <div class="amount">{{order.order_detail.order_amt}}</div>
+                    </div>
+                    <div class="payment-numbers">
+                        <div>Total Tax:</div>
+                        <div class="amount">{{order.order_detail.total_tax_amt}}</div>
+                    </div>
+                    <div class="payment-numbers">
+                        <div>Tip:</div>
+                        <div class="amount">{{order.order_detail.tip_amt}}</div>
+                    </div>
+                    <div class="payment-numbers">
+                        <div>Delivery:</div>
+                        <div class="amount">{{order.order_detail.delivery_amt}}</div>
+                    </div>
+                    <div class="payment-numbers">
+                        <div>Transaction Fees:</div>
+                        <div class="amount">{{order.order_detail.trans_fee_amt}}</div>
+                    </div>
+                    <div class="payment-numbers">
+                        <div>Grand Total:</div>
+                        <div class="amount">{{order.order_detail.grand_total}}</div>
+                    </div>
+                </div>
+            </div>
+            <div ng-show="order.order_detail_loading" class="modal-body">
+                <div class="filter-loader-contain">
+                    <div class="filter-loader"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" ng-disabled class="btn btn-primary" data-dismiss="modal">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="refund-order-modal" class="modal fade" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                    aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">Refund Order #{{order.current_order.order_id}}</h4>
+            </div>
+            <form name="order.refund_order_form" novalidate ng-submit="order.refundOrder()">
+                <div class="modal-body">
+                    <div class="form-group m-l-10">
+                        <label class="block">Refund Amount</label>
+                        <div class="input-large">
+                            <input type="text" class="form-control" name="refund_amount"
+                                   ng-model="order.refund_order.refund_amount" ng-fade
+                                   currency-format amount="order.refund_order.refund_amount"
+                                   validate-max="order.current_order.grand_total"
+                                   ng-required="true" ng-max="order.current_order.grand_total"
+                                   placeholder="Enter Amount">
+                            <div class="alert alert-danger ng-hide alert-reg-position"
+                                 ng-show="order.refund_order_form.refund_amount.$error.required
+                                     && (order.refund_order_form.refund_amount.$faded
+                                     || order.refund_order_form.$submitted)"
+                                 role="alert">
+                                Refund Amount is required.
+                            </div>
+                            <div class="alert alert-danger alert-reg-position"
+                                 ng-show="order.refund_order_form.refund_amount.$error.invalidMaxValue && (order.refund_order_form.refund_amount.$faded
+                                     || order.refund_order_form.$submitted)"
+                                 role="alert">
+                                Refund Amount cannot be greater than the original order grand total.
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="form-group m-l-10">
+                        <label class="block">Employee Name</label>
+                        <div class="input-large">
+                            <input type="text" class="form-control" name="employee_name"
+                                   ng-model="order.refund_order.employee_name" ng-fade
+                                   ng-required="true"
+                                   placeholder="For Notes">
+
+                            <div class="alert alert-danger ng-hide alert-reg-position"
+                                 ng-show="order.refund_order_form.employee_name.$error.required
+                                     && (order.refund_order_form.employee_name.$faded
+                                     || order.refund_order_form.$submitted)"
+                                 role="alert">
+                                Employee Name is required.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group m-l-10">
+                        <label class="block">Note</label>
+                        <div class="input-large">
+                            <textarea class="form-control" rows="2"
+                                      name="note" ng-model="order.refund_order.note"
+                                      ng-required="true"
+                                      required="required"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group m-l-10">
+                        <div class="alert alert-danger ng-hide alert-reg-position"
+                             ng-show="order.refund_error"
+                             role="alert">
+                            Unsuccessful Refund - API Server Response: {{order.refund_error_message}}
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" ng-disabled class="btn btn-default"
+                            data-dismiss="modal">Cancel
+                    </button>
+                    <button class="btn btn-success">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<div id="merchant-message-response-modal" class="modal fade" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">Merchant Message Response</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group m-l-10 break-word">
+                    {{order.merchant_message_response}}
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" ng-disabled class="btn btn-primary" data-dismiss="modal">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

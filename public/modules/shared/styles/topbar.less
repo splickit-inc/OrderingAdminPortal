@@ -1,0 +1,110 @@
+.topbar {
+  -webkit-box-shadow: 1px 0 3px 0 rgba(0, 0, 0, 0.2);
+  background: #ffffff;
+  box-shadow: 1px 0 3px 0 rgba(0, 0, 0, 0.2);
+  left: 0;
+  position: fixed;
+  right: 0;
+  top: 0;
+  z-index: 999;
+  .topbar-left {
+    .flex-init;
+    .flex-justify-content-center;
+    .flex-align-items-center;
+    float: left;
+    height: 70px;
+    position: relative;
+    width: 240px;
+    z-index: 1;
+    .logo div{
+      background: @navbar-logo no-repeat;
+      height: 48px;
+      width: 151px;
+      background-size: 151px 48px
+    }
+    @media (max-width: @sidebar-collapse-threshold-res){
+      width: 70px;
+    }
+  }
+}
+
+#wrapper.enlarged .topbar .topbar-left {
+  width: 70px !important;
+}
+
+#wrapper.enlarged .topbar .topbar-left .logo {
+  display: none;
+  opacity: 0;
+}
+
+#wrapper.enlarged .topbar .topbar-left .logo-sm {
+  display: inline-block;
+}
+
+.logo,
+.logo-sm {
+  color: @text-color;
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: .05em;
+  line-height: 70px;
+  text-transform: uppercase;
+}
+
+.logo {
+  @media (max-width: @sidebar-collapse-threshold-res){
+    display: none !important;
+  }
+}
+
+.logo-sm {
+  display: none;
+  @media (max-width: @sidebar-collapse-threshold-res)
+  {
+    display: inline-block;
+  }
+}
+
+.navbar-inverse {
+  background: @navbar-bg;
+  margin-bottom: 0;
+  border: none;
+  .navbar-nav {
+    margin: 2px 0 0 0;
+    @media (max-width: 767px) {
+      margin: 6px 0 0 0;
+    }
+    &.fix-nav-bar-menu-margin {
+      @media (max-width: 620px) {
+        margin-right: -15px;
+      }
+    }
+  }
+}
+
+.container {
+  width: auto;
+  padding-right: 15px;
+  padding-left: 15px;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+@media (max-width: 767px) {
+  .navbar-inverse, .navbar-default {
+    .navbar-nav .open .dropdown-menu {
+      background-color: @dropdown-bg;
+      & > li > a {
+        color: @dropdown-link-color;
+        &:hover{
+          color: @dropdown-link-hover-color;
+          background-color: @dropdown-link-hover-bg;
+        }
+      }
+      box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
+      left: auto;
+      position: absolute;
+      right: 0;
+    }
+  }
+}

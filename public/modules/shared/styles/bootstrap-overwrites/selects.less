@@ -1,0 +1,70 @@
+.select {
+  position: relative;
+  display: block;
+  height: @input-height-base;
+  min-width: 42px;
+  &.inline{
+    display: inline-block;
+    vertical-align: bottom;
+  }
+}
+
+.select select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  display: inline-block;
+  width: 100%;
+  cursor: pointer;
+  outline: 0;
+  border: 0;
+  height: @input-height-base; // Make inputs at least the height of their button counterpart (base line-height + padding + border)
+  padding: .3em;
+  padding-right: 20px;
+  @media (max-width: @screen-sm) {
+    font-size: @font-size-base - 1;
+  }
+  font-size: @font-size-base;
+  line-height: @line-height-base;
+  color: @input-color;
+  background-color: @input-bg;
+  border: 1px solid @input-border;
+  margin: 0 !important;
+  .form-control-focus();
+  .border-radius-all(@input-border-radius);
+  .no-antialiased;
+
+  &::-ms-expand {
+    display: none;
+    border: 0;
+    background-color: transparent;
+  }
+
+  &[disabled],
+  &[readonly],
+  fieldset[disabled] & {
+    background-color: @input-bg-disabled;
+    opacity: 1; // iOS fix for unreadable disabled content; see https://github.com/twbs/bootstrap/issues/11655
+  }
+
+  &[disabled],
+  fieldset[disabled] & {
+    cursor: @cursor-disabled;
+  }
+}
+
+select::-ms-expand {
+  display: none;
+}
+
+select:not([multiple]){
+  -webkit-appearance:none;
+  -moz-appearance:none;
+  background-position:right 50%;
+  background-repeat:no-repeat;
+  background-image:url("data:image/svg+xml,%3Csvg%20version%3D%271.1%27%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20xmlns%3Axlink%3D%27http%3A%2F%2Fwww.w3.org%2F1999%2Fxlink%27%20width%3D%2722%27%20height%3D%2728%27%20viewBox%3D%270%200%2024%2022%27%3E%3Cpath%20fill%3D%27%23303030%27%20d%3D%27M7.406%207.828l4.594%204.594%204.594-4.594%201.406%201.406-6%206-6-6z%27%3E%3C%2Fpath%3E%3C%2Fsvg%3E");
+  padding: .3em;
+  padding-right:1.5em;
+  padding-left: 0.7em;
+  border-radius:0;
+}

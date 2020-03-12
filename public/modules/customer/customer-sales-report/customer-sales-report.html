@@ -1,0 +1,106 @@
+<div class="row">
+    <div class="col-sm-12">
+        <div class="page-header-title">
+            <h4 class="page-title">Sales Status Report</h4>
+            <ol class="breadcrumb">
+                <li><a href="/#/">Home</a></li>
+            </ol>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Basic example -->
+    <div class="col-md-12">
+        <div class="panel panel-primary">
+            <div
+                    class="panel-heading"><h3 class="panel-title">Customer Onboarding Progress</h3>
+            </div>
+            <div class="panel-body min-panel">
+                <div class="form-horizontal">
+                    <div class="form-group">
+                        <label class="col-md-2 control-label">Date Range</label>
+                        <div class="col-md-10">
+                            <div class="select input-large">
+                                <select name="brand" class="form-control"
+                                        ng-required="true"
+                                        ng-model="vm.selectedPeriod"
+                                        ng-change="vm.onPeriodChanged()"
+                                        ng-options="timePeriod.desc for timePeriod in vm.timePeriods track by timePeriod.key">
+                                    <option class="placeholder-color" value="" selected disabled>
+                                        Time
+                                        Period
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div ng-show="!!vm.selectedPeriod && vm.selectedPeriod.key=='custom'">
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">From</label>
+                            <div class='col-md-10'>
+                                <div class='input-group input-large date' id='from_date'>
+                                    <input type='text' class="form-control"/>
+                                    <span class="input-group-addon">
+                                        <span class="fa fa-calendar"></span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">To</label>
+                            <div class='col-md-10'>
+                                <div class='input-group input-large date' id='to_date'>
+                                    <input type='text' class="form-control"/>
+                                    <span class="input-group-addon">
+                                        <span class="fa fa-calendar"></span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div ng-show="vm.processing" class="col-md-12" style="padding: 60px">
+                        <div class="form-loader">
+                            <div class="line"></div>
+                            <div class="line"></div>
+                            <div class="line"></div>
+                            <div class="line"></div>
+                        </div>
+                    </div>
+                </div>
+                <div ng-show="(!vm.leads || !vm.leads.length) && !vm.processing"
+                     class="col-md-12 message-container">
+                    <h5 class="pre-load-text">No records were found.</h5>
+                </div>
+                <table ng-show="!!vm.leads && !!vm.leads.length && !vm.processing" class="table">
+                    <thead>
+                    <tr>
+                        <th class="right-text">Customer ID</th>
+                        <th>Store</th>
+                        <th>Owner</th>
+                        <th>City/State</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Started</th>
+                        <th>Paid</th>
+                        <th>Appointment Set</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="lead in vm.leads">
+                        <td class="right-text">{{ lead.id }}</td>
+                        <td>{{ lead.store_name }}</td>
+                        <td>{{ lead.contact_name }}</td>
+                        <td>{{ lead.store_city }} {{ lead.store_state }}</td>
+                        <td>{{ lead.contact_email }}</td>
+                        <td>{{ lead.contact_phone_no }}</td>
+                        <td>{{ lead.created_at |toDate | date: 'MM/dd/yyyy'}}</td>
+                        <td>{{ lead.first_form_completion |toDate | date: 'MM/dd/yyyy'}}</td>
+                        <td>{{ lead.second_form_completion |toDate | date: 'MM/dd/yyyy'}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div><!-- panel-body -->
+        </div> <!-- panel -->
+    </div> <!-- col-->
+</div>

@@ -1,0 +1,48 @@
+@import "../../shared/styles/flex.less";
+.merchant-nav-bar-container{
+    .flex-init;
+    .flex-justify-content-end;
+    height: 70px;
+    align-items: center;
+
+    .merchant-progress-bar-box{
+        .flex-init;
+        .flex-direction-column;
+        width: 300px;
+        min-width: 0px;
+        margin-right: 10px;
+        margin-left: 14px;
+        .title{
+            font-size: 16px;
+            align-self: center;
+            color: @text-color;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            width: 100%;
+            text-align: center;
+        }
+
+        .progress-lg{
+            font-size: 12px;
+            line-height: 20px;
+            height: 20px;
+            margin-bottom: 0px;
+            border-radius: 4px;
+            background-color: #f5f5f5;
+            box-shadow: none;
+            -webkit-box-shadow: none;
+            overflow: hidden;
+            box-sizing: border-box;
+        }
+    }
+}
+
+.logo{
+    color: @text-color;
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: .05em;
+    line-height: 70px;
+    text-transform: uppercase;
+}

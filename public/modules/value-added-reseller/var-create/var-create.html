@@ -1,0 +1,71 @@
+<div class="row">
+    <div class="col-sm-12">
+        <div class="page-header-title">
+            <h4 class="page-title">Create VA Reseller</h4>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Basic example -->
+    <div class="col-md-12">
+        <div class="panel panel-primary">
+            <div class="panel-heading"><h3 class="panel-title">Create Value Added Reseller</h3></div>
+            <div class="panel-body">
+                <form name="create_value_added_reseller_form" class="form-horizontal"
+                      novalidate ng-submit="createNewValueAddedReseller()">
+                    <div class="col-md-12">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">Name</label>
+                                <div class="col-md-9">
+                                    <input name="name" class = 'input-med form-control' type='text'
+                                           ng-required="true" ng-model="new_value_added_reseller.name" ng-fade >
+
+                                    <div class="alert alert-danger ng-hide alert-reg-position"
+                                         ng-show="create_value_added_reseller_form.name.$error.required && (create_value_added_reseller_form.name.$faded || new_value_added_reseller.submit)"
+                                         role="alert">Name is required.</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">Description</label>
+                                <div class="col-md-9">
+                                    <textarea class="form-control" rows="2" name="description" ng-model="new_value_added_reseller.description" ></textarea>
+
+                                    <div class="alert alert-danger ng-hide alert-reg-position"
+                                         ng-show="create_value_added_reseller_form.description.$error.required && (create_value_added_reseller_form.description.$faded || new_value_added_reseller.submit)"
+                                         role="alert">Description is required.</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div ng-show="new_value_added_reseller.processing" class="form-loader">
+                        <div class="line"></div>
+                        <div class="line"></div>
+                        <div class="line"></div>
+                        <div class="line"></div>
+                    </div>
+
+                    <div class="col-md-12 m-t-10">
+                        <div class="col-md-12" ng-show="new_value_added_reseller.success">
+                            <div class="alert alert-success alert-reg-position"
+                                 role="alert">
+                                <i class="fa fa-check-circle" aria-hidden="true"></i> The value added reseller {{success_new_value_added_reseller}} has been created!
+                            </div>
+                        </div>
+
+
+                        <button class = 'btn-success btn pull-right'>Create</button>
+                    </div>
+                </form><!-- panel-body -->
+            </div> <!-- panel -->
+
+        </div> <!-- col-->
+    </div>
+</div>

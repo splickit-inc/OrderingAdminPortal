@@ -1,0 +1,59 @@
+.custom-picker-colors {
+    background-color: @body-bg;
+    td.available:hover {
+        background-color: @td-available-hover;
+    }
+    td.start-date {
+        background-color: @td-start-date;
+    }
+    td.off {
+        background-color: @td-off
+    }
+    td.off.in-range {
+        background-color: @td-off-in-range;
+    }
+    td.off.start-date {
+        background-color: @td-off-start-date;
+    }
+    td.in-range {
+        background-color: @td-in-range-background;
+        color: @td-in-range-color;
+    }
+    td.end-date {
+        background-color: @td-end-date;
+    }
+    .ranges li:hover {
+        background-color: @ranges-li-hover;
+    }
+}
+
+.arrow {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+}
+
+.arrow::before {
+    position: absolute;
+    content: '\276e';
+    top: 5px;
+    right: 9px;
+    height: 20px;
+    color: #000;
+    transform: rotate(-90deg);
+}
+
+#statements-report-page{
+    @max-small-cards: 529px;
+    @min-medium-cards: 530px;
+    @max-medium-cards: 880px;
+    @min-table-screen: 881px;
+
+    .content-table {
+        .content-table(@min-table-screen);
+    }
+
+    .content-responsive {
+        .content-responsive(@max-small-cards, @min-medium-cards, @max-medium-cards);
+    }
+}

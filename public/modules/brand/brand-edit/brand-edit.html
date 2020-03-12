@@ -1,0 +1,121 @@
+<div>
+    <div class="page-header-title">
+        <h4 class="page-title">Brand Edition</h4>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h3 class="panel-title">BRAND INFORMATION</h3>
+                </div>
+                <div class="panel-body">
+                    <div class="filter-loader-contain" ng-show="vm.processing && !vm.error">
+                        <div class="filter-loader"></div>
+                    </div>
+                    <div class="gray-text text-center" ng-if="vm.error">
+                        <h5 class="pre-load-text">{{vm.errorMessage}}</h5>
+                    </div>
+                    <form name="vm.brand_form" class="form-horizontal" novalidate ng-submit="vm.submitButton()" ng-if="!vm.processing && !vm.error">
+                        <div class="form-group">
+                            <label class="col-md-4 control-label">Brand Name</label>
+                            <div class="col-md-8 m-t-5-sm">
+                                <input type="text" class="input-large form-control" name="name" ng-keyup="vm.updateDefaultUrl()"
+                                       ng-model="vm.brandModel.brand_name" ng-fade ng-required="true">
+                                <div class="error-large error-large alert alert-danger ng-hide alert-reg-position"
+                                     ng-show="vm.brand_form.name.$error.required && (vm.brand_form.name.$touched || vm.brand_form.$submitted)"
+                                     role="alert">
+                                    Name is required.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-4 control-label">Active</label>
+                            <div class="col-md-8 m-t-5">
+                                <toggle-switch name="active"
+                                               ng-model="vm.brandModel.active">
+                                </toggle-switch>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-md-4 control-label">Default URL</label>
+                            <div class="col-md-8 m-t-5-sm">
+                                <input type="text" class="input-large form-control" name="default_url" ng-keyup="brand.brandModel.default_url_customized = true"
+                                       ng-model="vm.brandModel.default_url" ng-fade>
+                                <div class="error-large alert alert-danger ng-hide alert-reg-position"
+                                     ng-show="vm.brand_form.default_url.$error.required && (vm.brand_form.default_url.$touched || vm.brand_form.$submitted)"
+                                     role="alert">
+                                    Default URL is required.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-md-4 control-label">Allow Tipping</label>
+                            <div class="col-md-8 m-t-5">
+                                <toggle-switch name="allows_tipping"
+                                               ng-model="vm.brandModel.allows_tipping">
+                                </toggle-switch>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-md-4 control-label double-line-md">Allow In Store Payments</label>
+                            <div class="col-md-8 m-t-5">
+                                <toggle-switch name="allows_in_store_payments"
+                                               ng-model="vm.brandModel.allows_in_store_payments">
+                                </toggle-switch>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-md-4 control-label">Nutrition Flag</label>
+                            <div class="col-md-8 m-t-5">
+                                <toggle-switch name="nutrition_flag"
+                                               ng-model="vm.brandModel.nutrition_flag">
+                                </toggle-switch>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-md-4 control-label">Support Email</label>
+                            <div class="col-md-8 m-t-5-sm">
+                                <input type="text" class="input-large form-control" name="support_email"
+                                       ng-model="vm.brandModel.support_email" ng-fade>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-md-4 control-label">Production</label>
+                            <div class="col-md-8 m-t-5">
+                                <toggle-switch name="production"
+                                               ng-model="vm.brandModel.production">
+                                </toggle-switch>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-md-4 control-label">Last Orders Displayed</label>
+                            <div class="col-md-8 m-t-5-sm">
+                                <input type="number" class="input-small form-control" name="last_orders_displayed"
+                                       ng-model="vm.brandModel.last_orders_displayed" ng-fade min="0">
+                                <div class="error-large alert alert-danger ng-hide alert-reg-position"
+                                     ng-show="vm.brand_form.last_orders_displayed.$error.required &&
+                                 (vm.brand_form.last_orders_displayed.$touched || vm.brand_form.$submitted)"
+                                     role="alert">
+                                    Last Orders Displayed is required.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-12">
+                                <button class="btn btn-success pull-right" type="submit">Submit</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

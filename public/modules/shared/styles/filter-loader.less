@@ -1,0 +1,66 @@
+@import "flex.less";
+
+.filter-loader-contain {
+  width: 100%;
+  left: 0px;
+  margin-top: 40px;
+  margin-bottom: 40px;
+}
+.filter-loader {
+  border: 8px solid @loader-bg;
+  /* Light grey */
+  border-top: 8px solid @loader-color;
+  /* Blue */
+  border-radius: 50%;
+  width: 80px;
+  height: 80px;
+  margin: auto;
+  -webkit-animation: spin 1s linear infinite;
+  animation: spin 1s linear infinite;
+}
+.filter-loader-contain-full {
+  width: 100%;
+  left: 0px;
+  margin-top: 100px;
+  margin-bottom: 100px;
+}
+.filter-loader-full {
+  border: 15px solid @loader-bg;
+  /* Light grey */
+  border-top: 15px solid @loader-color;
+  /* Blue */
+  border-radius: 50%;
+  width: 150px;
+  height: 150px;
+  margin: auto;
+  -webkit-animation: spin .8s linear infinite;
+  animation: spin .8s linear infinite;
+}
+
+.panel-heading {
+  &.with-loader {
+    padding: 10px;
+    align-items: center;
+    margin-left: auto;
+    margin-right: auto;
+    .flex-init;
+    .flex-direction-row;
+    .flex-align-items-center;
+    .loader-container {
+      margin-left: auto;
+      margin-right: auto;
+      .filter-loader {
+        margin-left: 0px;
+        margin-right: 0px;
+        border: 3px solid @loader-bg;
+        border-top: 3px solid @loader-color;
+        border-radius: 50%;
+        width: 30px;
+        height: 30px;
+      }
+      label{
+        color: @text-color;
+      }
+    }
+  }
+}

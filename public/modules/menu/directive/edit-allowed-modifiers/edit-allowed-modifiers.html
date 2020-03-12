@@ -1,0 +1,44 @@
+<div id="edit-allowed-modifiers-modal" class="modal fade" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" >Option Settings - {{menu_item.data.item_name}}</h4>
+            </div>
+            <div class="modal-body">
+                <table id="table-fix" class="table content-table">
+                    <thead>
+                    <tr>
+                        <th>Grouping</th>
+                        <th>Max # of Selections<BR> Per Grouping</th>
+                        <th>Group Credit<BR> (offsets Modifier Item up-charges)</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="allowed_modifier_group in menu_item.data.allowed_modifier_groups">
+                        <td>{{allowed_modifier_group.display_name}}</td>
+                        <td>
+                            <input type="number" class="input-in-row input-micro form-control" name="max_allowed"
+                                   min="0" ng-min="0"
+                                   ng-model="allowed_modifier_group.max" ng-fade>
+                        </td>
+                        <td>
+                            <input type="text" class="input-in-row input-sm form-control" name="price_override"
+                                   currency-format amount="allowed_modifier_group.price_override"
+                                   ng-model="allowed_modifier_group.price_override" ng-fade>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" ng-disabled class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button id="submit-propagate-options" class="btn btn-success" ng-disabled data-dismiss="modal" ng-click="submitAllowedModifierChanges()">Submit</button>
+            </div>
+        </div>
+    </div>
+</div>

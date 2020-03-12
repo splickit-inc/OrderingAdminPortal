@@ -1,0 +1,231 @@
+<div class="row">
+    <div class="col-sm-12">
+        <div class="page-header-title creative-bg">
+            <h4 class="page-title">Creative</h4>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6" ng-show="creative.user.hasPermission('brands_filter')">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">Creative</h3>
+            </div>
+            <div class="panel-body form-horizontal">
+                <div class="form-group">
+                    <label class="col-md-3 control-label">Brand</label>
+                    <div class="col-md-9">
+                        <div class="select input-large"><select name="skin_brand_select" class="form-control"
+                                                                ng-required="true"
+                                                                ng-model="creative.brand"
+                                                                ng-change="creative.viewWebSkins(creative.brand)"
+                                                                ng-options="brand.brand_id as brand.brand_name for brand in creative.brands">
+                            <option class="placeholder-color" value="" selected disabled>Brand
+                            </option>
+                        </select></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">Recently Visited</h3>
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="col-md-4 m-b-15 recently-visited"
+                             ng-repeat="recent_web_skin in creative.recently_visited_web_skins"
+                             ng-click="creative.viewWebSkin(recent_web_skin.brand_id)">
+                            <span class="bold">{{recent_web_skin.brand_name}}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row" ng-show="creative.selected_brand_name.length > 0 || !createive.user.hasPermission('brands_filter')">
+    <div class="col-md-12">
+        <div class="panel panel-primary">
+            <div class="panel-heading flex-justify-content-space-between">
+                <h3 class="panel-title">{{creative.selected_brand_name}} Site Versions</h3>
+                <button id="create-new-web-skin" class="pull-right btn btn-danger" data-toggle="modal" ng-disabled
+                        ng-click="creative.openModal()">Create New Site Version
+                </button>
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <h5 class="pre-load-text" ng-show="creative.brand_web_skins.length == 0">No
+                            Existing Site Versions</h5>
+                        <div class="filter-loader-contain" ng-show="menu.search.processing">
+                            <div class="filter-loader"></div>
+                        </div>
+                        <table class="table table-hover"
+                               ng-show="creative.brand_web_skins.length > 0">
+                            <thead>
+                            <tr>
+                                <th>Skin ID</th>
+                                <th>Name</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="web_skin in creative.brand_web_skins"
+                                ng-click="creative.viewWebSkin(web_skin.id)">
+                                <td>{{web_skin.id}}</td>
+                                <td>{{web_skin.name}}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<div id="create-template-modal" class="modal fade" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Create New Website</h4>
+            </div>
+            <div class="modal-body">
+                <form name="creative.create_new_web_skin_form" class="form-horizontal" novalidate
+                      ng-submit="creative.createNewOrUseTemplate()">
+                    <div class="form-group">
+                        <label class="col-md-3 control-label">Name</label>
+                        <div class="col-md-9 m-t-5">
+                            <input type="text" class="input-med form-control" name="name"
+                                   ng-model="creative.new_web_skin.name" ng-fade ng-required="true">
+                            <div class="alert alert-danger ng-hide alert-reg-position"
+                                 ng-show="creative.create_new_web_skin_form.name.$error.required
+                                 && (creative.create_new_web_skin_form.name.$faded || creative.new_web_skin.submit)"
+                                 role="alert">
+                                Name is required.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-xs-12">
+                        <label>Would you like to:</label>
+                    </div>
+
+                    <div class="col-xs-8">
+                        <label>Design My Own</label>
+                    </div>
+
+                    <div class="col-xs-2">
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox" name="design"
+                                       ng-checked="creative.optionCreate"
+                                       ng-click="creative.optionCreate=!creative.optionCreate">
+                                <span></span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="col-xs-8">
+                        <label>Start with a Template</label>
+                    </div>
+
+                    <div class="col-xs-2">
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox" name="template"
+                                       ng-checked="!creative.optionCreate"
+                                       ng-click="creative.optionCreate=!creative.optionCreate">
+                                <span></span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div ng-show="creative.new_web_skin.processing" class="col-md-12">
+                            <div class="form-loader">
+                                <div class="line"></div>
+                                <div class="line"></div>
+                                <div class="line"></div>
+                                <div class="line"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" ng-disabled class="btn btn-default"
+                                data-dismiss="modal">Cancel
+                        </button>
+                        <button class="btn btn-success">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="select-template-modal" class="modal fade" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Select a Template for Your Restaurant Category</h4>
+            </div>
+            <div class="modal-body">
+                <form name="creative.create_new_web_skin_with_template_form" class="form-horizontal" novalidate
+                      ng-submit="creative.createWebSkinWithTemplate()">
+
+                    <div ng-repeat="template in creative.templates" class="col-xs-12 form-group">
+                        <div class="center-row-image center-image">
+                            <img class="center-image" src="{{template.thumbnail}}">
+                        </div>
+                        <div class="col-xs-7 col-md-7 center-row-image">
+                            <div class="center-text-image">{{template.name}}</div>
+                        </div>
+                        <div class="col-xs-2 col-sm-2 center-checkbox-image center-row-image">
+                            <div class="checkbox pull-right ">
+                                <label>
+                                    <input type="checkbox" name="template"
+                                           ng-model="creative.idCheckbox.template"
+                                           ng-true-value="{{template}}"
+                                           ng-false-value="">
+                                    <span></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div ng-show="creative.new_web_skin.processing" class="col-md-12">
+                            <div class="form-loader">
+                                <div class="line"></div>
+                                <div class="line"></div>
+                                <div class="line"></div>
+                                <div class="line"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" ng-disabled class="btn btn-default"
+                                data-dismiss="modal">Cancel
+                        </button>
+                        <button id="create-web-skin-submit" class="btn btn-success">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

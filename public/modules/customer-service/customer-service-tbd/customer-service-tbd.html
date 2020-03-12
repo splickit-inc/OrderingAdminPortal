@@ -1,0 +1,61 @@
+<div class="row">
+    <div class="col-sm-12">
+        <div class="page-header-title">
+            <h4 class="page-title">Parking Lot Users</h4>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">Search Clients</h3>
+            </div>
+            <div class="panel-body">
+                <form name="vm.search_form" novalidate ng-submit="vm.search()">
+                    <div class="form-group">
+                        <div class="flex-init flex-align-items-center">
+                            <div class="search-box" style="width: 270px">
+                                <input type="text" class="form-control" name="search_text"
+                                       placeholder=""
+                                       ng-init="vm.search.text = ''"
+                                       ng-model="vm.search.text">
+                            </div>
+                            <button type="submit" class='btn-default btn m-l-10'>Search</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="customer-service-user-list row">
+    <div class="col-md-12">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">Search Results</h3>
+            </div>
+            <div class="panel-body">
+                <paginated-table container-id="'tbd-search-results-table'"
+                                 field-names="vm.fieldNames" params="vm.searchParams" endpoint-string="'/customer_service/parking_lot'">
+
+                    <content-responsive>
+                        <div class="panel panel-body row-table">
+                            <div class="name">
+                                <h5 class="dark-grey text-wrap-word-break"><b>{{vm.formatPhone($parent.item.phone_number)}}</b>
+                                </h5>
+                            </div>
+                            <div class="description clear">
+                                <div>Amount: {{$parent.item.amount}}</div>
+                                <div>Location: {{$parent.item.location}}</div>
+                                <div>Date: {{$parent.item.created}}</div>
+                            </div>
+                        </div>
+                    </content-responsive>
+                </paginated-table>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,63 @@
+.toggle-switch {
+  background-color: @toggle-bg-color;
+  border: 1px solid @toggle-border-color;
+  min-width: 72px;
+  height: 30px;
+}
+
+.toggle-switch.disabled > div > span.knob {
+  background: #AAA;
+}
+
+.toggle-switch span {
+  line-height: 18px;
+  font-size: 12px;
+  text-transform: uppercase;
+  font-weight: 600;
+  padding: 7px 4px;
+  text-align: center;
+  width: 33%;
+  white-space: nowrap;
+}
+
+.toggle-switch > div {
+  position: relative;
+  width: 150%;
+  height: 30px;
+}
+
+.toggle-switch .switch-on {
+  left: 0%;
+}
+
+.toggle-switch .switch-off {
+  left: -50%
+}
+
+.toggle-switch .switch-left, .toggle-switch .switch-right {
+  z-index: 1;
+}
+
+.toggle-switch .switch-left {
+  color: @toggle-text-color;
+  background: @active-toggle-color;
+  border-right: 1px solid @toggle-border-color;
+}
+
+.toggle-switch .knob {
+  background: @toggle-bg-color;
+  border: none;
+}
+
+.toggle-switch .switch-right {
+  color: @toggle-text-color;
+  background: @inactive-toggle-color;
+  border-left: 1px solid @toggle-border-color;
+}
+
+.toggle-switch-animate {
+  transition: left 0.5s;
+  -o-transition: left 0.5s;
+  -moz-transition: left 0.5s;
+  -webkit-transition: left 0.5s;
+}

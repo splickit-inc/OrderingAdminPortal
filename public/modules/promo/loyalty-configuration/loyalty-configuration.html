@@ -1,0 +1,374 @@
+<div class="page-header-title marketing-bg">
+    <h4 class="page-title">Loyalty</h4>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">Loyalty Program Setup</h3>
+            </div>
+
+            <div class="panel-body" ng-if="vm.brandConfigurationLoading">
+                <div>
+                    <div class="filter-loader-contain">
+                        <div class="filter-loader"></div>
+                    </div>
+                </div>
+            </div>
+            <form name="vm.program_setup_form" novalidate class="form-horizontal">
+                <div class="panel-body" ng-show="!vm.brandConfigurationLoading">
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="brand_list_select" class="col-md-5 control-label">Brand</label>
+                            <div class="col-md-7">
+                                <select name="brand_list_select"
+                                        id="brand_list_select"
+                                        class="input-med form-control"
+                                        ng-model="vm.brand"
+                                        ng-change="vm.loadBrandConfiguration()"
+                                        ng-options="item.brand_name for item in vm.brand_list track by item.brand_id"
+                                        ng-required="true">
+                                </select>
+                                <div class="alert alert-danger ng-hide alert-reg-position"
+                                     ng-show="vm.program_setup_form.brand_list_select.$error.required && (vm.program_setup_form.brand_list_select.$touched || vm.program_setup_form.$submitted)"
+                                     role="alert">
+                                    Brand is required.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-md-5 control-label">Add Loyalty</label>
+                            <div class="col-md-7">
+                                <toggle-switch name="add_loyalty"
+                                               ng-model="vm.program_setup.enabled"
+                                               ng-init="vm.program_setup.enabled = false"
+                                               ng-disabled="!vm.program_setup.brand_id">
+                                </toggle-switch>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-md-5 control-label">Type of Program</label>
+                            <div class="col-md-7">
+                                <select name="program_type"
+                                        class="input-med form-control"
+                                        ng-required="true"
+                                        ng-model="vm.program_setup.loyalty_type"
+                                        ng-disabled="!vm.program_setup.brand_id">
+                                    <option ng-repeat="item in vm.program_types" value="{{item.id}}">{{item.name}}
+                                    </option>
+                                </select>
+                                <div class="alert alert-danger ng-hide alert-reg-position"
+                                     ng-show="vm.program_setup_form.program_type.$error.required && (vm.program_setup_form.program_type.$touched || vm.program_setup_form.$submitted)"
+                                     role="alert">
+                                    The Type of Program field is required.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-md-5 control-label">Points earned per $ Spent</label>
+                            <div class="col-md-7">
+                                <input type="text" class="input-med form-control" name="points_earned"
+                                       ng-model="vm.program_setup.earn_value_amount_multiplier" ng-fade
+                                       ng-disabled="!vm.program_setup.brand_id" ng-required="true" ui-number-mask="0">
+                                <div class="alert alert-danger ng-hide alert-reg-position"
+                                     ng-show="vm.program_setup_form.points_earned.$error.required && (vm.program_setup_form.points_earned.$touched || vm.program_setup_form.$submitted)"
+                                     role="alert">
+                                    The points earned oer $ spent field is required.
+                                </div>
+                            </div>
+                        </div>
+
+<!--                        <div class="form-group">
+                            <label class="col-md-5 control-label">Points Redemption Value</label>
+                            <div class="col-md-7">
+                                <input type="text" class="input-med form-control" name="points_redemption"
+                                       ng-model="vm.program_setup.points_redemption" ng-fade
+                                       ng-disabled="!vm.program_setup.brand_id" ui-number-mask="0">
+                            </div>
+                        </div>-->
+
+                        <div class="form-group"
+                             ng-if="!!vm.program_setup && vm.program_setup.loyalty_type === 'splickit_cliff'">
+                            <label class="col-md-5 control-label">Cliff Value</label>
+                            <div class="col-md-7">
+                                <input type="text" class="input-med form-control" name="cliff_value"
+                                       ng-model="vm.program_setup.cliff_value" ng-fade
+                                       ng-disabled="!vm.program_setup.brand_id" ng-required="true" ui-number-mask="0">
+                                <div class="alert alert-danger ng-hide alert-reg-position"
+                                     ng-show="vm.program_setup_form.cliff_value.$error.required && (vm.program_setup_form.cliff_value.$touched || vm.program_setup_form.$submitted)"
+                                     role="alert">
+                                    The Cliff Value field is required.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group"
+                             ng-if="!!vm.program_setup && vm.program_setup.loyalty_type === 'splickit_cliff'">
+                            <label class="col-md-5 control-label">Cliff Award Dollar Value</label>
+                            <div class="col-md-7">
+                                <input type="text" class="input-med form-control" name="cliff_award_dollar_value"
+                                       ng-model="vm.program_setup.cliff_award_dollar_value" ng-fade
+                                       ng-disabled="!vm.program_setup.brand_id" ng-required="true" ui-number-mask="2">
+                                <div class="alert alert-danger ng-hide alert-reg-position"
+                                     ng-show="vm.program_setup_form.cliff_award_dollar_value.$error.required && (vm.program_setup_form.cliff_award_dollar_value.$touched || vm.program_setup_form.$submitted)"
+                                     role="alert">
+                                    The Cliff Award Dollar Value field is required.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-md-5 control-label"># of Points on Join (Optional)</label>
+                            <div class="col-md-7">
+                                <input type="text" class="input-med form-control" name="points_on_join"
+                                       ng-model="vm.program_setup.starting_point_value" ng-fade
+                                       ng-disabled="!vm.program_setup.brand_id" ui-number-mask="0">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-md-5 control-label">Charge Tax on Redemption</label>
+                            <div class="col-md-7">
+                                <toggle-switch name="charge_tax"
+                                               ng-model="vm.program_setup.charge_tax"
+                                               ng-init="vm.program_setup.charge_tax = false"
+                                               ng-disabled="!vm.program_setup.brand_id">
+                                </toggle-switch>
+                            </div>
+                        </div>
+
+                        <div class="form-group" ng-if="!!vm.program_setup.brand_id">
+                            <label class="col-md-5 control-label">Loyalty Logo</label>
+                            <div class="col-md-7">
+                                <img ng-src="{{vm.logoURL}}" alt="" ng-if="!!vm.logoURL && !!!vm.file"
+                                     style="background: whitesmoke; max-width: 158px; max-height: 66px; border-radius: 10px"
+                                     ng-click="vm.showImageModal()">
+
+                                <img src="/img/thumbnail.png" alt="" ng-if="!!!vm.file && !!!vm.logoURL"
+                                     style="background: whitesmoke; max-width: 158px; max-height: 66px; border-radius: 10px"
+                                     ng-click="vm.showImageModal()">
+
+                                <img ng-if="!!vm.file" ngf-src="vm.file"
+                                     ngf-background="vm.file"
+                                     ngf-resize="{width: 158, height: 66, quality: .8}" alt=""
+                                     style="background: whitesmoke; max-width: 158px; max-height: 66px; border-radius: 10px"
+                                     ng-click="vm.showImageModal()">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <div>
+                                <text-angular
+                                    ta-toolbar="[
+                                        ['h1','h2','h3','h4','h5','h6'],
+                                        ['p','pre', 'quote'],['bold','italics','underline'],
+                                        ['ul','ol'],
+                                        ['undo', 'redo', 'clear']['html']
+                                    ]"
+                                    ng-model="vm.program_setup.rules_info"
+                                    data-ng-required="false"
+                                    data-name="rules_info"
+                                    ta-disabled="!vm.program_setup.brand_id"
+
+                                >
+                                </text-angular>
+                            </div>
+
+                            <div class="alert alert-danger ng-hide alert-reg-position"
+                                 ng-show="vm.program_setup_form.rules_info.$error.required && (vm.program_setup_form.rules_info.$touched || vm.program_setup_form.$submitted)"
+                                 role="alert">
+                                The rules copy field is required.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <button type="button" class="btn btn-success pull-right" ng-click="vm.submitInformation()"
+                                ng-disabled="!vm.program_setup.brand_id">
+                            Submit
+                        </button>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="alert-success alert-reg-position form-submit-success fade-effect"
+                             ng-show="vm.updateSuccess"
+                             role="alert">
+                            <i class="fa fa-check-circle" aria-hidden="true"></i> Loyalty Program Setup Updated.
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+            <div class="panel panel-primary" ng-show="!vm.brandConfigurationLoading">
+                <div class="panel-heading flex-init flex-justify-content-space-between">
+                    <h3 class="panel-title">Bonus Points Days</h3>
+                    <button type="button" class="btn btn-success" ng-click="vm.openPointDaysSelector()"
+                            ng-disabled="!vm.program_setup.brand_id">
+                        + Add New
+                    </button>
+                </div>
+
+                <div class="panel-body">
+                    <h5 class="pre-load-text" ng-if="vm.bonus_points_days_records.length == 0">No records</h5>
+                    <table class="table content-table" ng-if="vm.bonus_points_days_records.length > 0">
+                        <thead>
+                        <tr>
+                            <th class="cursor-pointer">Day Of Week</th>
+                            <th class="cursor-pointer">Name It</th>
+                            <th class="cursor-pointer">Start Date</th>
+                            <th class="cursor-pointer">End Date</th>
+                            <th class="cursor-pointer">Points Multiplier</th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="item in vm.bonus_points_days_records">
+                            <td>{{item.trigger_value}}</td>
+                            <td>{{item.history_label}}</td>
+                            <td>{{item.first_date_available}}</td>
+                            <td>{{item.last_date_available}}</td>
+                            <td>{{item.value}}</td>
+                            <td class="delete-icon">
+                                <i class="fa fa-times" aria-hidden="true" ng-click="vm.deleteBonusPointsDays(item)"></i>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="point-days-selector" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                    aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Create Bonus Point Day</h4>
+            </div>
+            <form name="vm.advanced_setup_form" novalidate class="form-horizontal">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="col-md-5 control-label">Bonus Points Days</label>
+                        <div class="col-md-7">
+                            <select name="bonus_days"
+                                    class="input-med form-control"
+                                    ng-required="true"
+                                    ng-model="vm.advanced_setup.trigger_value"
+                                    ng-disabled="!vm.program_setup.brand_id">
+                                <option ng-repeat="item in vm.bonus_points_days" value="{{item.id}}">{{item.name}}
+                                </option>
+                            </select>
+                            <div class="alert alert-danger ng-hide alert-reg-position"
+                                 ng-show="vm.advanced_setup_form.bonus_days.$error.required && (vm.advanced_setup_form.bonus_days.$touched || vm.advanced_setup_form.$submitted)"
+                                 role="alert">
+                                The Bonus Points Days is required.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-5 control-label">Name It</label>
+                        <div class="col-md-7">
+                            <input type="text" class="input-med form-control" name="name_it"
+                                   ng-model="vm.advanced_setup.history_label" ng-fade
+                                   ng-required="true"
+                                   ng-disabled="!vm.program_setup.brand_id">
+                            <div class="alert alert-danger ng-hide alert-reg-position"
+                                 ng-show="vm.advanced_setup_form.name_it.$error.required && (vm.advanced_setup_form.name_it.$touched || vm.advanced_setup_form.$submitted)"
+                                 role="alert">
+                                The Name It field is required.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-5 control-label">Start Day</label>
+                        <div class="col-md-7">
+                            <input type="date" class="form-control input-med flex-init"
+                                   placeholder="MM/DD"
+                                   name="start_day"
+                                   ng-required="true" ng-model="vm.advanced_setup.first_date_available"
+                                   ng-disabled="!vm.program_setup.brand_id">
+                            <div class="alert alert-danger ng-hide alert-reg-position"
+                                 ng-show="vm.advanced_setup_form.start_day.$error.required && (vm.advanced_setup_form.start_day.$touched || vm.advanced_setup_form.$submitted)"
+                                 role="alert">
+                                The Start Day field is required.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-5 control-label">End Day</label>
+                        <div class="col-md-7">
+                            <input type="date" class="form-control input-med flex-init"
+                                   placeholder="MM/DD"
+                                   name="end_day"
+                                   ng-required="true" ng-model="vm.advanced_setup.last_date_available"
+                                   ng-disabled="!vm.program_setup.brand_id">
+                            <div class="alert alert-danger ng-hide alert-reg-position"
+                                 ng-show="vm.advanced_setup_form.end_day.$error.required && (vm.advanced_setup_form.end_day.$touched || vm.advanced_setup_form.$submitted)"
+                                 role="alert">
+                                The Start Day field is required.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-5 control-label">Points Multiplier</label>
+                        <div class="col-md-7">
+                            <input type="text" class="input-med form-control" name="points_multiplier"
+                                   ng-model="vm.advanced_setup.value" ng-fade
+                                   ng-required="true"
+                                   ng-disabled="!vm.program_setup.brand_id" ui-number-mask="0">
+                            <div class="alert alert-danger ng-hide alert-reg-position"
+                                 ng-show="vm.advanced_setup_form.points_multiplier.$error.required && (vm.advanced_setup_form.points_multiplier.$touched || vm.advanced_setup_form.$submitted)"
+                                 role="alert">
+                                The points multiplier field is required.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success" ng-click="vm.addBonusPointsDays()">
+                        Submit
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div id="image-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                    aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Select the Loyalty Logo</h4>
+            </div>
+            <div class="modal-body">
+                <div ng-show="false">
+                    <div class="filter-loader-contain">
+                        <div class="filter-loader"></div>
+                    </div>
+                </div>
+                <div style="margin: auto" ngf-drop ngf-select ng-model="vm.file" class="drop-box site-image-drop-box"
+                     ngf-max-size="5MB" ngf-drag-over-class="'dragover'" ngf-multiple="false"
+                     ngf-allow-dir="false" accept="image/*" ngf-pattern="'image/*'"
+                     ngf-resize="{width: 158, height: 66, quality: .8}" ngf-validate-fn="vm.isValidLogo($file)"
+                >
+                    Drop image file here or click to upload
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" ng-disabled class="btn btn-default" data-dismiss="modal">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

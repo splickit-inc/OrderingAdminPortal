@@ -1,0 +1,50 @@
+<div id="report-selector-component">
+    <transactions-component ng-if="vm.selectedReportType.key === 'transactions'"
+                            custom-brand-filter="vm.customBrandFilter"
+                            custom-reports-filter-type="vm.customReportsFilterType"
+                            merchant-search="vm.merchantSearch"
+                            processing="vm.processing"
+                            exporting="vm.exporting"></transactions-component>
+
+    <customer-component ng-if="vm.selectedReportType.key === 'customers'"
+                        custom-brand-filter="vm.customBrandFilter"
+                        custom-reports-filter-type="vm.customReportsFilterType"
+                        merchant-search="vm.merchantSearch"
+                        processing="vm.processing"
+                        exporting="vm.exporting"></customer-component>
+
+    <statements-component ng-if="vm.selectedReportType.key === 'statements_report'"
+                          custom-brand-filter="vm.customBrandFilter"
+                          custom-reports-filter-type="vm.customReportsFilterType"
+                          merchant-search="vm.merchantSearch"
+                          processing="vm.processing"
+                          exporting="vm.exporting"></statements-component>
+
+    <sales-by-menu-item-component ng-if="vm.selectedReportType.key === 'sales_by_menu_items'"
+                                  custom-brand-filter="vm.customBrandFilter"
+                                  custom-reports-filter-type="vm.customReportsFilterType"
+                                  merchant-search="vm.merchantSearch"
+                                  processing="vm.processing"
+                                  exporting="vm.exporting"></sales-by-menu-item-component>
+
+    <merchant-config-component ng-if="vm.selectedReportType.key === 'store_settings'"
+                                  custom-brand-filter="vm.customBrandFilter"
+                                  custom-reports-filter-type="vm.customReportsFilterType"
+                                  merchant-search="vm.merchantSearch"
+                                  processing="vm.processing"
+                                  exporting="vm.exporting"></merchant-config-component>
+
+    <all-orders-component ng-if="vm.selectedReportType.key === 'all_orders'"
+                          custom-brand-filter="vm.customBrandFilter"
+                          custom-reports-filter-type="vm.customReportsFilterType"
+                          merchant-search="vm.merchantSearch"
+                          processing="vm.processing"
+                          exporting="vm.exporting"></all-orders-component>
+
+    <promos-report-component ng-if="vm.selectedReportType.key === 'promo'"
+                          custom-brand-filter="vm.customBrandFilter"
+                          custom-reports-filter-type="vm.customReportsFilterType"
+                          merchant-search="vm.merchantSearch"
+                          processing="vm.processing"
+                          exporting="vm.exporting"></promos-report-component>
+</div>

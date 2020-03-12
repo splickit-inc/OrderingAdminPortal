@@ -1,0 +1,38 @@
+.panel {
+  border: none;
+  .panel-heading {
+    .flex-init;
+    .flex-align-items-center;
+    .antialiased;
+    font-family: @panel-heading-font-family;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    border: none;
+    overflow: hidden;
+    .panel-title {
+      color: @panel-primary-heading-color;
+      font-size: @panel-heading-text-size;
+    }
+  }
+}
+
+.panel-footer{
+    background-color: @panel-default-heading-bg;
+    display: flex;
+    flex-direction: row-reverse;
+    border: none;
+    padding: 10px 20px;
+    display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-align-items: center;
+    align-items: center;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-family: "Agency FB", Helvetica, Arial, sans-serif;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    overflow: hidden;
+}

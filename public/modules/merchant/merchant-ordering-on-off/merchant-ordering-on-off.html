@@ -1,0 +1,31 @@
+<div class="row">
+    <div class="col-sm-12">
+        <div class="page-header-title creative-bg">
+            <h4 class="page-title">Ordering and Delivery On/Off</h4>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">Ordering Status</h3>
+            </div>
+            <div class="panel-body form-horizontal">
+                <div class="form-group">
+                    <label class="col-md-3 control-label">Ordering</label>
+                    <div class="col-md-9">
+                        <toggle-switch name="ordering_on" ng-change="op_on_off.changeOrderingOnConfirm()" ng-model="op_on_off.ordering_on"></toggle-switch>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-3 control-label">Delivery</label>
+                    <div class="col-md-9">
+                        <toggle-switch name="delivery" ng-change="op_on_off.changeDeliveryConfirm()" ng-model="op_on_off.delivery"></toggle-switch>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

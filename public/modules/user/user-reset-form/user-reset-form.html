@@ -1,0 +1,85 @@
+<div class="login-view wrapper-page panel panel-color panel-primary panel-padded">
+    <div class="panel-body" ng-controller="UserResetFormCtrl">
+        <h3 class="text-center m-t-0 m-b-30">
+                <span class=""><img src="img/Order140_Final_Logoflat.png" alt="splickit logo"
+                                    height="40"></span>
+        </h3>
+        <form class="m-t-20" name="vm.form" novalidate
+              ng-submit="vm.submitResetPassword()"
+        >
+            <div class="form-group">
+                <input type="email" id="inputEmail" class="form-control"
+                       placeholder="Email address" required autofocus
+                       ng-required="true" ng-model="vm.email" ng-fade>
+            </div>
+            <h5 class="pre-load-text alert" ng-if="vm.method == 'create'">
+                Please use the email address where you received your password reset email.</h5>
+
+            <div class="form-group">
+                <div class="inner-addon right-addon">
+                    <span class="fa fa-times" style="color: black" ng-show="(vm.form.inputPassword.$error.required || vm.form.inputPassword.$error.pattern) && vm.form.inputPassword.$touched"></span>
+                    <span class="fa fa-check" style="color: black" ng-show="(!vm.form.inputPassword.$error.required && !vm.form.inputPassword.$error.pattern)"></span>
+                    <input type="password" name="inputPassword" id="inputPassword" class="form-control"
+                           placeholder="Password" required autofocus
+                           ng-required="true" ng-model="vm.password" ng-fade ng-minlength="8"
+                           ng-pattern="/^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[\/\W+\/g])(?=\S+$).{8,}$/"
+                    >
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="inner-addon right-addon">
+                    <span class="fa fa-times" ng-show="(vm.password_confirmation !==  vm.password && !!vm.password)" style="color: black"></span>
+                    <span class="fa fa-check" ng-show="vm.password_confirmation ===  vm.password && !!vm.password" style="color: black"></span>
+                    <input type="password" name="inputPasswordConfirmation" id="inputPasswordConfirmation" class="form-control"
+                           placeholder="Confirm Password" required autofocus
+                           ng-required="true" ng-model="vm.password_confirmation" ng-fade ng-minlength="8"
+                           ng-pattern='/^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[\/\W+\/g])(?=\S+$).{8,}$/'
+                    >
+                </div>
+            </div>
+
+            <h5 class="pre-load-text alert" ng-show="(vm.form.inputPassword.$error.required || vm.form.inputPassword.$error.pattern)">
+                Password must include at least 8 characters, both alpha and numeric characters, capital letter, and a special character.</h5>
+
+            <div class="loader-position" ng-show="vm.processing">
+                <div class="line"></div>
+                <div class="line"></div>
+                <div class="line"></div>
+                <div class="line"></div>
+            </div>
+
+            <div class="alert alert-danger"
+                 ng-show="vm.password_confirmation !==  vm.password && !!vm.password"
+                 role="alert">
+                The password confirmation doesn't match.
+            </div>
+
+            <div class="alert alert-danger"
+                 ng-show="vm.submit_errors"
+                 role="alert">
+                Invalid email, please set the correct value for the email field.
+            </div>
+
+            <div class="alert-danger"
+                 ng-show="!!vm.errors.errors.email"
+                 role="alert">
+                {{vm.errors.errors.email}}
+            </div>
+
+            <div class="alert-danger"
+                 ng-show="!!vm.errors.password"
+                 role="alert">
+                {{vm.errors.password[0]}}
+            </div>
+
+            <div class="form-group text-center m-t-20 m-b-0">
+                <button class="btn btn-primary w-md waves-effect waves-light" type="submit" ng-disabled="vm.form.$invalid" ng-if="vm.method == 'reset'">
+                    Reset Password
+                </button>
+                <button class="btn btn-primary w-md waves-effect waves-light" type="submit" ng-disabled="vm.form.$invalid" ng-if="vm.method == 'create'">
+                    Create Password
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

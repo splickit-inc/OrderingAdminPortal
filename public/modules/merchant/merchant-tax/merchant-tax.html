@@ -1,0 +1,237 @@
+<div class="row">
+    <div class="col-sm-12">
+        <div class="page-header-title merchant-bg">
+            <h4 class="page-title">{{ 'MERCHANT.TAX.TAX' | translate }}</h4>
+            <ol class="breadcrumb">
+                <li><a href="#/merchants">{{ 'MESSAGE.SHARE.MERCHANT' | translate }}</a></li>
+                <li><a href="#/merchant/tax">{{ 'MERCHANT.TAX.TAX' | translate }}</a></li>
+            </ol>
+        </div>
+    </div>
+</div>
+
+<div id="sales-tax-tax" class="row">
+    <!-- Basic example -->
+    <div class="col-md-6">
+        <div class="panel panel-primary">
+            <div class="panel-heading-with-tooltip">
+                <div class="panel-heading  ">
+                    <h3 class="panel-title">{{ 'MERCHANT.TAX.SALESTAX' | translate }}</h3>
+                </div>
+                <div class="panel-heading-tooltip-right">
+                    <h4>
+                        <i class="fa fa-question-circle tooltip-help" aria-hidden="true">
+                            <span class="tool-tip-text-responsive">{{ 'MERCHANT.CONTACT.TOOLTIP.TAX.SALES' | translate }}</span>
+                        </i>
+                    </h4>
+                </div>
+            </div>
+            <div class="panel-body p-t-15">
+                <form name="tax.sales_tax_form" novalidate ng-submit="tax.updateSalesTax()" class="form-horizontal">
+                    <div class="form-group">
+                        <label class="control-label col-md-4">{{ 'MERCHANT.TAX.DESCRIPTION' | translate }}</label>
+                        <div class="col-md-8">
+                            <textarea type="text" class="input-x-large form-control" name="locale_description"
+                                      placeholder="Municipality Description"
+                                      ng-model="tax.sales_tax.locale_description" ng-required="true"></textarea>
+                            <div class="input-x-large alert alert-danger ng-hide alert-reg-position "
+                                 ng-show="tax.sales_tax_form.locale_description.$error.required && (tax.sales_tax_form.locale_description.$touched || tax.sales_tax.submit)"
+                                 role="alert">
+                                {{'MERCHANT.TAX.DESCRIPTION.ERROR' | translate}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-4">{{ 'MERCHANT.TAX.RATEIN' | translate }}</label>
+                        <div class="col-md-8">
+                            <input type="number" class="input-med form-control" name="rate" placeholder="Enter Whole %"
+                                   ng-model="tax.sales_tax.rate" ng-fade ng-min="0" ng-required="true">
+                            <div class="input-med alert alert-danger ng-hide alert-reg-position input-med"
+                                 ng-show="!tax.sales_tax_form.rate.$valid && (tax.sales_tax_form.rate.$faded || tax.sales_tax.submit)"
+                                 role="alert">
+                                {{ 'MERCHANT.TAX.RATEREQUIRED' | translate }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div ng-show="tax.sales_tax.processing" class="text-center">
+                        <div class="line"></div>
+                        <div class="line"></div>
+                        <div class="line"></div>
+                        <div class="line"></div>
+                    </div>
+
+                    <div class="submit-contain flex-init flex-justify-content-space-between">
+                        <div class="flex-init flex-direction-column flex-justify-content-center">
+                            <div id="tax-update-success"
+                                 class="alert-success alert-reg-position form-submit-success fade-effect"
+                                 ng-show="tax.sales_tax.success"
+                                 role="alert">
+                                <i class="fa fa-check-circle" aria-hidden="true"></i> {{ 'MERCHANT.TAX.TAXUPDATED' |
+                                translate }}
+                            </div>
+                        </div>
+
+                        <div class="flex-align-self-end">
+                            <button id='tax-update-submit' class='btn-soft-blue btn pull-right btn-pull-left'>{{
+                                'MESSAGE.SHARE.SUBMIT' | translate }}
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div><!-- panel-body -->
+        </div> <!-- panel -->
+        <div class="panel panel-primary">
+            <div class="panel-heading-with-tooltip">
+                <div class="panel-heading">
+                    <h3 class="panel-title">{{ 'MERCHANT.TAX.DELIVERYTAX' | translate }}</h3>
+                </div>
+                <div class="panel-heading-tooltip-right">
+                    <h4>
+                        <i class="fa fa-question-circle tooltip-help" aria-hidden="true">
+                            <span class="tool-tip-text-responsive">{{ 'MERCHANT.CONTACT.TOOLTIP.TAX.DELIVERY' | translate }}</span>
+                        </i>
+                    </h4>
+                </div>
+            </div>
+
+            <div class="panel-body p-t-15">
+                <form name="tax.delivery_tax_form" novalidate
+                      ng-submit="tax.updateDeliveryTax()" class="form-horizontal">
+
+                    <div class="form-group">
+                        <label class="control-label col-md-4">{{ 'MERCHANT.TAX.RATEIN' | translate }}</label>
+                        <div class="col-md-8">
+                            <input type="number" class="input-med form-control" name="rate" placeholder="Enter Whole %"
+                                   ng-model="tax.delivery_tax.rate" ng-fade ng-min="0" ng-required="true">
+                            <div class="input-med alert alert-danger ng-hide alert-reg-position"
+                                 ng-show="(!tax.delivery_tax_form.rate.$valid) && (tax.delivery_tax_form.rate.$faded || tax.delivery_tax.submit)"
+                                 role="alert">
+                                {{ 'MERCHANT.TAX.RATEMUSTBENUMERIC' | translate }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-4">Description
+                            <i class="fa fa-question-circle tooltip-help" aria-hidden="true">
+                                <span class="tool-tip-text-responsive">Optional, for your internal use</span>
+                            </i>
+                        </label>
+                        <div class="col-md-8">
+                            <textarea type="text" class="input-x-large form-control" name="locale_description"
+                                      placeholder="Municipality Description"
+                                      ng-model="tax.delivery_tax.locale_description"></textarea>
+                        </div>
+                    </div>
+
+                    <div ng-show="tax.delivery_tax.processing" class="text-center">
+                        <div class="line"></div>
+                        <div class="line"></div>
+                        <div class="line"></div>
+                        <div class="line"></div>
+                    </div>
+
+                    <div class="submit-contain flex-init flex-justify-content-space-between">
+                        <div class="flex-init flex-direction-column flex-justify-content-center">
+                            <div id="delivery-tax-success"
+                                 class="alert-success alert-reg-position form-submit-success fade-effect"
+                                 ng-show="tax.delivery_tax.success"
+                                 role="alert">
+                                <i class="fa fa-check-circle" aria-hidden="true"></i> {{
+                                'MERCHANT.TAX.DELIVERYTAXUPDATED' | translate }}
+                            </div>
+                        </div>
+
+                        <div class="flex-align-self-end">
+                            <button id="delivery-tax-submit" class='btn-soft-blue btn pull-right btn-pull-left'>{{
+                                'MESSAGE.SHARE.SUBMIT' | translate }}
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div><!-- panel-body -->
+        </div> <!-- panel -->
+    </div> <!-- col-->
+
+
+    <div class="col-md-6">
+        <div class="panel panel-primary">
+            <div class="panel-heading-with-tooltip">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Fixed Tax</h3>
+                </div>
+                <div class="panel-heading-tooltip-right">
+                    <h4>
+                        <i class="fa fa-question-circle tooltip-help" aria-hidden="true">
+                            <span class="tool-tip-text-responsive">{{ 'MERCHANT.CONTACT.TOOLTIP.TAX.FIXED' | translate }}</span>
+                        </i>
+                    </h4>
+                </div>
+            </div>
+            <div class="panel-body p-t-15">
+                <form name="tax.fixed_tax_form" novalidate ng-submit="tax.updateFixTax()" class="form-horizontal">
+                    <div class="form-group">
+                        <label class="control-label col-md-4">Name</label>
+                        <div class="col-md-8">
+                            <input type="text" class="input-med form-control" name="name" placeholder="Enter Name"
+                                   ng-model="tax.fixed_tax.name">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-4">{{ 'MERCHANT.TAX.DESCRIPTION' | translate }}
+                            <i class="fa fa-question-circle tooltip-help" aria-hidden="true">
+                                <span class="tool-tip-text-responsive">Optional, for your internal use</span>
+                            </i>
+                        </label>
+                        <div class="col-md-8">
+                            <textarea type="text" class="input-x-large form-control" name="description"
+                                      placeholder="Enter Description"
+                                      ng-model="tax.fixed_tax.description"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-4">{{ 'MERCHANT.TAX.AMOUNT' | translate }}</label>
+                        <div class="col-md-8">
+                            <input type="number" class="input-med form-control" name="amount" placeholder="Enter Amount"
+                                   ng-model="tax.fixed_tax.amount" ng-required="true">
+                            <div class="input-med alert alert-danger ng-hide alert-reg-position"
+                                 ng-show="(tax.fixed_tax_form.amount.$error.required || tax.fixed_tax_form.amount.$error.number)
+                                        && (tax.fixed_tax_form.amount.$faded || tax.fixed_tax_form.$submitted)"
+                                 role="alert">
+                                {{ 'MERCHANT.TAX.AMOUNTREQUIRED' | translate }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div ng-show="tax.fixed_tax.processing" class="text-center">
+                        <div class="line"></div>
+                        <div class="line"></div>
+                        <div class="line"></div>
+                        <div class="line"></div>
+                    </div>
+
+                    <div class="submit-contain flex-init flex-justify-content-space-between">
+                        <div class="flex-init flex-direction-column flex-justify-content-center">
+                            <div id="fixed-tax-success"
+                                 class="alert-success alert-reg-position form-submit-success fade-effect"
+                                 ng-show="tax.fixed_tax.success"
+                                 role="alert">
+                                <i class="fa fa-check-circle" aria-hidden="true"></i> {{ 'MERCHANT.TAX.FIXEDTAXUPDATED'
+                                | translate }}
+                            </div>
+                        </div>
+
+                        <div class="flex-align-self-end">
+                            <button id="fixed-tax-submit" class='btn-soft-blue btn pull-right btn-pull-left'>{{
+                                'MESSAGE.SHARE.SUBMIT' | translate }}
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div><!-- panel-body -->
+        </div> <!-- panel -->
+    </div> <!-- col-->
+</div>

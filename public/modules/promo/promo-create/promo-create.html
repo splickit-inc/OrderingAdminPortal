@@ -1,0 +1,1497 @@
+<div class="row">
+    <div class="col-sm-12">
+        <div class="page-header-title marketing-bg">
+            <h4 class="pull-left page-title">Create New Promo</h4>
+            <ol class="breadcrumb pull-right">
+                <li><a href="#/">Home</a></li>
+            </ol>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+</div>
+
+<div class="row create-promo-view">
+    <!-- Basic example -->
+    <div class="col-md-9">
+        <div class="panel panel-primary">
+            <div class="panel-heading"><h3 class="panel-title">New Promo</h3></div>
+            <div class="panel-body">
+                <form name="new_promo.create_form" class="form-horizontal padding-fix" novalidate
+                      ng-submit="new_promo.create()">
+                    <div class="form-group" ng-if="new_promo.can_select_brands">
+                        <label class="col-md-3 col-lg-3 control-label">Brand</label>
+                        <div class="col-md-9 col-lg-9">
+                            <select name="brand" class="form-control input-large margin-top-five" ng-required="true"
+                                    ng-change="new_promo.loadMenuOptions()"
+                                    ng-model="new_promo.promo_data.brand_id" ng-fade
+                                    ng-options="brand.brand_id as brand.brand_name for brand in new_promo.brands">
+                                <option class="placeholder-color" value="" selected disabled>Brand</option>
+                            </select>
+                            <div class="input-large alert alert-danger ng-hide alert-reg-position"
+                                 ng-show="new_promo.create_form.brand.$error.required
+                                 && (new_promo.create_form.brand.$faded || new_promo.promo_data.submit)"
+                                 role="alert">
+                                Brand is required.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-3 col-lg-3 control-label">Keyword(s)</label>
+                        <div class="col-md-9 col-lg-9">
+                            <input type="text" class="input-large form-control inline" name="keywords"
+                                   placeholder="Promo Codes , Separated"
+                                   ng-model="new_promo.promo_data.key_word" ng-blur="new_promo.validateKeyWords()"
+                                   ng-fade
+                                   ng-required="!new_promo.promo_data.automatic_promo"
+                                   ng-disabled="new_promo.promo_data.automatic_promo">
+                            <button type="button" class="btn-success btn-xs inline m-l-10"
+                                    ng-click="new_promo.promo_data.automatic_promo = true"
+                                    ng-show="!new_promo.promo_data.automatic_promo">No Keywords Needed
+                            </button>
+                            <button type="button" class="btn-success btn-xs inline m-l-10"
+                                    ng-click="new_promo.promo_data.automatic_promo = false"
+                                    ng-show="new_promo.promo_data.automatic_promo">Keyword Driven Promo
+                            </button>
+                            <div class="input-large alert alert-danger ng-hide alert-reg-position"
+                                 ng-show="new_promo.create_form.keywords.$error.required
+                                 && (new_promo.create_form.keywords.$faded || new_promo.promo_data.submit)"
+                                 role="alert">
+                                Keyword is required.
+                            </div>
+                            <div class="input-large alert alert-danger ng-hide alert-reg-position"
+                                 ng-show="new_promo.create_form.keywords.$error.key_word_new
+                                 && (new_promo.create_form.keywords.$faded || new_promo.promo_data.submit)"
+                                 role="alert">
+                                {{new_promo.key_word_date_error}}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-3 col-lg-3 control-label">Description</label>
+                        <div class="col-md-9 col-lg-9">
+                            <input type="text" class="input-large form-control" name="description"
+                                   placeholder="For Your Reference"
+                                   ng-model="new_promo.promo_data.description" ng-fade ng-required="true">
+                            <div class="input-large alert alert-danger ng-hide alert-reg-position"
+                                 ng-show="new_promo.create_form.description.$error.required
+                                 && (new_promo.create_form.description.$faded || new_promo.promo_data.submit)"
+                                 role="alert">
+                                Description is required.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-3 col-lg-3 control-label">Promotion Type</label>
+                        <div class="col-md-9 col-lg-9">
+                            <select name="cmb_promo_type" class="form-control input-large margin-top-five"
+                                    ng-required="true" j
+                                    ng-change="new_promo.loadMenuOptions(new_promo.promo_data.brand)"
+                                    ng-model="new_promo.promo_data.promo_type" ng-fade
+                                    ng-options="promo_type.code as promo_type.value for promo_type in new_promo.promo_types">
+                                <option class="placeholder-color" value="" selected disabled>Discount Type</option>
+                            </select>
+                            <div class="input-large alert alert-danger ng-hide alert-reg-position"
+                                 ng-show="new_promo.create_form.cmb_promo_type.$error.required
+                                 && (new_promo.create_form.cmb_promo_type.$faded || new_promo.promo_data.submit)"
+                                 role="alert">
+                                Promotion Type is required.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-3 col-lg-3 control-label">First Order</label>
+                        <div class="col-md-9 col-lg-9 m-t-5">
+                            <toggle-switch name="first_order"
+                                           ng-model="new_promo.promo_data.valid_on_first_order_only"></toggle-switch>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-3 col-lg-3 control-label">Order Type</label>
+                        <div class="col-md-9 col-lg-9">
+                            <select name="order_type" class="form-control input-large margin-top-five"
+                                    ng-required="true" j
+                                    ng-change="new_promo.loadMenuOptions(new_promo.promo_data.brand)"
+                                    ng-model="new_promo.promo_data.order_type"
+                                    ng-fade
+                                    ng-options="order_type.code as order_type.value for order_type in new_promo.order_types">
+                                <option class="placeholder-color" value="" selected disabled>Order Type</option>
+                            </select>
+                            <div class="input-large alert alert-danger ng-hide alert-reg-position"
+                                 ng-show="new_promo.create_form.order_type.$error.required
+                                 && (new_promo.create_form.order_type.$faded || new_promo.promo_data.submit)"
+                                 role="alert">
+                                Order Type is required.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-3 col-lg-3 control-label">Uses Per Customer</label>
+                        <div class="col-md-9 col-lg-9">
+                            <toggle-switch class="fix-margin" style="margin-top: 2px;" name="customer_uses"
+                                           ng-model="new_promo.promo_data.customer_uses"></toggle-switch>
+                            <div ng-show="!new_promo.promo_data.customer_uses" class="secondary-text m-t-5">
+                                Leave Off for Unlimited Customer Uses
+                            </div>
+
+                            <input type="number" class="m-t-5 input-med form-control"
+                                   name="max_use" placeholder="Enter Max Uses" min="1" max="1000"
+                                   ng-max="1000" ng-min="1"
+                                   ng-model="new_promo.promo_data.max_use" ng-show="new_promo.promo_data.customer_uses"
+                                   ng-fade ng-required="new_promo.promo_data.customer_uses">
+
+                            <div class="input-med alert alert-danger ng-hide alert-reg-position"
+                                 ng-show="(new_promo.create_form.max_use.$error.required || new_promo.create_form.max_use.$error.number)
+                                 && (new_promo.create_form.max_use.$faded || new_promo.promo_data.submit)"
+                                 role="alert">
+                                If turned on, a value for the number of customer total uses is required.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-3 col-lg-3 control-label">Multiple Uses Per Order</label>
+                        <div class="col-md-9 col-lg-9 m-t-5">
+                            <toggle-switch class="fix-margin2" name="allow_multiple_use_per_order"
+                                           ng-model="new_promo.promo_data.allow_multiple_use_per_order"></toggle-switch>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-3 col-lg-3 control-label">Max Uses Per Campaign</label>
+                        <div class="col-md-9 col-lg-9">
+                            <toggle-switch class="fix-margin" name="campaign_uses"
+                                           ng-model="new_promo.promo_data.campaign_uses"></toggle-switch>
+                            <div ng-show="!new_promo.promo_data.campaign_uses" class="secondary-text m-t-5">
+                                Maximum promo redemptions by all users collectively. (Example: I only want this Promo
+                                used100 times.) Leave off if you do not want to limit the number of collective
+                                redemptions
+                            </div>
+
+                            <input type="number" class="m-t-5 input-med form-control"
+                                   name="max_redemptions" placeholder="Enter Max Uses" min="0" max="1000"
+                                   ng-max="1000" ng-min="0"
+                                   ng-model="new_promo.promo_data.max_redemptions"
+                                   ng-show="new_promo.promo_data.campaign_uses" ng-fade
+                                   ng-required="new_promo.promo_data.campaign_uses">
+
+                            <div class="input-med alert alert-danger ng-hide alert-reg-position"
+                                 ng-show="(new_promo.create_form.max_redemptions.$error.required || new_promo.create_form.max_redemptions.$error.number)
+                                 && (new_promo.create_form.max_redemptions.$faded || new_promo.promo_data.submit)"
+                                 role="alert">
+                                If turned on, a value for the number of campaign total uses is required.
+                            </div>
+                        </div>
+                    </div>
+
+                    <date-range-to-from-picker date-options="new_promo.date_options"
+                                               on-period-changed="new_promo.onPeriodChanged(startDate, endDate)"></date-range-to-from-picker>
+
+                    <input type="hidden" ng-model="new_promo.promo_data.start_date">
+                    <input type="hidden" ng-model="new_promo.promo_data.end_date">
+
+                    <div ng-show="new_promo.userService.hasPermission('multi_merchs_filter')"
+                         class="form-group m-t-10 m-b-10">
+                        <button id="create-promo-open-select-merchants-button" type='button'
+                                class='btn menu-btn btn-primary fix-button-wrap-text' data-toggle="modal" ng-disabled
+                                ng-show="new_promo.merchant_search_service.selected_merchants.length < 1"
+                                ng-click="new_promo.showSelectMerchantModal()">Select Merchants for Promo
+                        </button>
+
+                        <button type='button' class='btn menu-btn btn-primary fix-button-wrap-text' data-toggle="modal"
+                                ng-disabled
+                                ng-show="new_promo.merchant_search_service.selected_merchants.length > 0"
+                                ng-click="new_promo.showSelectMerchantModal()">Change Merchants for Promo Selection
+                        </button>
+
+                        <div class="col-md-12">
+                            <div class="col-md-3"></div>
+
+                            <div class="col-md-9 col-lg-9">
+                                <div class="secondary-text m-t-10" ng-show="new_promo.userService.hasPermission('brands_filter')">
+                                    Only select merchants if not all merchants tied to your brand will be honoring this
+                                    promo.
+                                </div>
+                                <div class="secondary-text m-t-10" ng-show="!new_promo.userService.hasPermission('brands_filter')">
+                                    Only select specific merchants if you are not applying this promo to all your locations.
+                                </div>
+                                <div class="alert alert-danger ng-hide alert-reg-position"
+                                     ng-show="new_promo.create_form.keywords.$error.merchants_menu_valid"
+                                     role="alert">
+                                    Sorry, the merchants you've selected cannot be grouped for promotions.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="filter-loader-contain" ng-if="new_promo.validatingMerchantGroups">
+                        <div class="filter-loader"></div>
+                    </div>
+                    <div class="form-group margin-top-10 m-b-10"
+                         ng-show="new_promo.merchant_search_service.selected_merchants.length > 0">
+                        <label class="col-md-3 col-lg-3 control-label">Selected Merchants</label>
+                        <div class="col-md-9 m-t-10"
+                             ng-show="new_promo.merchant_search_service.selected_merchants.length > 0">
+                            <div class="table-fixed-with-scroll">
+                                <table class="table table-hover">
+                                    <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Name</th>
+                                        <th>Address</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr ng-repeat="merchant in new_promo.merchant_search_service.selected_merchants">
+                                        <td>{{merchant.merchant_id}}</td>
+                                        <td>{{merchant.name}}</td>
+                                        <td>
+                                            {{merchant.address1}}<BR>
+                                            {{merchant.city}}, {{merchant.state}} {{merchant.zip}}
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label class="col-md-3 col-lg-3 control-label"></label>
+                        <div class="col-md-9 col-lg-9">
+                            <div class="input-med alert alert-danger ng-hide alert-reg-position"
+                                 ng-show="new_promo.create_form.keywords.$error.to_before_from"
+                                 role="alert">
+                                "To Date" must be after "From Date".
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--<div class="form-group">-->
+                    <!--<label class="col-md-3 col-lg-3 control-label">Start Date</label>-->
+                    <!--<div class="col-md-9 col-lg-9">-->
+                    <!--<div class='input-group input-large date' id='from_date'>-->
+                    <!--<input id="start_date" name="start_date" type='text' class="input-med form-control" placeholder="MM/DD/YYYY"-->
+                    <!--ng-model="new_promo.promo_data.start_date" ng-fade />-->
+                    <!--<span class="input-group-addon">-->
+                    <!--<span class="fa fa-calendar"></span>-->
+                    <!--</span>-->
+                    <!--</div>-->
+                    <!--</div>-->
+
+                    <!--</div>-->
+
+                    <!--<div class="form-group">-->
+                    <!--<label class="col-md-3 col-lg-3 control-label">End Date</label>-->
+                    <!--<div class="col-md-9 col-lg-9">-->
+                    <!--<div class='input-group input-large date' id='to_date'>-->
+                    <!--<input id="end_date" name="end_date" type='text' class="input-med form-control" placeholder="MM/DD/YYYY"-->
+                    <!--ng-model="new_promo.promo_data.end_date" ng-fade>-->
+                    <!--<span class="input-group-addon">-->
+                    <!--<span class="fa fa-calendar"></span>-->
+                    <!--</span>-->
+                    <!--</div>-->
+                    <!--</div>-->
+                    <!--</div>-->
+
+                    <div ng-show="new_promo.discountPromoType()">
+                        <div class="form-group">
+                            <label class="col-md-3 col-lg-3 control-label">Min Order Amount</label>
+                            <div class="col-md-9 col-lg-9">
+                                <input type="number" class="input-med form-control" name="qualifying_amt"
+                                       placeholder="Qualifying Cart Subtotal"
+                                       ng-model="new_promo.promo_data.qualifying_amt" ng-fade
+                                       ng-required="new_promo.discountPromoType()">
+                                <div class="input-med alert alert-danger ng-hide alert-reg-position"
+                                     ng-show="new_promo.create_form.qualifying_amt.$error.required
+                                 && (new_promo.create_form.qualifying_amt.$faded || new_promo.promo_data.submit)"
+                                     role="alert">
+                                    Minimum Order Amount is Required.
+                                </div>
+                            </div>
+                        </div>
+                        <!--Only for Promo Type 1-->
+                        <div class="form-group" ng-show="new_promo.promo_data.promo_type == 1">
+                            <label class="col-md-3 col-lg-3 control-label">Discount Type</label>
+                            <div class="col-md-9 col-lg-9">
+                                <select name="discount_type" class="form-control input-large margin-top-five"
+                                        ng-required="new_promo.promo_data.promo_type == 1"
+                                        ng-model="new_promo.promo_data.discount_type" ng-fade
+                                        ng-change="new_promo.zeroOutUnselectedDiscountTypes()"
+                                        ng-options="discount_type.code as discount_type.value for discount_type in new_promo.discount_types">
+                                    <option class="placeholder-color" value="" selected disabled>Discount Type</option>
+                                </select>
+                                <div class="input-large alert alert-danger ng-hide alert-reg-position"
+                                     ng-show="new_promo.create_form.discount_type.$error.required
+                                 && (new_promo.create_form.discount_type.$faded || new_promo.promo_data.submit)"
+                                     role="alert">
+                                    Discount Type is required.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group"
+                             ng-show="new_promo.promo_data.promo_type == 4 || new_promo.promo_data.promo_type == 5">
+                            <label class="col-md-3 col-lg-3 control-label">Discount Type</label>
+                            <div class="col-md-9 col-lg-9">
+                                <select name="discount_type_4_5" class="form-control input-large margin-top-five"
+                                        ng-required="new_promo.promo_data.promo_type == 4 || new_promo.promo_data.promo_type == 5"
+                                        ng-model="new_promo.promo_data.discount_type" ng-fade
+                                        ng-change="new_promo.zeroOutUnselectedDiscountTypes()"
+                                        ng-options="discount_type.code as discount_type.value for discount_type in new_promo.discount_types_4_5">
+                                    <option class="placeholder-color" value="" selected disabled>Discount Type</option>
+                                </select>
+                                <div class="input-large alert alert-danger ng-hide alert-reg-position"
+                                     ng-show="new_promo.create_form.discount_type_4_5.$error.required
+                                 && (new_promo.create_form.discount_type_4_5.$faded || new_promo.promo_data.submit)"
+                                     role="alert">
+                                    Discount Type is required.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group" ng-show="new_promo.promo_data.discount_type == 'percent_off'">
+                            <label class="col-md-3 col-lg-3 control-label">% Off</label>
+                            <div class="col-md-9 col-lg-9">
+                                <input type="number" class="input-med form-control" name="percent_off"
+                                       placeholder="Enter Promo % Off" min="0" max="1000"
+                                       ng-max="1000" ng-min="0"
+                                       ng-model="new_promo.promo_data.percent_off" ng-fade
+                                       ng-required="new_promo.promo_data.discount_type == 'percent_off'">
+                                <div class="input-med alert alert-danger ng-hide alert-reg-position"
+                                     ng-show="new_promo.create_form.percent_off.$error.required
+                                 && (new_promo.create_form.percent_off.$faded || new_promo.promo_data.submit)"
+                                     role="alert">
+                                    Percent Off is Required.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group" ng-show="new_promo.promo_data.discount_type == 'dollars_off'">
+                            <label class="col-md-3 col-lg-3 control-label">Dollars Off</label>
+                            <div class="col-md-9 col-lg-9">
+                                <input type="number" class="input-med form-control" name="promo_amt"
+                                       placeholder="Enter Promo $ Off" min="0" max="1000"
+                                       ng-max="1000" ng-min="0"
+                                       ng-model="new_promo.promo_data.fixed_amount_off" ng-fade
+                                       ng-required="new_promo.promo_data.discount_type == 'fixed_amount_off'">
+                                <div class="input-med alert alert-danger ng-hide alert-reg-position"
+                                     ng-show="new_promo.create_form.fixed_amount_off.$error.required
+                                 && (new_promo.create_form.fixed_amount_off.$faded || new_promo.promo_data.submit)"
+                                     role="alert">
+                                    Dollars Off is Required.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group" ng-show="new_promo.promo_data.discount_type == 'fixed_price'">
+                            <label class="col-md-3 col-lg-3 control-label">Fixed Price</label>
+                            <div class="col-md-9 col-lg-9">
+                                <input type="number" class="input-med form-control" name="fixed_price"
+                                       placeholder="Enter Promo Fixed Price" min="0" max="1000"
+                                       ng-max="1000" ng-min="0"
+                                       ng-model="new_promo.promo_data.fixed_price" ng-fade
+                                       ng-required="new_promo.promo_data.discount_type == 'fixed_price'">
+                                <div class="input-med alert alert-danger ng-hide alert-reg-position"
+                                     ng-show="new_promo.create_form.fixed_price.$error.required
+                                 && (new_promo.create_form.fixed_price.$faded || new_promo.promo_data.submit)"
+                                     role="alert">
+                                    Fixed Price is Required.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group" ng-show="new_promo.promo_data.promo_type == 1">
+                            <label class="col-md-3 col-lg-3 control-label">Max Amount Off</label>
+                            <div class="col-md-9 col-lg-9">
+                                <input type="number" class="input-med form-control" name="max_amt_off"
+                                       placeholder="$$"
+                                       ng-model="new_promo.promo_data.max_amt_off" ng-fade
+                                >
+                                <div class="input-med alert alert-danger ng-hide alert-reg-position"
+                                     ng-show="new_promo.create_form.max_amount_off.$error.required
+                                 && (new_promo.create_form.max_amount_off.$faded || new_promo.promo_data.submit)"
+                                     role="alert">
+                                    Max Amount Off is Required.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <!--<h3 class="dark-grey">Add Customer Messages</h3>-->
+                    <!--<div class="form-group">-->
+                    <!--<label class="col-md-3 col-lg-3 control-label">Success</label>-->
+                    <!--<div class="col-md-6">-->
+                    <!--<textarea class="form-control" rows="3" name="success_message" ng-model="new_promo.promo_data.success_message"-->
+                    <!--ng-required='new_promo.promo_data.promo_type == 1'></textarea>-->
+
+                    <!--<div class="alert alert-danger ng-hide alert-reg-position"-->
+                    <!--ng-show="(new_promo.create_form.success_message.$error.required && new_promo.create_form.success_message.$touched)-->
+                    <!--|| (new_promo.create_form.success_message.$error.required && new_promo.promo_data.submit)"-->
+                    <!--role="alert">-->
+                    <!--Success Message is Required.-->
+                    <!--</div>-->
+                    <!--</div>-->
+                    <!--</div>-->
+
+                    <!--<div class="form-group">-->
+                    <!--<label class="col-md-3 col-lg-3 control-label">Qualifying</label>-->
+                    <!--<div class="col-md-6">-->
+                    <!--<textarea class="form-control" rows="3" name="qualifying" ng-model="new_promo.promo_data.qualifying"-->
+                    <!--ng-required='new_promo.promo_data.promo_type == 1'></textarea>-->
+
+                    <!--<div class="alert alert-danger ng-hide alert-reg-position"-->
+                    <!--ng-show="(new_promo.create_form.qualifying.$error.required && new_promo.create_form.qualifying.$touched)-->
+                    <!--|| (new_promo.create_form.qualifying.$error.required && new_promo.promo_data.submit)"-->
+                    <!--role="alert">-->
+                    <!--Qualifying Message is Required.-->
+                    <!--</div>-->
+                    <!--</div>-->
+                    <!--</div>-->
+
+                    <div class="text-center m-t-20"
+                         ng-show="new_promo.promo_data.promo_type == 2 || new_promo.promo_data.promo_type == 4 || new_promo.promo_data.promo_type == 5">
+                        <button id="menu-select-button" type='button'
+                                class='btn menu-btn btn-primary fix-button-wrap-text' data-toggle="modal"
+                                ng-disabled
+                                ng-show="!new_promo.bogo_menu_selected"
+                                data-target="#menu-select-modal"
+                                ng-click="new_promo.merchant_search_service.selected_merchants = [];">Select Menu for
+                            Promo
+                        </button>
+                        <button type='button' class='btn-primary menu-btn btn fix-button-wrap-text' data-toggle="modal"
+                                ng-disabled
+                                ng-show="new_promo.bogo_menu_selected"
+                                data-target="#menu-select-modal"
+                                ng-click="new_promo.merchant_search_service.selected_merchants = [];">Change Menu for
+                            Promo from
+                            {{new_promo.menu.current_menu.name}}
+                        </button>
+                    </div>
+
+
+                    <div ng-show="new_promo.promo_data.promo_type == 2" class="">
+
+                        <h2 class="dark-grey">Buy One Get One Free</h2>
+
+
+                        <div class="" ng-show="new_promo.bogo_menu_selected">
+                            <h3 class="dark-grey">Buy Menu Elements</h3>
+
+                            <div class=""
+                                 ng-show="new_promo.promo_data.bogo_menu_selections.buy_type == '' && new_promo.menu.menu_type_sizes.length > 0">
+                                <h5 class="dark-grey">What level of the menu will the Buy option exist on?</h5>
+
+                                <div class="row">
+                                    <div class="col-md-3 col-lg-3 text-center">
+                                        <button type="button" class="btn-primary btn btn-sm auto-margin"
+                                                ng-click="new_promo.openSelectCategories('bogo-buy')">
+                                            Category
+                                        </button>
+                                        <h5 class="pre-load-text">"By Entr&eacute;e get..."</h5>
+                                    </div>
+
+                                    <div class="col-md-3 col-lg-3 text-center">
+                                        <button type="button" class="btn-primary btn btn-sm auto-margin"
+                                                ng-click="new_promo.openSelectSections('bogo-buy')">
+                                            Section
+                                        </button>
+                                        <h5 class="pre-load-text">"Buy {{new_promo.example_bogo.menu_type_name}}
+                                            get..."</h5>
+                                    </div>
+
+                                    <div class="col-md-3 col-lg-3 text-center">
+                                        <button type="button" class="btn-primary btn btn-sm auto-margin"
+                                                ng-click="new_promo.openSelectSectionSizes('bogo-buy')">
+                                            Section Size
+                                        </button>
+                                        <h5 class="pre-load-text">"Buy {{new_promo.example_bogo.menu_type_name}} w/ size
+                                            {{new_promo.example_bogo.size_name}} get..."</h5>
+                                    </div>
+                                    <div class="col-md-3 col-lg-3 text-center">
+                                        <button type="button" class="btn-primary btn btn-sm auto-margin"
+                                                ng-click="new_promo.openSelectSectionItems('bogo-buy')">
+                                            Item
+                                        </button>
+                                        <h5 class="pre-load-text">"Buy {{new_promo.example_bogo.item_name}} get..."</h5>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+
+                                    <div class="col-md-3 col-lg-3 text-center float-fix">
+                                        <button type="button" class="btn-primary btn btn-sm auto-margin "
+                                                ng-click="new_promo.openSectionItemSizes('bogo-buy')">
+                                            Item Size
+                                        </button>
+                                        <h5 class="pre-load-text">"Buy {{new_promo.example_bogo.item_name}} w/ size
+                                            {{new_promo.example_bogo.size_name}} get..."</h5>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-12 m-t-15"
+                                 ng-show="new_promo.promo_data.bogo_menu_selections.selected_buy_category_list.length > 0">
+                                <label class="col-md-5 col-lg-3">
+                                    Buy Menu Categories:
+                                </label>
+
+                                <div class="col-md-12">
+                                    <h5 class="dark-grey">
+                                        {{new_promo.promo_data.bogo_menu_selections.selected_buy_category_list}}</h5>
+                                </div>
+                            </div>
+
+                            <div class="col-md-12 m-t-15"
+                                 ng-show="new_promo.promo_data.bogo_menu_selections.selected_buy_sections_list.length > 0">
+                                <label class="col-md-5 col-lg-3">
+                                    Buy Menu Sections:
+                                </label>
+
+                                <div class="col-md-12">
+                                    <h5 class="dark-grey">
+                                        {{new_promo.promo_data.bogo_menu_selections.selected_buy_sections_list}}</h5>
+                                </div>
+                            </div>
+
+                            <div class="col-md-12 m-t-15"
+                                 ng-show="new_promo.promo_data.bogo_menu_selections.buy_selections.section_sizes_list.length > 0">
+                                <label class="col-md-3 col-lg-3">
+                                    Buy Section Sizes:
+                                </label>
+
+                                <div class="col-md-3 m-t-20">
+                                    <h5 class="dark-grey">
+                                        {{new_promo.promo_data.bogo_menu_selections.buy_selections.section_sizes_list}}</h5>
+                                </div>
+                            </div>
+                            <div class="col-md-12 m-t-15"
+                                 ng-show="new_promo.promo_data.bogo_menu_selections.selected_buy_section_items_list.length > 0">
+                                <label class="col-md-3 col-lg-3">
+                                    Buy Items:
+                                </label>
+
+                                <div class="col-md-3 m-t-20">
+                                    <h5 class="dark-grey">
+                                        {{new_promo.promo_data.bogo_menu_selections.selected_buy_section_items_list}}</h5>
+                                </div>
+                            </div>
+
+                            <div class="col-md-12 m-t-15"
+                                 ng-show="new_promo.promo_data.bogo_menu_selections.selected_buy_section_items_sizes_list.length > 0">
+                                <label class="col-md-3 col-lg-3">
+                                    Buy Item Sizes:
+                                </label>
+
+                                <div class="col-md-3 m-t-20">
+                                    <h5 class="dark-grey">
+                                        {{new_promo.promo_data.bogo_menu_selections.selected_buy_section_items_sizes_list}}</h5>
+                                </div>
+                            </div>
+
+                            <div>
+                                <h3 class="dark-grey m-t-20" style="clear: both;">Get Menu Elements</h3>
+                            </div>
+                            <div class=""
+                                 ng-show="new_promo.promo_data.bogo_menu_selections.get_type == '' && new_promo.menu.menu_type_sizes.length > 0">
+                                <h5 class="dark-grey">What level of the menu will the "Get" option exist on?</h5>
+
+                                <div class="row">
+                                    <div class="col-md-3 col-lg-3 text-center">
+                                        <button type="button" class="btn-primary btn btn-sm auto-margin"
+                                                ng-click="new_promo.openSelectCategories('bogo-get')">
+                                            Category
+                                        </button>
+                                        <h5 class="pre-load-text">"Entr&eacute;e"</h5>
+                                    </div>
+
+                                    <div class="col-md-3 col-lg-3 text-center">
+                                        <button type="button" class="btn-primary btn btn-sm auto-margin"
+                                                ng-click="new_promo.openSelectSections('bogo-get')">
+                                            Section
+                                        </button>
+                                        <h5 class="pre-load-text">"...Get
+                                            {{new_promo.example_bogo.menu_type_name}}"</h5>
+                                    </div>
+
+                                    <div class="col-md-3 col-lg-3 text-center">
+                                        <button type="button" class="btn-primary btn btn-sm auto-margin"
+                                                ng-click="new_promo.openSelectSectionSizes('bogo-get')">
+                                            Section Size
+                                        </button>
+                                        <h5 class="pre-load-text">"Get {{new_promo.example_bogo.menu_type_name}} w/ size
+                                            {{new_promo.example_bogo.size_name}}"</h5>
+                                    </div>
+
+                                    <div class="col-md-3 col-lg-3 text-center">
+                                        <button type="button" class="btn-primary btn btn-sm auto-margin"
+                                                ng-click="new_promo.openSelectSectionItems('bogo-get')">
+                                            Item
+                                        </button>
+                                        <h5 class="pre-load-text">"...Get {{new_promo.example_bogo.item_name}}"</h5>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-3 col-lg-3 text-center float-fix">
+                                        <button type="button" class="btn-primary btn btn-sm auto-margin "
+                                                ng-click="new_promo.openSectionItemSizes('bogo-get')">
+                                            Item Size
+                                        </button>
+                                        <h5 class="pre-load-text">"...Get {{new_promo.example_bogo.item_name}} w/ size
+                                            {{new_promo.example_bogo.size_name}}"</h5>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="col-md-12 m-t-15"
+                                 ng-show="new_promo.promo_data.bogo_menu_selections.selected_get_category_list.length > 0">
+                                <label class="col-md-5 col-lg-3">
+                                    Get Menu Categories:
+                                </label>
+
+                                <div class="col-md-12">
+                                    <h5 class="dark-grey">
+                                        {{new_promo.promo_data.bogo_menu_selections.selected_get_category_list}}</h5>
+                                </div>
+                            </div>
+
+                            <div class="col-md-12 m-t-15"
+                                 ng-show="new_promo.promo_data.bogo_menu_selections.selected_get_sections_list.length > 0">
+                                <label class="col-md-3 col-lg-3">
+                                    Get Menu Sections:
+                                </label>
+
+                                <div class="col-md-3 m-t-20">
+                                    <h5 class="dark-grey">
+                                        {{new_promo.promo_data.bogo_menu_selections.selected_get_sections_list}}</h5>
+                                </div>
+                            </div>
+
+
+                            <div class="col-md-12 m-t-15"
+                                 ng-show="new_promo.promo_data.bogo_menu_selections.selected_get_section_sizes_list.length > 0">
+                                <label class="col-md-3 col-lg-3">
+                                    Get Section Sizes:
+                                </label>
+
+                                <div class="col-md-3 m-t-20">
+                                    <h5 class="dark-grey">
+                                        {{new_promo.promo_data.bogo_menu_selections.selected_get_section_sizes_list}}</h5>
+                                </div>
+                            </div>
+
+
+                            <div class="col-md-12 m-t-15"
+                                 ng-show="new_promo.promo_data.bogo_menu_selections.selected_get_section_items_list.length > 0">
+                                <label class="col-md-3 col-lg-3">
+                                    Get Items:
+                                </label>
+
+                                <div class="col-md-3 m-t-20">
+                                    <h5 class="dark-grey">
+                                        {{new_promo.promo_data.bogo_menu_selections.selected_get_section_items_list}}</h5>
+                                </div>
+                            </div>
+
+                            <div class="col-md-12 m-t-15"
+                                 ng-show="new_promo.promo_data.bogo_menu_selections.selected_get_section_items_sizes_list.length > 0">
+                                <label class="col-md-3 col-lg-3">
+                                    Get Item Sizes:
+                                </label>
+
+                                <div class="col-md-3 m-t-20">
+                                    <h5 class="dark-grey">
+                                        {{new_promo.promo_data.bogo_menu_selections.selected_get_section_items_sizes_list}}</h5>
+                                </div>
+                            </div>
+
+                            <div class=" text-center"
+                                 ng-show="new_promo.promo_data.bogo_menu_selections.get_type == 'item_size'">
+                                <div class="col-md-12 margin-button-10">
+                                    <button type="button" class="btn-primary btn btn-lg auto-margin"
+                                            ng-click="new_promo.openBogoSectionSectionItemsSizes('get')">
+                                        Select "Get" Item Sizes
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="col-md-12 m-t-10 m-b-10">
+                                <button type="button" class="btn-default btn btn-xs pul-right"
+                                        ng-show="new_promo.promo_data.bogo_menu_selections.get_type != ''"
+                                        ng-click="new_promo.promo_data.bogo_menu_selections.get_type = ''">
+                                    <i class="fa fa-times-circle"></i> Change Get Menu Element Type
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="input-large alert alert-danger alert-reg-position"
+                             ng-show="new_promo.create_form.keywords.$error.buy_object_selected
+                                 && new_promo.promo_data.submit"
+                             role="alert">
+                            You must select at least one "Buy" menu object.
+                        </div>
+
+                        <div class="input-large alert alert-danger alert-reg-position"
+                             ng-show="new_promo.create_form.keywords.$error.get_object_selected
+                                 && new_promo.promo_data.submit"
+                             role="alert">
+                            You must select at least one "Get" menu object.
+                        </div>
+                    </div>
+
+
+                    <div ng-show="new_promo.promo_data.promo_type == 5" class="">
+
+                        <h2 class="dark-grey">Buy ALL Menu Entities for Discount</h2>
+
+                        <div class="" ng-show="new_promo.bogo_menu_selected">
+                            <div>
+                                <div class="row">
+                                    <div class="col-md-3 col-lg-3 text-center">
+                                        <button type="button" class="btn-primary btn btn-sm auto-margin"
+                                                ng-click="new_promo.openSelectCategories('discount-all')">
+                                            Category
+                                        </button>
+                                        <h5 class="pre-load-text">"By Entr&eacute;e for discount..."</h5>
+                                    </div>
+
+                                    <div class="col-md-3 col-lg-3 text-center">
+                                        <button type="button" class="btn-primary btn btn-sm auto-margin"
+                                                ng-click="new_promo.openSelectSections('discount-all')">
+                                            Section
+                                        </button>
+                                        <h5 class="pre-load-text">"Buy {{new_promo.example_bogo.menu_type_name}} for
+                                            discount..."</h5>
+                                    </div>
+
+                                    <div class="col-md-3 col-lg-3 text-center">
+                                        <button type="button" class="btn-primary btn btn-sm auto-margin"
+                                                ng-click="new_promo.openSelectSectionSizes('discount-all')">
+                                            Section Size
+                                        </button>
+                                        <h5 class="pre-load-text">"Buy {{new_promo.example_bogo.menu_type_name}} w/ size
+                                            {{new_promo.example_bogo.size_name}} for discount..."</h5>
+                                    </div>
+                                    <div class="col-md-3 col-lg-3 text-center">
+                                        <button type="button" class="btn-primary btn btn-sm auto-margin"
+                                                ng-click="new_promo.openSelectSectionItems('discount-all')">
+                                            Item
+                                        </button>
+                                        <h5 class="pre-load-text">"Buy {{new_promo.example_bogo.item_name}} for
+                                            discount..."</h5>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+
+                                    <div class="col-md-3 col-lg-3 text-center float-fix">
+                                        <button type="button" class="btn-primary btn btn-sm auto-margin "
+                                                ng-click="new_promo.openSectionItemSizes('discount-all')">
+                                            Item Size
+                                        </button>
+                                        <h5 class="pre-load-text">"Buy {{new_promo.example_bogo.item_name}} w/ size
+                                            {{new_promo.example_bogo.size_name}} get..."</h5>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-12 m-t-15"
+                                 ng-show="new_promo.promo_data.buy_all_discount_category_list.length > 0">
+                                <label class="col-md-5 col-lg-3">
+                                    Discount Categories:
+                                </label>
+
+                                <div class="col-md-12">
+                                    <h5 class="dark-grey">{{new_promo.promo_data.buy_all_discount_category_list}}</h5>
+                                </div>
+                            </div>
+
+                            <div class="col-md-12 m-t-15"
+                                 ng-show="new_promo.promo_data.buy_all_discount_sections_list.length > 0">
+                                <label class="col-md-5 col-lg-3">
+                                    Discount Sections:
+                                </label>
+
+                                <div class="col-md-12">
+                                    <h5 class="dark-grey">{{new_promo.promo_data.buy_all_discount_sections_list}}</h5>
+                                </div>
+                            </div>
+
+                            <div class="col-md-12 m-t-15"
+                                 ng-show="new_promo.promo_data.buy_all_discount.section_sizes_list.length > 0">
+                                <label class="col-md-3 col-lg-3">
+                                    Discount Section Sizes:
+                                </label>
+
+                                <div class="col-md-3 m-t-20">
+                                    <h5 class="dark-grey">
+                                        {{new_promo.promo_data.buy_all_discount.section_sizes_list}}</h5>
+                                </div>
+                            </div>
+                            <div class="col-md-12 m-t-15"
+                                 ng-show="new_promo.promo_data.buy_all_discount_section_items_list.length > 0">
+                                <label class="col-md-3 col-lg-3">
+                                    Discount Items:
+                                </label>
+
+                                <div class="col-md-3 m-t-20">
+                                    <h5 class="dark-grey">
+                                        {{new_promo.promo_data.buy_all_discount_section_items_list}}</h5>
+                                </div>
+                            </div>
+
+                            <div class="col-md-12 m-t-15"
+                                 ng-show="new_promo.promo_data.buy_all_discount_section_items_sizes_list.length > 0">
+                                <label class="col-md-3 col-lg-3">
+                                    Discount Item Sizes:
+                                </label>
+
+                                <div class="col-md-3 m-t-20">
+                                    <h5 class="dark-grey">
+                                        {{new_promo.promo_data.buy_all_discount_section_items_sizes_list}}</h5>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="input-large alert alert-danger alert-reg-position"
+                             ng-show="new_promo.create_form.keywords.$error.buy_all_object_selected
+                                 && new_promo.promo_data.submit"
+                             role="alert">
+                            You must select at least one "Buy All" menu object.
+                        </div>
+                    </div>
+
+                    <div ng-show="new_promo.promo_data.promo_type == 4" class="">
+
+                        <h2 class="dark-grey">Buy ANY Menu Entities for Discount</h2>
+
+                        <div class="" ng-show="new_promo.bogo_menu_selected">
+                            <div>
+                                <div class="row">
+                                    <div class="col-md-3 col-lg-3 text-center">
+                                        <button type="button" class="btn-primary btn btn-sm auto-margin"
+                                                ng-click="new_promo.openSelectCategories('discount-any')">
+                                            Category
+                                        </button>
+                                        <h5 class="pre-load-text">"By Entr&eacute;e for discount..."</h5>
+                                    </div>
+
+                                    <div class="col-md-3 col-lg-3 text-center">
+                                        <button type="button" class="btn-primary btn btn-sm auto-margin"
+                                                ng-click="new_promo.openSelectSections('discount-any')">
+                                            Section
+                                        </button>
+                                        <h5 class="pre-load-text">"Buy {{new_promo.example_bogo.menu_type_name}} for
+                                            discount..."</h5>
+                                    </div>
+
+                                    <div class="col-md-3 col-lg-3 text-center">
+                                        <button type="button" class="btn-primary btn btn-sm auto-margin"
+                                                ng-click="new_promo.openSelectSectionSizes('discount-any')">
+                                            Section Size
+                                        </button>
+                                        <h5 class="pre-load-text">"Buy {{new_promo.example_bogo.menu_type_name}} w/ size
+                                            {{new_promo.example_bogo.size_name}} for discount..."</h5>
+                                    </div>
+                                    <div class="col-md-3 col-lg-3 text-center">
+                                        <button type="button" class="btn-primary btn btn-sm auto-margin"
+                                                ng-click="new_promo.openSelectSectionItems('discount-any')">
+                                            Item
+                                        </button>
+                                        <h5 class="pre-load-text">"Buy {{new_promo.example_bogo.item_name}} for
+                                            discount..."</h5>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+
+                                    <div class="col-md-3 col-lg-3 text-center float-fix">
+                                        <button type="button" class="btn-primary btn btn-sm auto-margin "
+                                                ng-click="new_promo.openSectionItemSizes('discount-any')">
+                                            Item Size
+                                        </button>
+                                        <h5 class="pre-load-text">"Buy {{new_promo.example_bogo.item_name}} w/ size
+                                            {{new_promo.example_bogo.size_name}} get..."</h5>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-12 m-t-15"
+                                 ng-show="new_promo.promo_data.buy_any_discount_category_list.length > 0">
+                                <label class="col-md-5 col-lg-3">
+                                    Discount Categories:
+                                </label>
+
+                                <div class="col-md-12">
+                                    <h5 class="dark-grey">{{new_promo.promo_data.buy_any_discount_category_list}}</h5>
+                                </div>
+                            </div>
+
+                            <div class="col-md-12 m-t-15"
+                                 ng-show="new_promo.promo_data.buy_any_discount_sections_list.length > 0">
+                                <label class="col-md-5 col-lg-3">
+                                    Discount Sections:
+                                </label>
+
+                                <div class="col-md-12">
+                                    <h5 class="dark-grey">{{new_promo.promo_data.buy_any_discount_sections_list}}</h5>
+                                </div>
+                            </div>
+
+                            <div class="col-md-12 m-t-15"
+                                 ng-show="new_promo.promo_data.buy_any_discount.section_sizes_list.length > 0">
+                                <label class="col-md-3 col-lg-3">
+                                    Discount Section Sizes:
+                                </label>
+
+                                <div class="col-md-3 m-t-20">
+                                    <h5 class="dark-grey">
+                                        {{new_promo.promo_data.buy_any_discount.section_sizes_list}}</h5>
+                                </div>
+                            </div>
+                            <div class="col-md-12 m-t-15"
+                                 ng-show="new_promo.promo_data.buy_any_discount_section_items_list.length > 0">
+                                <label class="col-md-3 col-lg-3">
+                                    Discount Items:
+                                </label>
+
+                                <div class="col-md-3 m-t-20">
+                                    <h5 class="dark-grey">
+                                        {{new_promo.promo_data.buy_any_discount_section_items_list}}</h5>
+                                </div>
+                            </div>
+
+                            <div class="col-md-12 m-t-15"
+                                 ng-show="new_promo.promo_data.buy_any_discount_section_items_sizes_list.length > 0">
+                                <label class="col-md-3 col-lg-3">
+                                    Discount Item Sizes:
+                                </label>
+
+                                <div class="col-md-3 m-t-20">
+                                    <h5 class="dark-grey">
+                                        {{new_promo.promo_data.buy_any_discount_section_items_sizes_list}}</h5>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="input-large alert alert-danger alert-reg-position"
+                             ng-show="new_promo.create_form.keywords.$error.buy_any_object_selected
+                                 && new_promo.promo_data.submit"
+                             role="alert">
+                            You must select at least one "Buy Any" menu object.
+                        </div>
+                    </div>
+
+                    <div ng-show="new_promo.promo_data.promo_type == 300" class="">
+                        <div class="form-group">
+                            <label class="col-md-3 col-lg-3 control-label">% of Delivery Discount</label>
+                            <div class="col-md-9 col-lg-9">
+                                <input type="number" class="input-med form-control" name="delivery_percent_off"
+                                       placeholder="Enter % Off" min="0" max="1000"
+                                       ng-max="1000" ng-min="0"
+                                       ng-model="new_promo.promo_data.percent_off" ng-fade
+                                       ng-required="new_promo.promo_data.promo_type == 300">
+                                <div class="input-med alert alert-danger ng-hide alert-reg-position"
+                                     ng-show="new_promo.create_form.delivery_percent_off.$error.required
+                                 && (new_promo.create_form.delivery_percent_off.$faded || new_promo.promo_data.submit)"
+                                     role="alert">
+                                    Delivery Percent Off is Required.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-3 col-lg-3 control-label">Min Order Amount</label>
+                            <div class="col-md-9 col-lg-9">
+                                <input type="number" class="input-med form-control" name="delivery_qualifying_amt"
+                                       placeholder="Qualifying Cart Subtotal"
+                                       ng-model="new_promo.promo_data.qualifying_amt" ng-fade
+                                       ng-required="new_promo.promo_data.promo_type == 300">
+                                <div class="input-med alert alert-danger ng-hide alert-reg-position"
+                                     ng-show="new_promo.create_form.delivery_qualifying_amt.$error.required
+                                 && (new_promo.create_form.delivery_qualifying_amt.$faded || new_promo.promo_data.submit)"
+                                     role="alert">
+                                    Minimum Order Qualifying Amount is Required.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="col-md-12">
+                        <div ng-show="new_promo.promo_data.processing" class="form-loader">
+                            <div class="line"></div>
+                            <div class="line"></div>
+                            <div class="line"></div>
+                            <div class="line"></div>
+                        </div>
+                    </div>
+
+                    <div class="submit-contain pull-right">
+                        <button id="submit-create-new-promo" class='btn-success btn'>Submit</button>
+                    </div>
+                </form>
+            </div><!-- panel-body -->
+        </div> <!-- panel -->
+    </div> <!-- col-->
+</div>
+
+<div id="menu-select-modal" class="modal fade" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Select Menu</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="col-md-3 col-lg-3 control-label">Menu Search</label>
+                    <div class="col-md-9 col-lg-9">
+                        <label for="search_text">Search</label>
+                        <form name="new_promo.menu_search_form" novalidate ng-submit="new_promo.menuSearch()">
+                            <input type="text" class="input-large form-control"
+                                   name="search_text" placeholder=""
+                                   ng-model="new_promo.search.text" ng-required="true">
+
+                            <div class="submit-contain">
+                                <button class='btn-primary menu-btn btn'>Search</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-xs-12 create-promo-view">
+                            <h5 class="pre-load-text" ng-show="!new_promo.search.initial_search">No Search Set</h5>
+                            <div class="filter-loader-contain" ng-show="new_promo.search.processing">
+                                <div class="filter-loader"></div>
+                            </div>
+                            <table class="big-screen table table-hover" ng-show="new_promo.search.results.length > 0">
+                                <thead>
+                                <tr>
+                                    <th>Menu ID</th>
+                                    <th>External ID</th>
+                                    <th>Name</th>
+                                    <th>Description</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr ng-repeat="search_menu in new_promo.search.results"
+                                    ng-click="new_promo.selectMenu(search_menu)">
+                                    <td>{{search_menu.menu_id}}</td>
+                                    <td>{{search_menu.external_menu_id}}</td>
+                                    <td>{{search_menu.name}}</td>
+                                    <td class="eight-em-text">{{search_menu.description}}</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <div class="small-screen">
+                                <div ng-repeat="search_menu in new_promo.search.results">
+                                    <div ng-click="new_promo.selectMenu(search_menu)">
+                                        <div class="panel row-table">
+                                            <div class="name">
+                                                <h5 class="dark-grey"><b>{{search_menu.name}}</b>
+                                                </h5>
+                                            </div>
+
+                                            <div class="id">
+                                                <h5 class="dark-grey">Menu ID
+                                                    <b>{{search_menu.menu_id}}</b></h5>
+                                            </div>
+                                            <div class="clear">
+                                                External ID:
+                                                {{search_menu.external_menu_id}}
+                                            </div>
+
+                                            <div>
+                                                Description: {{search_menu.description}}
+                                            </div>
+
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div ng-show="im.item_priority_processing" class="form-loader">
+                    <div class="line"></div>
+                    <div class="line"></div>
+                    <div class="line"></div>
+                    <div class="line"></div>
+                </div>
+                <button type="button" ng-disabled class="btn btn-default" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<select-menu-categories close-menu-object-select="new_promo.setSelectedCategories()"></select-menu-categories>
+<select-menu-sections close-menu-object-select="new_promo.setSelectedSections()"></select-menu-sections>
+<select-menu-sizes close-menu-object-select="new_promo.setSelectSectionSizes()"></select-menu-sizes>
+<select-menu-items close-menu-object-select="new_promo.setBogoSectionItems()"></select-menu-items>
+<select-menu-item-sizes close-menu-object-select="new_promo.setSectionItemSizes()"></select-menu-item-sizes>
+
+<div id="menu-select-bogo-items-sizes" class="modal fade" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Select Items</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="col-md-3 col-lg-3 control-label">Menu Section Items</label>
+                                <div class="col-md-9 col-lg-9 m-t-10">
+                                    <div class="col-md-12 button-select">
+                                        <table class="table table-hover m-t-10">
+                                            <tr ng-repeat="item_size in new_promo.bogo_all_section_item_sizes"
+                                                ng-click="new_promo.addBogoItemSize(item_size, $index)">
+                                                <td>
+                                                    <i class="fa fa-plus-circle" aria-hidden="true"></i>
+                                                </td>
+                                                <td>{{item_size.menu_type_name}}</td>
+                                                <td>{{item_size.item_name}}</td>
+                                                <td>{{item_size.size_name}}</td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group col-md-12">
+                                <label class="col-md- control-label">Selected Items:</label>
+                                <div class="col-md-12 m-t-10">
+                                    <div class="inline m-l-10">
+                                        <table class="table table-hover m-t-10">
+                                            <tr ng-repeat="item_size in new_promo.bogo_selected_item_sizes"
+                                                ng-click="new_promo.removeBogoItemSize(item_size, $index)">
+                                                <td>
+                                                    <i class="fa fa-minus-circle" aria-hidden="true"></i>
+                                                </td>
+                                                <td>{{item_size.menu_type_name}}</td>
+                                                <td>{{item_size.item_name}}</td>
+                                                <td>{{item_size.size_name}}</td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+            <div class="modal-footer">
+                <div ng-show="im.item_priority_processing" class="form-loader">
+                    <div class="line"></div>
+                    <div class="line"></div>
+                    <div class="line"></div>
+                    <div class="line"></div>
+                </div>
+
+                <button type="button" ng-disabled class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button class="btn btn-info" ng-click="new_promo.setBOGOItemSizes()">Submit</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div id="merchant-select-modal" class="modal fade promo-merchant-select-modal" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <button class="btn btn-success"
+                        ng-click="new_promo.enableMerchantGroups = false; new_promo.propertyName = null; new_promo.reverse = false;"
+                        ng-class="{active_button: !new_promo.enableMerchantGroups}"
+                        ng-disabled="!new_promo.enableMerchantGroups">
+                    Select Merchants
+                </button>
+                |
+                <button class="btn btn-success"
+                        ng-click="new_promo.enableMerchantGroups = true; new_promo.propertyName = null; new_promo.reverse = false;"
+                        ng-class="{active_button: new_promo.enableMerchantGroups}"
+                        ng-disabled="new_promo.enableMerchantGroups">
+                    Select Merchant Groups
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row" ng-if="!new_promo.enableMerchantGroups">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="col-md-3 control-label">Merchants for Promo</label>
+                            <div class="col-md-12 m-t-10">
+                                <div class="form-group">
+                                    <div class="flex-init flex-align-items-center">
+                                        <input type="text" class="input-med form-control m-r-10" name="merchants_filter"
+                                               ng-enter="new_promo.merchant_search_service.merchantSearchByBrand(new_promo.promo_data.brand_id)"
+                                               ng-model="new_promo.merchant_search_service.search_text" ng-fade
+                                               placeholder="Filter">
+
+                                        <label class="m-t-5 flex-init flex-align-items-baseline">
+                                            <input style="margin-right: 10px" type="checkbox" name="active_search"
+                                                   ng-init="new_promo.merchant_search_service.active_only = true"
+                                                   ng-model="new_promo.merchant_search_service.active_only"> Active Only
+                                        </label>
+                                        <button ng-click="new_promo.merchant_search_service.merchantSearchByBrand(new_promo.promo_data.brand_id)" class='btn-default btn m-l-10'>Search</button>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-12 button-select"
+                                     ng-show="new_promo.merchant_search_service.processing">
+                                    <div class="filter-loader-contain">
+                                        <div class="filter-loader"></div>
+                                    </div>
+                                </div>
+                                <div
+                                        ng-show="!new_promo.merchant_search_service.processing && new_promo.merchant_search_service.selectable_merchants.length > 0">
+                                    <table class="table table-hover" style="margin-bottom: -1px">
+                                        <thead>
+                                        <tr>
+                                            <th colspan="2" ng-click="new_promo.sortBy('merchant_id')">
+                                                ID <span class="sort-order"
+                                                         ng-show="new_promo.propertyName === 'merchant_id'"
+                                                         ng-class="{reverse: new_promo.reverse}"></span>
+                                            </th>
+                                            <th ng-click="new_promo.sortBy('name')">
+                                                Name
+                                                <span class="sort-order" ng-show="new_promo.propertyName === 'name'"
+                                                      ng-class="{reverse: new_promo.reverse}"></span>
+                                            </th>
+                                            <th ng-click="new_promo.sortBy('address1')">
+                                                Address
+                                                <span class="sort-order" ng-show="new_promo.propertyName === 'address1'"
+                                                      ng-class="{reverse: new_promo.reverse}"></span>
+                                            </th>
+                                        </tr>
+                                        </thead>
+                                    </table>
+                                    <div class="table-fixed-with-scroll">
+                                        <table class="table table-hover">
+                                            <tbody>
+                                            <tr id="promo-add-merchant"
+                                                ng-repeat="merchant in new_promo.merchant_search_service.selectable_merchants | orderBy:new_promo.propertyName:new_promo.reverse"
+                                                ng-click="new_promo.merchant_search_service.addMerchant(merchant); vm.promo_data.is_valid = false;">
+                                                <td>
+                                                    <i class="fa fa-plus-circle" aria-hidden="true"></i>
+                                                </td>
+                                                <td>{{merchant.merchant_id}}</td>
+                                                <td>{{merchant.name}}</td>
+                                                <td>
+                                                    {{merchant.address1}}<BR>
+                                                    {{merchant.city}}, {{merchant.state}} {{merchant.zip}}
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group col-md-12">
+                            <label class="col-md- control-label">Selected Merchants:</label>
+
+                            <div class="m-t-20"
+                                 ng-show="new_promo.merchant_search_service.selected_merchants.length > 0">
+                                <table class="table table-hover" style="margin-bottom: -1px">
+                                    <thead>
+                                    <tr>
+                                        <th colspan="2" ng-click="new_promo.sortBy('merchant_id')">
+                                            ID <span class="sort-order"
+                                                     ng-show="new_promo.propertyName === 'merchant_id'"
+                                                     ng-class="{reverse: new_promo.reverse}"></span>
+                                        </th>
+                                        <th ng-click="new_promo.sortBy('name')">
+                                            Name
+                                            <span class="sort-order" ng-show="new_promo.propertyName === 'name'"
+                                                  ng-class="{reverse: new_promo.reverse}"></span>
+                                        </th>
+                                        <th ng-click="new_promo.sortBy('address1')">
+                                            Address
+                                            <span class="sort-order" ng-show="new_promo.propertyName === 'address1'"
+                                                  ng-class="{reverse: new_promo.reverse}"></span>
+                                        </th>
+                                    </tr>
+                                    </thead>
+                                </table>
+                                <div class="table-fixed-with-scroll">
+                                    <table class="table table-hover">
+                                        <tbody>
+                                        <tr ng-repeat="merchant in new_promo.merchant_search_service.selected_merchants | orderBy:new_promo.propertyName:new_promo.reverse"
+                                            ng-click="new_promo.merchant_search_service.removeMerchant(merchant); vm.promo_data.is_valid = false;">
+                                            <td>
+                                                <i class="fa fa-minus-circle" aria-hidden="true"></i>
+                                            </td>
+                                            <td>{{merchant.merchant_id}}</td>
+                                            <td>{{merchant.name}}</td>
+                                            <td>
+                                                {{merchant.address1}}<BR>
+                                                {{merchant.city}}, {{merchant.state}} {{merchant.zip}}
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row" ng-if="new_promo.enableMerchantGroups">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="col-md-3 control-label">Merchant Groups for Promo</label>
+                            <div class="col-md-12 m-t-10">
+                                <input type="text" class="input-med form-control inline-block" name="merchants_filter"
+                                       ng-enter="new_promo.merchant_search_service.merchantGroupSearch()"
+                                       ng-model="new_promo.merchant_search_service.search_text" ng-fade
+                                       placeholder="Filter">
+
+                                <button ng-click="new_promo.merchant_search_service.merchantGroupSearch()" class='btn-default btn m-l-10'>Search</button>
+
+                                <div class="col-md-12 button-select"
+                                     ng-show="new_promo.merchant_search_service.processing">
+                                    <div class="filter-loader-contain">
+                                        <div class="filter-loader"></div>
+                                    </div>
+                                </div>
+                                <div class="m-t-20"
+                                     ng-show="!new_promo.merchant_search_service.processing && new_promo.merchant_search_service.selectable_merchant_groups.length > 0">
+                                    <table class="table table-hover" style="margin-bottom: -1px">
+                                        <thead>
+                                        <tr>
+                                            <th colspan="2" ng-click="new_promo.sortBy('id')">
+                                                ID <span class="sort-order" ng-show="new_promo.propertyName === 'id'"
+                                                         ng-class="{reverse: new_promo.reverse}"></span>
+                                            </th>
+                                            <th ng-click="new_promo.sortBy('name')">
+                                                Name
+                                                <span class="sort-order" ng-show="new_promo.propertyName === 'name'"
+                                                      ng-class="{reverse: new_promo.reverse}"></span>
+                                            </th>
+                                            <th ng-click="new_promo.sortBy('group_type')">
+                                                Group Type
+                                                <span class="sort-order"
+                                                      ng-show="new_promo.propertyName === 'group_type'"
+                                                      ng-class="{reverse: new_promo.reverse}"></span>
+                                            </th>
+                                        </tr>
+                                        </thead>
+                                    </table>
+                                    <div class="table-fixed-with-scroll">
+                                        <table class="table table-hover">
+                                            <tbody>
+                                            <tr id="promo-add-merchant"
+                                                ng-repeat="group in new_promo.merchant_search_service.selectable_merchant_groups | orderBy:new_promo.propertyName:new_promo.reverse"
+                                                ng-click="new_promo.merchant_search_service.addMerchantGroup(group); vm.promo_data.is_valid = false;">
+                                                <td>
+                                                    <i class="fa fa-plus-circle" aria-hidden="true"></i>
+                                                </td>
+                                                <td>{{group.id}}</td>
+                                                <td>{{group.name}}</td>
+                                                <td>{{group.group_type}}</td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group col-md-12">
+                            <label class="col-md- control-label">Selected Merchants:</label>
+
+                            <div class="m-t-20"
+                                 ng-show="new_promo.merchant_search_service.selected_merchant_groups.length > 0">
+                                <table class="table table-hover" style="margin-bottom: -1px">
+                                    <thead>
+                                    <tr>
+                                        <th colspan="2" ng-click="new_promo.sortBy('id')">
+                                            ID <span class="sort-order" ng-show="new_promo.propertyName === 'id'"
+                                                     ng-class="{reverse: new_promo.reverse}"></span>
+                                        </th>
+                                        <th ng-click="new_promo.sortBy('name')">
+                                            Name
+                                            <span class="sort-order" ng-show="new_promo.propertyName === 'name'"
+                                                  ng-class="{reverse: new_promo.reverse}"></span>
+                                        </th>
+                                        <th ng-click="new_promo.sortBy('group_type')">
+                                            Group Type
+                                            <span class="sort-order" ng-show="new_promo.propertyName === 'group_type'"
+                                                  ng-class="{reverse: new_promo.reverse}"></span>
+                                        </th>
+                                    </tr>
+                                    </thead>
+                                </table>
+                                <div class="table-fixed-with-scroll">
+                                    <table class="table table-hover">
+                                        <tbody>
+                                        <tr ng-repeat="group in new_promo.merchant_search_service.selected_merchant_groups | orderBy:new_promo.propertyName:new_promo.reverse"
+                                            ng-click="new_promo.merchant_search_service.removeMerchantGroup(group); vm.promo_data.is_valid = false;">
+                                            <td>
+                                                <i class="fa fa-minus-circle" aria-hidden="true"></i>
+                                            </td>
+                                            <td>{{group.id}}</td>
+                                            <td>{{group.name}}</td>
+                                            <td>{{group.group_type}}</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" ng-disabled class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button class="btn btn-success" ng-disabled ng-click="new_promo.setMerchants()">
+                    Submit
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="error-message" class="modal fade promo-merchant-select-modal" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4>Warning</h4>
+            </div>
+            <div class="modal-body">
+                {{new_promo.errorMessage}}
+            </div>
+            <div class="modal-footer">
+                <button type="button" ng-disabled class="btn btn-default" data-dismiss="modal">Ok</button>
+            </div>
+        </div>
+    </div>
+</div>

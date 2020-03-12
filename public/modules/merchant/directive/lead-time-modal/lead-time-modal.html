@@ -1,0 +1,115 @@
+<div id="{{handlerName}}" class="lead-time-modal modal fade {{handlerName}}">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <form name="holiday_form" novalidate>
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">{{!!headerTitle? headerTitle : 'Lead Time Panel'}}</h4>
+                </div>
+                <div class="modal-body">
+                    <div style="margin: 10px;">
+                        <div class="form-group">
+                            <label class="control-label">Type</label>
+                            <select class="form-control input-med" name="type" id="type"
+                                    ng-options="option.id as option.name for option in type"
+                                    ng-model="currentLeadTimeSelected.hour_type" ng-required="true"></select>
+                            <div class="alert alert-danger ng-hide alert-reg-position"
+                                 ng-show="holiday_form.type.$error.required
+                                     && (holiday_form.type.$touched || holiday_form.$submitted)"
+                                 role="alert">
+                                Type is required.
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label">Day of week</label>
+                            <select class="form-control input-med" name="weekDay" id="weekDay"
+                                    ng-options="option.id as option.name for option in weekDay"
+                                    ng-model="currentLeadTimeSelected.day_of_week" ng-required="true"></select>
+                            <div class="alert alert-danger ng-hide alert-reg-position"
+                                 ng-show="holiday_form.weekDay.$error.required
+                                     && (holiday_form.weekDay.$touched || holiday_form.$submitted)"
+                                 role="alert">
+                                The week day is required.
+                            </div>
+                        </div>
+
+                        <div class="form-group ">
+                            <label class="control-label">Start Time</label>
+                            <br>
+                            <div class="tooltip-help">
+                                <input type="time" class="form-control input-med "
+                                       name="start_time"
+                                       ng-model="currentLeadTimeSelected.start_time_object"
+                                       ng-required="true" ng-max="currentLeadTimeSelected.end_time_object"
+                                       ui-validate=" '$value!=end_time' "
+                                       ui-validate-watch=" 'end_time' ">
+
+                                <span class="tool-tip-text input-med-popup">Must be format HH:MM AM/PM.</span>
+                            </div>
+
+                            <div class="alert alert-danger ng-hide alert-reg-position"
+                                 ng-show="(holiday_form.start_time.$error.required || holiday_form.start_time.$error.time)
+                                     && (holiday_form.start_time.$touched || holiday_form.$submitted)"
+                                 role="alert">
+                                The start time is required and must be in HH:MM AM/PM time format.
+                            </div>
+                            <div class="alert alert-danger ng-hide alert-reg-position"
+                                 ng-show="holiday_form.start_time.$error.max
+                                     && (holiday_form.start_time.$touched || holiday_form.$submitted)"
+                                 role="alert">
+                                The start time must be less than end time.
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label">End Time</label>
+                            <br>
+                            <div class="tooltip-help">
+                                <input type="time" class="form-control input-med"
+                                       name="end_time"
+                                       ng-model="currentLeadTimeSelected.end_time_object" ng-required="true" ng-min="currentLeadTimeSelected.start_time_object">
+                                <span class="tool-tip-text input-med-popup">Must be format HH:MM AM/PM.</span>
+                            </div>
+                            <div class="alert alert-danger ng-hide alert-reg-position"
+                                 ng-show="(holiday_form.end_time.$error.required || holiday_form.end_time.$error.time)
+                                     && (holiday_form.end_time.$touched || holiday_form.$submitted)"
+                                 role="alert">
+                                The end time is required and must be in HH:MM AM/PM time format..
+                            </div>
+                            <div class="alert alert-danger ng-hide alert-reg-position"
+                                 ng-show="holiday_form.end_time.$error.min
+                                     && (holiday_form.end_time.$touched || holiday_form.$submitted)"
+                                 role="alert">
+                                The end time must be grater than start time.
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label">Lead Time (in minutes)</label>
+                            <input type="number" class="form-control input-med"
+                                   name="lead_time"
+                                   ng-model="currentLeadTimeSelected.lead_time" ng-required="true" min="1">
+                            <div class="alert alert-danger ng-hide alert-reg-position"
+                                 ng-show="holiday_form.lead_time.$error.required
+                                     && (holiday_form.lead_time.$touched || holiday_form.$submitted)"
+                                 role="alert">
+                                The lead time is required.
+                            </div>
+                            <div class="alert alert-danger ng-hide alert-reg-position"
+                                 ng-show="holiday_form.lead_time.$error.min
+                                     && (holiday_form.lead_time.$touched || holiday_form.$submitted)"
+                                 role="alert">
+                                Lead time must be greater than zero.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal" data-ng-click="cancelButton()">Cancel</button>
+                    <button type="submit" class="btn btn-success" data-ng-click="submitButton(); $event.stopPropagation()">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

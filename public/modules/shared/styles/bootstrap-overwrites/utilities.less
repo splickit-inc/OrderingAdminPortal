@@ -1,0 +1,39 @@
+.antialiased {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.no-antialiased{
+  -webkit-font-smoothing: subpixel-antialiased;
+  -moz-osx-font-smoothing: unset;
+}
+
+* {
+  .antialiased;
+}
+
+//deactivate antialias for inputs
+input {
+  .no-antialiased;
+}
+
+.border-radius-all(@radius) {
+  -webkit-border-radius: @radius;
+  -moz-border-radius: @radius;
+  border-radius: @radius;
+}
+
+.force-button-variant(@background; @border) {
+  background-color: @background !important;
+  border-color: @border !important;
+  &:focus,
+  &.focus {
+    background-color: darken(@background, 10%) !important;
+    border-color: darken(@border, 25%) !important;
+  }
+
+  &:hover {
+    background-color: darken(@background, 10%) !important;
+    border-color: darken(@border, 12%) !important;
+  }
+}

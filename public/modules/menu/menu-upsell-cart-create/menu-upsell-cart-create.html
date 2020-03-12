@@ -1,0 +1,149 @@
+
+<div class="loader-container" ng-show="vm.processing">
+    <div class="filter-loader"></div>
+</div>
+
+<div class="menu-upsell-cart-create" ng-if="!vm.processing">
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title">
+                Select Item for Cart Upsell
+            </h3>
+        </div>
+        <div class="panel-body">
+            <div class="form-group">
+                <label class="m-l-2">
+                    Search
+                    <i class="fa fa-question-circle tooltip-help" aria-hidden="true">
+                        <span class="tool-tip-text-responsive">{{ 'MENU.TOOLTIP.UPSELL.SEARCH' | translate }}</span>
+                    </i>
+                </label>
+                <div class="search-box input-med ">
+                    <input type="text" class="form-control" name="search_text"
+                           placeholder="Enter Name"
+                           ng-model="vm.menu.search_text" ng-required="true" ng-fade>
+                </div>
+            </div>
+
+            <div ng-show="!vm.menu.processing">
+                <label class="m-l-2">
+                    Items Available for the Current Menu:
+                </label>
+                <div class="text-center" ng-if="resultItems.length == 0">
+                    <h5 class="pre-load-text">No Items Found</h5>
+                </div>
+                <div class="m-b-20 table-fixed-with-scroll" ng-show="resultItems.length > 0">
+                    <table class="table table-hover content-table ">
+                        <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>External</th>
+                            <th>Name</th>
+                            <th>Description</th>
+                            <th>Priority</th>
+                            <th>Active</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="item in vm.menu.all_items | orderBy: 'item_name' | filter: vm.filterItems as resultItems"
+                            ng-click="vm.setUpsellItem(item)">
+                            <td>{{item.item_id}}</td>
+                            <td>{{item.external_item_id}}</td>
+                            <td>{{item.item_name}}</td>
+                            <td>{{item.description}}</td>
+                            <td>
+                                {{item.priority}}
+                            </td>
+                            <td>{{item.active}}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <div class="content-responsive">
+                        <div ng-repeat="item in vm.menu.all_items | orderBy: 'item_name'  | filter: vm.filterItems"
+                             ng-click="vm.setUpsellItem(item)">
+                            <div class="panel panel-body row-table">
+                                <div class="name">
+                                    <h5 class="dark-grey"><b>{{item.item_name}}</b></h5>
+                                </div>
+                                <div class="id">
+                                    <h5 class="dark-grey id-title">ID <span class="id-number">{{item.item_id}}</span>
+                                    </h5>
+                                </div>
+                                <div class="description clear">
+                                    <div ng-show="!!item.external_item_id">External ID:
+                                        {{item.external_item_id}}
+                                    </div>
+                                    <div>Priority: {{item.priority}} - Active: {{item.active}}</div>
+                                    <div>
+                                        {{item.description}}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div ng-if="!vm.menu.processing">
+                <label class="m-l-2">
+                    Selected Items:
+                </label>
+                <h5 class="pre-load-text text-center" ng-if="vm.selectedItems.length == 0">No Items Selected</h5>
+                <div ng-if="vm.selectedItems.length > 0">
+                    <table class="table table-hover content-table ">
+                        <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>External</th>
+                            <th>Name</th>
+                            <th>Description</th>
+                            <th>Priority</th>
+                            <th>Active</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="item in vm.selectedItems | orderBy: 'item_name'"
+                            ng-click="vm.removeUpsellItem(item)">
+                            <td>{{item.item_id}}</td>
+                            <td>{{item.external_item_id}}</td>
+                            <td>{{item.item_name}}</td>
+                            <td>{{item.description}}</td>
+                            <td>
+                                {{item.priority}}
+                            </td>
+                            <td>{{item.active}}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <div class="content-responsive">
+                        <div ng-repeat="item in vm.selectedItems | orderBy: 'item_name'"
+                             ng-click="vm.removeUpsellItem(item)">
+                            <div class="panel panel-body row-table">
+                                <div class="name">
+                                    <h5 class="dark-grey"><b>{{item.item_name}}</b></h5>
+                                </div>
+                                <div class="id">
+                                    <h5 class="dark-grey id-title">ID <span class="id-number">{{item.item_id}}</span>
+                                    </h5>
+                                </div>
+                                <div class="description clear">
+                                    <div ng-show="!!item.external_item_id">External ID:
+                                        {{item.external_item_id}}
+                                    </div>
+                                    <div>Priority: {{item.priority}} - Active: {{item.active}}</div>
+                                    <div>
+                                        {{item.description}}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pull-right m-t-20 m-b-10">
+                <button type="button" class="btn btn-default m-r-5" back-button>Cancel</button>
+                <button type="button" class="btn btn-success" ng-click="vm.submitUpsells()">Submit</button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,550 @@
+<div class="row">
+    <div class="col-sm-12">
+        <div class="page-header-title menu-bg">
+            <h4 class="page-title">Edit Item {{item.current_item.item_name}}</h4>
+            <ol class="breadcrumb">
+                <li><a href="#/menus">Menus</a></li>
+                <li><a href="#/menu/items">Items & Modifiers</a></li>
+                <li><a href="javascript:void(0);">Edit Item {{item.current_item.item_name}}</a></li>
+            </ol>
+        </div>
+    </div>
+</div>
+
+<form name="item.update_item_form" class="form-horizontal" novalidate ng-submit="item.selectMerchantsToPropagate()">
+    <div class="row">
+        <div class="col-md-12 m-b-10">
+            <div class="panel panel-primary">
+                <div class="panel-heading ">
+                    <h3 class="panel-title">
+                        Item Info
+                    </h3>
+                </div>
+                <div class="panel-body">
+                    <div class="row panel-head-row">
+                        <div class="col-md-1">
+                            <h4 class="dark-header">Section</h4>
+                        </div>
+                        <div class="col-md-1 col-margin">
+                            <h4 class="dark-header">Extern.</h4>
+                        </div>
+                        <div class="col-md-2">
+                            <h4 class="dark-header">Name</h4>
+                        </div>
+                        <div class="col-md-2 ">
+                            <h4 class="dark-header">Description</h4>
+                        </div>
+                        <div class="col-md-2">
+                            <h4 class="dark-header">Print Name</h4>
+                        </div>
+                        <div class="col-md-1">
+                            <h4 class="dark-header">Calorie Range
+                                <i class="fa fa-question-circle tooltip-help" aria-hidden="true">
+                                    <span class="tool-tip-text-responsive">Enter Calorie range for all sizes of this item</span>
+                                </i>
+                            </h4>
+                        </div>
+                        <div class="col-md-1">
+                            <h4 class="dark-header">Active</h4>
+                        </div>
+                        <div class="col-md-2 center-head" ng-show="!item.new">
+                            <h4 class="dark-header">Upload Image</h4>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-1">
+                            {{item.current_item.menu_type_name}}
+                        </div>
+                        <div class="col-md-1 col-margin">
+                            <input type="text" class="form-control" name="external_item_id" ng-required="true"
+                                   ng-model="item.current_item.external_item_id" ng-fade>
+                        </div>
+                        <div class="col-md-2">
+                            <input type="text" class="form-control" name="item_name" ng-required="true"
+                                   ng-blur="item.setPrintNameIfBlank(item.current_item.item_name)"
+                                   ng-maxlength="50" maxlength="50"
+                                   ng-model="item.current_item.item_name" ng-fade>
+                        </div>
+                        <div class="col-md-2">
+                            <input type="text" class="form-control" name="description"
+                                   ng-model="item.current_item.description" ng-fade>
+                        </div>
+                        <div class="col-md-2">
+                            <input type="text" class="form-control input-med" name="item_print_name" ng-required="true"
+                                   ng-model="item.current_item.item_print_name" ng-fade>
+                        </div>
+                        <div class="col-md-1">
+                            <input type="text" class="form-control input-small" name="calories"
+                                   ng-model="item.current_item.calories" ng-fade placeholder="000 - 000">
+                        </div>
+                        <div class="col-md-1">
+                            <toggle-switch name="active" class="table-toggle toggle-in-row"
+                                           ng-model="item.current_item.active">
+                            </toggle-switch>
+                        </div>
+                        <div class="col-md-2 edit-icon" ng-show="!item.new">
+                            <i class="fa fa-file-image-o" aria-hidden="true" data-toggle="modal" ng-show="!item.current_item.image.url_thumbnail"
+                               data-target="#image-modal"></i>
+                            <i class="fa fa-file-image-o" aria-hidden="true" data-toggle="modal" ng-show="!item.current_item.image.url_main"
+                               data-target="#image-modal"></i>
+                            <img class="item-image-small-icon" ng-cloak data-toggle="modal" data-target="#image-modal"
+                                 ng-src="{{item.current_item.image.url_thumbnail}}" ng-show="!!item.current_item.image.url_thumbnail">
+                            <img class="item-image-large-icon" ng-cloak data-toggle="modal" data-target="#image-modal"
+                                 ng-src="{{item.current_item.image.url_main}}" ng-show="!!item.current_item.image.url_main">
+                        </div>
+
+                        <div class="col-md-12">
+                            <div class="alert alert-danger alert-reg-position"
+                                 ng-show="item.update_item_form.menu_type.$error.required  && (item.update_item_form.menu_type.$faded || item.current_item.submit)"
+                                 role="alert">
+                                Section is required.
+                            </div>
+
+                            <div class="alert alert-danger alert-reg-position"
+                                 ng-show="item.update_item_form.item_name.$error.required && (item.update_item_form.item_name.$faded || item.current_item.submit)"
+                                 role="alert">
+                                Name is required.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-12">
+            <div ng-show="!item.page_open_sections.sizes"
+                 ng-click="item.page_open_sections.sizes = !item.page_open_sections.sizes"
+                 class="panel panel-primary">
+                <div class="panel-heading pointer">
+                    <h3 class="panel-title">
+                        Item Sizes
+                        <span class="pull-right">
+                        <i class="fa fa-plus" aria-hidden="true"></i>
+                    </span>
+                    </h3>
+                </div>
+            </div>
+
+            <div ng-show="item.page_open_sections.sizes"
+                 class="panel panel-primary">
+                <div class="panel-heading pointer" ng-click="item.page_open_sections.sizes = !item.page_open_sections.sizes">
+                    <h3 class="panel-title">
+                        Item Sizes
+                        <span class="pull-right">
+                        <i class="fa fa-minus" aria-hidden="true"></i>
+                    </span>
+                    </h3>
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-1">
+                            <h4 class="dark-header">ID</h4>
+                        </div>
+                        <div class="col-md-2">
+                            <h4 class="dark-header">Extern.</h4>
+                        </div>
+                        <div class="col-md-1">
+                            <h4 class="dark-header">Name</h4>
+                        </div>
+                        <div class="col-md-2">
+                            <h4 class="dark-header">Print Name</h4>
+                        </div>
+                        <div ng-class="item.new ? 'col-md-1' : 'col-md-2'" >
+                            <h4 class="dark-header">Description</h4>
+                        </div>
+                        <div class="col-md-1">
+                            <h4 class="dark-header">Price</h4>
+                        </div>
+                        <div class="col-md-1">
+                            <h4 class="dark-header">Active</h4>
+                        </div>
+                        <div class="col-md-1">
+                            <h4 class="dark-header">Priority</h4>
+                        </div>
+                        <div class="col-md-1" ng-show="item.new">
+                            <h4 class="dark-header">Include</h4>
+                        </div>
+                    </div>
+
+                    <div class="row m-b-10 light-grey-hover" ng-repeat="size in item.current_item.sizes">
+                        <div class="col-md-1">{{size.size_id}}</div>
+                        <div class="col-md-2">
+                            <input type="text" class="input-med form-control" name="external_size_id"
+                                   ng-model="size.external_size_id" ng-fade>
+                        </div>
+                        <div class="col-md-1">
+                            {{size.size_name}}
+                        </div>
+                        <div class="col-md-2">
+                            {{size.size_print_name}}
+                        </div>
+                        <div  ng-class="item.new ? 'col-md-1' : 'col-md-2'">
+                            {{size.description}}
+                        </div>
+                        <div class="col-md-1">
+                            <input type="text" class="input-small form-control" name="size_price"
+                                   currency-format amount="size.price"
+                                   ng-model="size.price" ng-fade>
+                        </div>
+                        <div class="col-md-1">
+                            <toggle-switch name="active" class="table-toggle toggle-in-row"
+                                           ng-model="size.active">
+                            </toggle-switch>
+                        </div>
+                        <div class="col-md-1">
+                            <input type="number" class="input-small form-control" name="size_priority"
+
+                                   ng-model="size.priority" ng-fade>
+                        </div>
+                        <div ng-show="item.new" class="col-md-1">
+                            <input type="checkbox" class="form-control" name="size_include"
+                                   ng-model="size.include" ng-fade>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div id="item-modifier-groups-open" ng-show="!item.page_open_sections.modifier_groups"
+                 ng-click="item.page_open_sections.modifier_groups = !item.page_open_sections.modifier_groups"
+                 class="panel panel-primary">
+                <div class="panel-heading pointer">
+                    <h3 class="panel-title">
+                        Modifier Groups
+                        <span class="pull-right">
+                        <i class="fa fa-plus" aria-hidden="true"></i>
+                    </span>
+                    </h3>
+                </div>
+            </div>
+
+            <div ng-show="item.page_open_sections.modifier_groups"
+                 class="panel panel-primary">
+                <div class="panel-heading pointer">
+                    <h3 class="panel-title col-md-10" ng-click="item.page_open_sections.modifier_groups = !item.page_open_sections.modifier_groups">
+                        Modifier Groups
+                        <i class="fa fa-minus" aria-hidden="true"></i>
+
+                    </h3>
+                    <div class="pull-right col-md-2">
+                        <toggle-switch id="modifier-show-active-toggle" class="pull-right" name="modifier_group_only_allowed"
+                                       ng-model="item.modifier_group_only_allowed"
+                                       on-label="Active"
+                                       off-label="All"
+                        >
+                        </toggle-switch>
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-2">
+                            <h4 class="dark-header">Name - Display</h4>
+                        </div>
+                        <div class="col-md-1">
+                            <h4 class="dark-header">Allowed</h4>
+                        </div>
+                        <div class="col-md-1">
+                            <h4 class="dark-header">Min</h4>
+                        </div>
+                        <div class="col-md-1">
+                            <h4 class="dark-header">Max</h4>
+                        </div>
+                        <div class="col-md-1">
+                            <h4 class="dark-header">Price Override</h4>
+                        </div>
+                        <div class="col-md-2">
+                            <h4 class="dark-header">Display</h4>
+                        </div>
+
+                        <div class="col-md-2">
+                            <h4 class="dark-header">Price Max</h4>
+                        </div>
+                        <div class="col-md-1">
+                            <h4 class="dark-header">Priority</h4>
+                        </div>
+                        <div class="col-md-1">
+                            <h4 class="dark-header">Apply To Entire Section?</h4>
+                        </div>
+                    </div>
+
+                    <div class="row m-b-10 light-grey-hover" ng-repeat="modifier_group in item.current_item.modifier_groups | filter: item.modGroupsFilter" ng-form="modifier_group_form">
+                        <ng-form name="mod_group_form">
+                            <div class="col-md-2">
+                                {{ modifier_group.modifier_group_name }}
+                            </div>
+                            <div class="col-md-1">
+                                <toggle-switch class="toggle-in-row switch-mod-group-allowed" name="active" ng-change="item.changeAllowed(modifier_group, $index)"
+                                               ng-model="modifier_group.allowed">
+                                </toggle-switch>
+                            </div>
+                            <div class="col-md-1">
+                                <input type="number" class="input-in-row input-micro form-control" name="modifier_group_min" ng-show="modifier_group.allowed"
+                                       min="0" ng-min="0" ng-max="modifier_group.max" ng-required="true"
+                                       ng-model="modifier_group.min" ng-fade>
+                            </div>
+                            <div class="col-md-1">
+                                <input type="number" class="input-in-row input-micro form-control" name="modifier_group_max" ng-show="modifier_group.allowed"
+                                       min="1" ng-min="1"
+                                       ng-model="modifier_group.max" ng-fade>
+                            </div>
+                            <div class="col-md-1">
+                                <input type="text" class="input-in-row input-sm form-control" name="price_override" ng-show="modifier_group.allowed"
+                                       currency-format amount="modifier_group.price_override"
+                                       ng-model="modifier_group.price_override" ng-fade>
+                            </div>
+                            <div class="col-md-2">
+                                <input type="text" class="input-in-row input-med form-control" name="display_name" ng-show="modifier_group.allowed"
+                                       ng-model="modifier_group.display_name" ng-fade>
+                            </div>
+                            <div class="col-md-2">
+                                <input type="text" class="input-in-row input-sm form-control" name="modifier_price_max" ng-show="modifier_group.allowed"
+                                       currency-format amount="modifier_group.price_max"
+                                       ng-model="modifier_group.price_max" ng-fade>
+                            </div>
+                            <div class="col-md-1">
+                                <input type="number" class="input-in-row input-micro form-control" name="modifier_group_priority" ng-show="modifier_group.allowed"
+                                       ng-model="modifier_group.priority" ng-fade>
+                            </div>
+
+                            <div class="col-md-1">
+                                <input type="checkbox" class="input-in-row input-micro form-control" name="push_this_mapping_to_each_item_in_menu_type" ng-show="modifier_group.allowed"
+                                       ng-model="modifier_group.push_this_mapping_to_each_item_in_menu_type" ng-fade>
+                            </div>
+
+                            <div class="col-md-12">
+                                <div class="alert alert-danger alert-reg-position"
+                                     ng-show="mod_group_form.modifier_group_max.$error.min  && (mod_group_form.modifier_group_max.$faded || item.current_item.submit)"
+                                     role="alert">
+                                    Modifier Group Max must be greater than 0.
+                                </div>
+                            </div>
+                        </ng-form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+
+    <div class="row">
+
+        <div class="col-md-12">
+            <div ng-show="!item.page_open_sections.modifier_comes_with"
+                 ng-click="item.page_open_sections.modifier_comes_with = !item.page_open_sections.modifier_comes_with"
+                 class="panel panel-primary">
+                <div class="panel-heading pointer">
+                    <h3 class="panel-title">
+                        "Comes With" Modifiers
+                        <span class="pull-right">
+                        <i class="fa fa-plus" aria-hidden="true"></i>
+                    </span>
+                    </h3>
+                </div>
+            </div>
+
+            <div ng-show="item.page_open_sections.modifier_comes_with"
+                 class="panel panel-primary">
+                <div class="panel-heading pointer" ng-click="item.page_open_sections.modifier_comes_with = !item.page_open_sections.modifier_comes_with">
+                    <h3 class="panel-title">
+                        "Comes With" Modifiers
+                        <span class="pull-right">
+                        <i class="fa fa-minus" aria-hidden="true"></i>
+                    </span>
+                    </h3>
+                </div>
+                <div class="panel-body">
+                    <div class="" ng-repeat="modifier_group in item.current_item.allowed_modifier_groups">
+                        <div>
+                            <h4>
+                                <span ng-click="modifier_group.edit_mode = true"
+                                      ng-show="!modifier_group.edit_mode">
+                                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                </span>
+                                <span ng-click="modifier_group.edit_mode = false"
+                                      ng-show="modifier_group.edit_mode">
+                                    <i class="fa fa-check-square-o" aria-hidden="true"></i>
+                                </span>
+                                {{modifier_group.modifier_group_name}}:
+                            </h4>
+                        </div>
+                        <div ng-show="!modifier_group.edit_mode">
+                            <div>
+                                <button type="button" class="btn btn-success m-l-10 m-t-5"
+                                        ng-repeat="modifier_item in modifier_group.modifier_items" ng-show="modifier_item.comes_with" ng-disabled>
+                                    <i class="fa fa-check-square-o" aria-hidden="true"></i>
+                                    {{modifier_item.modifier_item_name}}
+                                </button>
+                            </div>
+                            <h5 class="pre-load-text" ng-show="item.seeIfComesWith(modifier_group.modifier_items)">No Default Comes With Items</h5>
+                        </div>
+                        <div class="" ng-show="modifier_group.edit_mode">
+                            <div class="inline" ng-repeat="modifier_item in modifier_group.modifier_items">
+                                <button type="button" class="btn btn-success m-l-10 m-t-5"
+
+                                        ng-show="modifier_item.comes_with" ng-click="modifier_item.comes_with = !modifier_item.comes_with" ng-disabled>
+                                    <i class="fa fa-check-square-o" aria-hidden="true"></i>
+                                    {{modifier_item.modifier_item_name}}
+                                </button>
+                                <button type="button" class="btn btn-default m-l-10 m-t-5"
+                                        ng-show="!modifier_item.comes_with" ng-disabled ng-click="modifier_item.comes_with = !modifier_item.comes_with">
+                                    <i class="fa fa-window-close-o" aria-hidden="true"></i>
+                                    {{modifier_item.modifier_item_name}}
+                                </button>
+                            </div>
+                        </div>
+                        <hr>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    </div>
+    <div ng-show="item.current_item.processing" class="form-loader">
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+    </div>
+    <button class="btn btn-success btn-lg pull-right m-l-5" ng-show="item.new">Create Item</button>
+    <button id="submit-update-item" class="btn btn-success btn-lg pull-right m-l-5" ng-show="!item.new">Update Item</button>
+    <button ng-disabled type="button" class="btn btn-default btn-lg pull-right m-l-5" ng-click="item.backToItemsModifiers()">Cancel</button>
+</form>
+
+<div id="image-modal" class="modal fade" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="image_stage = 'load'">
+                    <span aria-hidden="true">&times;</span></button>
+                <h4 ng-show="image_stage == 'load'" class="modal-title">Select Image File</h4>
+                <h4 ng-show="image_stage == 'main'" class="modal-title">Crop Item Main Image</h4>
+                <h4 ng-show="image_stage == 'thumb_load'" class="modal-title">Select Image File for Thumb</h4>
+                <h4 ng-show="image_stage == 'thumb'" class="modal-title">Crop Item Thumb Image</h4>
+                <h4 ng-show="image_stage == 'preview_confirm_s3'" class="modal-title">Confirm Crops</h4>
+                <h4 ng-show="image_stage == 'processing'" class="modal-title">Creating & Uploading Images to Server</h4>
+            </div>
+            <div class="modal-body">
+                <table id="image-crop-contain">
+                    <td ng-show="image_stage == 'main'">
+                        <div class="cropArea">
+                            <ui-cropper image="myImage" area-type="rectangle" result-image-quality="1.0"
+                                        result-image-size="{w: 640, h: 420}"
+                                        aspect-ratio="1.52" result-image="myCroppedMainImage" cropject="cropper"
+                                        image-size="{w: 640, h: 420}" live-view="blockingObject"></ui-cropper>
+                        </div>
+                    </td>
+                    <td ng-show="image_stage == 'thumb'">
+                        <div class="cropArea">
+                            <ui-cropper image="myImageThumb" area-type="rectangle" result-image-quality="1.0"
+                                        result-image-size="{w: 158, h: 158}"
+                                        aspect-ratio="1" result-image="myCroppedThumbImage" cropject="thumb_crop"
+                                        image-size="{w: 158,h: 158}" live-view="blockingObject2"></ui-cropper>
+                        </div>
+                    </td>
+                </table>
+
+                <div class="row" ng-show="(image_stage == 'main' || image_stage == 'thumb')">
+                    <div class="col-md-12 m-b-10 text-center">
+                        <h5 ng-show="image_stage == 'main'">
+                            This will be the image on the menu page. Make sure your starting size is at least 640X420.
+                        </h5>
+                        <h5 ng-show="image_stage == 'thumb'">
+                            This is a thumbnail image which will be reduced to as small as 79X79 for the item customization window.
+                        </h5>
+                    </div>
+                </div>
+
+                <div class="filter-loader-contain" ng-show="image_stage == 'processing'">
+                    <div class="filter-loader"></div>
+                </div>
+
+
+                <div class="row flex-init flex-justify-content-center">
+                    <form ng-show="image_stage == 'load'" name="image_form">
+                        <div ngf-drop ngf-select ng-model="file" class="drop-box"
+                             ngf-drag-over-class="'dragover'" ngf-multiple="true" ngf-allow-dir="true"
+                             accept="image/*"
+                             ngf-pattern="'image/*'"
+                             ngf-max-size="3MB"
+                        >Drop image file here or click to upload
+                        </div>
+                        <div class="alert alert-success ng-hide alert-reg-position"
+                             ng-show="!image_form.$error.maxSize"
+                             role="alert">
+                            File size should not exceed 3MB.
+                        </div>
+                        <div class="alert alert-danger ng-hide alert-reg-position"
+                             ng-show="image_form.$error.maxSize && image_form.$dirty"
+                             role="alert">
+                            Sorry, your file exceeds the 3MB limit.
+                        </div>
+                    </form>
+
+                    <form ng-show="image_stage == 'thumb_load'" name="image_form_tumb_load">
+                        <div ngf-drop ngf-select ng-model="file_thumb" class="drop-box"
+                             ngf-drag-over-class="'dragover'" ngf-multiple="true" ngf-allow-dir="true"
+                             accept="image/*"
+                             ngf-pattern="'image/*'"
+                             ngf-max-size="3MB"
+                        >Drop image file here or click to upload the thumb image
+                        </div>
+                        <div class="alert alert-success ng-hide alert-reg-position"
+                             ng-show="!image_form_tumb_load.$error.maxSize"
+                             role="alert">
+                            File size should not exceed 3MB.
+                        </div>
+                        <div class="alert alert-danger ng-hide alert-reg-position"
+                             ng-show="image_form_tumb_load.$error.maxSize && image_form.$dirty"
+                             role="alert">
+                            Sorry, your file exceeds the 3MB limit.
+                        </div>
+                    </form>
+                </div>
+
+                <div class="row" ng-show="image_stage == 'preview_confirm_s3'">
+                    <div class="col-md-12 m-b-10 text-center">
+                        <h5>
+                            Are these the images you would like to use?
+                        </h5>
+                        <div class="col-md-6">
+                            <h5>Main</h5>
+                            <img class="preview-main-image" ng-src="{{img_preview.main}}">
+                        </div>
+                        <div class="col-md-6">
+                            <h5>Thumbnail</h5>
+                            <img class="preview-thumb-image" ng-src="{{img_preview.thumb}}">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button ng-show="image_stage != 'preview_confirm_s3'" type="button" ng-disabled class="btn btn-default" ng-click="cancelImageUpload()">Cancel</button>
+
+                    <button ng-show="image_stage == 'main'" ng-click="moveToThumbCrop()" type="button" ng-disabled class="btn btn-primary">Crop Main Image</button>
+
+                    <button ng-show="image_stage == 'thumb'" ng-click="uploadThumb()" type="button" ng-disabled class="btn btn-success">Upload New Image for Thumb</button>
+                    <button ng-show="image_stage == 'thumb'" ng-click="storeCrops()" type="button" ng-disabled class="btn btn-primary">Crop Thumb Image &amp; Save</button>
+
+                    <button type="button" ng-disabled ng-show="image_stage == 'preview_confirm_s3'"
+                            ng-click="image_stage = 'load'; file_thumb = undefined; file = undefined;"
+                            class="btn btn-default">Redo Crops
+                    </button>
+                    <button ng-show="image_stage == 'preview_confirm_s3'" ng-click="confirmCropsS3()" type="button" ng-disabled class="btn btn-primary">Confirm, Upload to Production</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<propagation-select close-merchant-select="item.setMerchants()" all-option="1" master-only="1" propation-options="1" auto-search="true"></propagation-select>

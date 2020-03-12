@@ -1,0 +1,158 @@
+.fix-table-wrap {
+  white-space: nowrap;
+}
+
+#table-fix {
+  .table-fixed;
+  width: 100%;
+}
+
+.text-overflow-wrap-word-break {
+  overflow-wrap: break-word;
+}
+
+.text-wrap-word-break {
+  -ms-word-break: break-all;
+  word-break: break-all;
+
+  /* Non standard for WebKit */
+  word-break: break-word;
+
+  -webkit-hyphens: auto;
+  -moz-hyphens: auto;
+  hyphens: auto;
+  white-space: normal;
+}
+
+.table-fixed {
+  table-layout: fixed;
+}
+
+.vertical-align-middle {
+  vertical-align: middle;
+}
+
+.table tr.hover:hover {
+  cursor: pointer;
+  background: @card-bg-hover-color;
+}
+
+.hidden-hover:hover {
+  background-color: inherit !important;
+  cursor: inherit !important;
+}
+
+.loadingeffect {
+  -webkit-animation: pulse 1.5s ease-in-out infinite alternate;
+  animation: pulse 1.5s ease-in-out infinite alternate;
+}
+
+@-webkit-keyframes pulse {
+  0% {
+    background-color: transparent;
+  }
+  50% {
+    background-color: darkseagreen;
+    color: white;
+  }
+  100% {
+    background-color: transparent;
+  }
+}
+
+@keyframes pulse {
+  0% {
+    background-color: transparent;
+  }
+  50% {
+    background-color: darkseagreen;
+    color: white;
+  }
+  100% {
+    background-color: transparent;
+  }
+}
+
+.successeffect {
+  -webkit-animation: pulse2 2s ease-in-out forwards alternate;
+  animation: pulse2 2s ease-in-out forwards alternate;
+}
+
+@-webkit-keyframes pulse2 {
+  0% {
+    background-color: transparent;
+    color: black;
+  }
+  50% {
+    background-color: darkseagreen;
+    color: white;
+  }
+  100% {
+    color: black;
+    background-color: transparent;
+  }
+}
+
+@keyframes pulse2 {
+  0% {
+    color: black;
+    background-color: transparent;
+  }
+  50% {
+    color: white;
+    background-color: darkseagreen;
+  }
+  100% {
+    color: black;
+    background-color: transparent;
+  }
+}
+
+.faileffect {
+  -webkit-animation: pulse3 2s ease-in-out forwards alternate;
+  animation: pulse3 2s ease-in-out forwards alternate;
+}
+
+@-webkit-keyframes pulse3 {
+  0% {
+    background-color: transparent;
+    color: black;
+  }
+  50% {
+    background-color: red;
+    color: white;
+  }
+  100% {
+    color: black;
+    background-color: transparent;
+  }
+}
+
+@keyframes pulse3 {
+  0% {
+    color: black;
+    background-color: transparent;
+  }
+  50% {
+    color: white;
+    background-color: red;
+  }
+  100% {
+    color: black;
+    background-color: transparent;
+  }
+}
+
+.table-fixed-with-scroll{
+  max-height:275px;
+  overflow: hidden;
+  overflow-y:auto;
+}
+
+.m-b-clear{
+  margin-bottom: 0px;
+}
+
+table{
+  margin-bottom: 0px !important;
+}

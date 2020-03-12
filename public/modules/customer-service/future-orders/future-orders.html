@@ -1,0 +1,116 @@
+<div class="row">
+    <div class="col-sm-12">
+        <div class="page-header-title">
+            <h4 class="page-title">Future Orders</h4>
+        </div>
+    </div>
+</div>
+
+<div id="future-orders-page" class="row">
+    <div class="col-md-6">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">Search Orders</h3>
+            </div>
+            <div class="panel-body">
+                <form name="vm.search_form" novalidate
+                      ng-submit="vm.searchOrders()">
+                    <div class="form-group">
+                        <div class="flex-init flex-align-items-center">
+                            <div class="search-box" style="width: 270px">
+                                <input type="text" class="form-control" id="search_text"
+                                       name="search_text"
+                                       ng-model="vm.search_text">
+                            </div>
+                            <button type="submit" class='btn-default btn m-l-10'>Search</button>
+                        </div>
+
+                        <div class=" alert alert-danger ng-hide alert-reg-position"
+                             ng-show="(vm.search_form.search_text.$error.required && vm.search_form.search_text.$touched) ||
+                                 (vm.search_form.search_text.$error.required && vm.search_form.$submitted)"
+                             role="alert">
+                            You must type at least one letter on search field.
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6" ng-class="vm.hasSearchResult()">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">Recently Visited</h3>
+            </div>
+            <div class="panel-body recently-visited-container">
+                <div class="panel panel-body row-table"
+                     ng-repeat="recent_order in vm.recently_visited_orders"
+                     data-toggle="modal"
+                     ng-click="vm.viewOrder(recent_order)">
+                    <div>
+                        <h5 class="bold">{{recent_order.order_id}} -
+                            ${{recent_order.grand_total}}</h5>
+                    </div>
+                    <div>
+                        {{recent_order.order_dt_tm}}<br>
+                        {{recent_order.merchant.name}}<br>
+                        {{recent_order.order_user.first_name}} {{recent_order.order_user.last_name}}<br>
+                    </div>
+                </div>
+                <div ng-show="customer_service.recently_visited_orders.length %2 == 1"
+                     class="fake-div"></div>
+                <div ng-show="customer_service.recently_visited_orders.length == 1"
+                     class="fix-div-1"></div>
+                <div ng-show="customer_service.recently_visited_orders.length >= 4"
+                     class="fake-div"></div>
+                <div ng-show="customer_service.recently_visited_orders.length >= 4"
+                     class="fake-div"></div>
+                <div ng-show="customer_service.recently_visited_orders.length == 5"></div>
+                <div ng-show="customer_service.recently_visited_orders.length == 5"></div>
+                <div ng-show="customer_service.recently_visited_orders.length == 5"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-primary">
+            <div class="panel-heading flex-init flex-justify-content-space-between">
+                <h3 class="panel-title">Search Results</h3>
+                <button class="btn btn-primary" ng-click="vm.refresh()">Refresh</button>
+            </div>
+            <div class="panel-body">
+                <paginated-table container-id="'customer-service-future-orders-table'"
+                                 field-names="vm.fieldNames" params="vm.searchParams"
+                                 click-event="vm.viewOrder" endpoint-string="'/future_orders'">
+                    <content-responsive>
+                        <div class="panel panel-body row-table"
+                             ng-click="vm.viewOrder($parent.item)">
+                            <div class="name">
+                                <h5 class="dark-grey"><b>{{$parent.item.name}}</b></h5>
+                            </div>
+                            <div class="id">
+                                <h5 class="dark-grey id-title">Order ID
+                                    <span class="id-number" ng-bind-html="$parent.item.order_id"></span>
+                                </h5>
+                            </div>
+                            <div class="description clear">
+                                <div>Merchant ID: {{$parent.item.merchant_id}}</div>
+                                <div>Name: {{$parent.item.first_name}} {{$parent.item.last_name}}</div>
+                                <div class="merchant-address">{{$parent.item.address1}}</div>
+                                <div ng-show="!!$parent.item.order_dt_tm">Order Date: {{$parent.item.order_dt_tm}}
+                                </div>
+                                <div ng-show="!!$parent.item.pickup_dt_tm"><b>Due Date:</b>
+                                    {{$parent.item.pickup_dt_tm}}
+                                </div>
+                                <div>Qty: {{$parent.item.order_qty}} - Total: {{$parent.item.grand_total}}
+                                </div>
+                                <div>Cash: {{$parent.item.cash}} - Type: {{$parent.item.order_type}}</div>
+                            </div>
+                        </div>
+                    </content-responsive>
+                </paginated-table>
+            </div>
+        </div>
+    </div>
+</div>

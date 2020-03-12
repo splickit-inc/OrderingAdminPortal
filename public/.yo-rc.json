@@ -1,0 +1,73 @@
+{
+  "generator-cg-angular": {
+    "uirouter": false,
+    "partialDirectory": "partial/",
+    "modalDirectory": "partial/",
+    "directiveDirectory": "directive/",
+    "filterDirectory": "filter/",
+    "serviceDirectory": "service/",
+    "inject": {
+      "js": {
+        "file": "index.html",
+        "marker": "<!-- Add New Component JS Above -->",
+        "template": "<script src=\"<%= filename %>\"></script>"
+      },
+      "less": {
+        "relativeToModule": true,
+        "file": "<%= module %>.less",
+        "marker": "/* Add Component LESS Above */",
+        "template": "@import \"<%= filename %>\";"
+      }
+    },
+    "modules": [
+      {
+        "name": "adminPortal.merchant",
+        "file": "modules/merchant/admin-portal.merchant.js"
+      },
+      {
+        "name": "adminPortal.menu",
+        "file": "modules/menu/admin-portal.menu.js"
+      },
+      {
+        "name": "adminPortal.promo",
+        "file": "modules/promo/admin-portal.promo.js"
+      },
+      {
+        "name": "adminPortal.customerService",
+        "file": "modules/customer-service/admin-portal.customer-service.js"
+      },
+      {
+        "name": "adminPortal.webSkin",
+        "file": "modules/web-skin/admin-portal.web-skin.js"
+      },
+      {
+        "name": "adminPortal.brand",
+        "file": "modules/brand/admin-portal.brand.js"
+      },
+      {
+        "name": "adminPortal.reports",
+        "file": "modules/reports/admin-portal.reports.js"
+      },
+      {
+        "name": "adminPortal.customer",
+        "file": "modules/customer/admin-portal.customer.js"
+      },
+      {
+        "name": "adminPortal.user",
+        "file": "modules/user/admin-portal.user.js"
+      },
+      {
+        "name": "adminPortal.valueAddedReseller",
+        "file": "modules/value-added-reseller/admin-portal.value-added-reseller.js"
+      },
+      {
+        "name": "shared",
+        "file": "modules/shared/shared.js"
+      },
+      {
+        "name": "adminPortal.operator",
+        "file": "modules/operator/admin-portal.operator.js"
+      }
+    ]
+  }
+}

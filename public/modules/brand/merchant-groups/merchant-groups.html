@@ -1,0 +1,159 @@
+<div class="row">
+    <div class="brand-section col-sm-12">
+        <div class="page-header-title menu-bg white-text">
+            <h4 class="page-title">Merchant Groups</h4>
+            <button class="btn btn-info" ng-click="mg.createMerchantGroup()" ng-disabled>Create New Merchant Group
+            </button>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">Search Merchant Groups</h3>
+            </div>
+            <div class="panel-body">
+                <form name="mg.search_form" novalidate ng-submit="mg.search()">
+                    <div class="form-group">
+                        <div class="flex-init flex-align-items-center">
+                            <div class="search-box" style="width: 270px">
+                                <input type="text" class="form-control"
+                                       id="search_text"
+                                       name="search_text" placeholder=""
+                                       ng-model="mg.search.text" ng-required="true">
+                            </div>
+                            <button type="submit" class='btn-default btn m-l-10'>Search</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!--<div class="col-md-6" ng-class="mg.hasSearchResult()">-->
+        <!--<div class="panel panel-primary">-->
+            <!--<div class="panel-heading">-->
+                <!--<h3 class="panel-title">Recently Visited</h3>-->
+            <!--</div>-->
+            <!--<div class="panel-body recently-visited-container">-->
+                <!--<div class="panel panel-body row-table"-->
+                     <!--ng-repeat="recent_menu in mg.recently_visited"-->
+                     <!--ng-click="mg.viewMenu(recent_menu)"-->
+                     <!--data-toggle="modal">-->
+                    <!--<div>-->
+                        <!--<h5 class="bold">{{recent_menu.menu_id}} - {{recent_menu.name}}</h5>-->
+                    <!--</div>-->
+                    <!--<div>-->
+                        <!--{{recent_menu.description}}-->
+                    <!--</div>-->
+                <!--</div>-->
+                <!--<div ng-show="mg.recently_visited.length %2 == 1" class="fake-div"></div>-->
+                <!--<div ng-show="mg.recently_visited.length == 1" class="fix-div-1"></div>-->
+                <!--<div ng-show="mg.recently_visited.length >= 4" class="fake-div"></div>-->
+                <!--<div ng-show="mg.recently_visited.length >= 4" class="fake-div"></div>-->
+                <!--<div ng-show="mg.recently_visited.length == 5"></div>-->
+                <!--<div ng-show="mg.recently_visited.length == 5"></div>-->
+                <!--<div ng-show="mg.recently_visited.length == 5"></div>-->
+            <!--</div>-->
+        <!--</div>-->
+    <!--</div>-->
+</div>
+
+<div class="menu-list">
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title">Search Results</h3>
+        </div>
+        <div class="panel-body">
+            <!--<h5 class="pre-load-text" ng-show="!mg.search.initial_search">No Search-->
+            <!--Set</h5>-->
+            <div class="filter-loader-contain" ng-show="mg.search.processing">
+                <div class="filter-loader"></div>
+            </div>
+            <table class="table table-hover content-table" ng-show="mg.results">
+                <thead>
+                <tr>
+                    <th>Merchant Group ID</th>
+                    <th>Name</th>
+                    <th>Type</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="merchant_group in mg.results">
+                    <td ng-click="mg.editMerchantGroup(merchant_group)">{{merchant_group.id}}</td>
+                    <td ng-click="mg.editMerchantGroup(merchant_group)">{{merchant_group.name}}</td>
+                    <td ng-click="mg.editMerchantGroup(merchant_group)">{{merchant_group.group_type}}</td>
+                    <td class="delete-icon" >
+                        <i class="fa fa-times" aria-hidden="true"
+                           ng-click="mg.deleteMerchantGroupDialog(merchant_group, $index)"></i>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!--<div id="edit-menu-modal" class="modal fade" tabindex="-1" role="dialog"-->
+     <!--aria-labelledby="Create New Menu" aria-hidden="true">-->
+    <!--<div class="modal-dialog">-->
+        <!--<div class="modal-content">-->
+            <!--<form name="mg.edit_menu_form" class="form-horizontal" novalidate-->
+                  <!--ng-submit="mg.updateMenu()" >-->
+                <!--<div class="modal-header">-->
+                    <!--<button type="button" class="close m-r-5" data-dismiss="modal" aria-label="Close"><span-->
+                            <!--aria-hidden="true">&times;</span></button>-->
+                    <!--<h4 class="modal-title">Edit Menu Menu</h4>-->
+                <!--</div>-->
+                <!--<div class="modal-body">-->
+                    <!--<div class="form-group">-->
+                        <!--<label class="col-md-4 control-label">Name</label>-->
+                        <!--<div class="col-md-8">-->
+                            <!--<input type="text" class="input-large form-control" name="name"-->
+                                   <!--ng-model="mg.edit_menu.name" ng-fade ng-required="true">-->
+                            <!--<div class="alert alert-danger ng-hide alert-reg-position"-->
+                                 <!--ng-show="mg.edit_menu_form.name.$error.required-->
+                                 <!--&& (mg.edit_menu_form.name.$faded || mg.edit_menu.submit)"-->
+                                 <!--role="alert">-->
+                                <!--Name is required.-->
+                            <!--</div>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                    <!--<div class="form-group">-->
+                        <!--<label class="col-md-4 control-label">Description</label>-->
+                        <!--<div class="col-md-8">-->
+                            <!--<textarea type="text" class="input-large form-control description-text-area" name="description"-->
+                                      <!--ng-model="mg.edit_menu.description" ng-fade>-->
+                            <!--</textarea>-->
+                        <!--</div>-->
+                    <!--</div>-->
+
+                    <!--<div class="modal-footer">-->
+                        <!--<div class="buttons-create-merchant">-->
+                            <!--<div>-->
+                                <!--<div ng-show="mg.processing" class="form-loader">-->
+                                    <!--<div class="line"></div>-->
+                                    <!--<div class="line"></div>-->
+                                    <!--<div class="line"></div>-->
+                                    <!--<div class="line"></div>-->
+                                <!--</div>-->
+                                <!--<div class="alert alert-success alert-reg-position form-submit-success fade-effect"-->
+                                     <!--ng-show="mg.invalidForm"-->
+                                     <!--role="alert">-->
+                                    <!--<i class="fa fa-check-circle" aria-hidden="true"></i>{{mg.error}}-->
+                                <!--</div>-->
+                            <!--</div>-->
+                            <!--<div>-->
+                                <!--<button type="button" ng-disabled class="btn btn-default" data-dismiss="modal">Cancel</button>-->
+                                <!--<button class="btn btn-success">Submit</button>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                <!--</div>-->
+            <!--</form>-->
+        <!--</div>-->
+    <!--</div>-->
+<!--</div>-->

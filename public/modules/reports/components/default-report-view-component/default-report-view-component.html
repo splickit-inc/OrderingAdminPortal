@@ -1,0 +1,173 @@
+<div id="default-report-view">
+    <div>
+        <div class="submit-contain pull-right">
+            <button ng-disabled="vm.isValidToSchedule()" class="btn-success btn btn-report" ng-click="vm.runReport()">
+                {{vm.processing?'Cancel Report':'Run Report'}}
+            </button>
+            <button ng-disabled="vm.isValidToSchedule()" class="btn-default btn btn-report" ng-click="vm.exportReport()">{{vm.exporting?'Cancel Export':
+                'Export Report'}}
+            </button>
+
+            <button
+                ng-show="vm.scheduleOption != 0"
+                ng-disabled="vm.isValidToSchedule()"
+                class="btn-danger btn" ng-click="vm.openAddScheduleModal()">
+                Schedule Report
+            </button>
+        </div>
+    </div>
+    <div class="col-md-12 m-t-20">
+        <div ng-show="!!vm.dataList && vm.dataList.length == 0 && !vm.processing" class="text-center">
+            <h5 class="pre-load-text">No records were found.</h5>
+        </div>
+
+        <div class="table-container" ng-show="!vm.processing">
+            <table ng-show="!!vm.dataList && !!vm.dataList.length"
+                   class="table report-table table-striped">
+                <thead>
+                <tr>
+                    <th class="no-padding" ng-repeat="s in vm.orderBy">
+                        <div class="sortable" ng-class="{'align-right': s.align=='right'}"
+                             ng-click="vm.sortByColumn(s.key)">
+                            <span class="header-title">{{s.title}}</span>
+                            <span class="arrow-container">
+                                    <i ng-class="{'arrow-down-dir': s.sort=='-',
+                                    'arrow-up-dir': s.sort=='+',
+                                    'arrow-blank': !s.sort}" aria-hidden="true"></i>
+                                </span>
+                        </div>
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr dir-paginate="d in vm.dataList | itemsPerPage: vm.perPage"
+                    total-items="vm.totalData" current-page="vm.page">
+                    <td ng-repeat="c in vm.orderBy"
+                        ng-class="{'right-text': c.align=='right'}">{{ c.filter(d[c.key]) }}
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="clear row-centered" ng-show="!vm.processing && !!vm.totalData">
+        <dir-pagination-controls max-size="10"
+                                 on-page-change="vm.onPageChanged(newPageNumber)">
+        </dir-pagination-controls>
+    </div>
+    <div class="clear row-centered m-t-10" ng-show="!vm.processing && !!vm.totalData">
+        <label class="control-label per-page-label">Per Page:</label>
+        <div class="select per-page-select">
+            <select class="form-control"
+                    ng-model="vm.perPage"
+                    ng-options="o as o for o in vm.perPageOptions">
+            </select>
+        </div>
+    </div>
+
+    <div id="add-schedule-modal" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title">Schedule Report</h4>
+                </div>
+                <form name="vm.add_schedule_form" class="form-horizontal" novalidate ng-submit="vm.addNewSchedule()">
+                    <div class="modal-body">
+                        <div class="container">
+                            <div class="form-group">
+                                <label for="reportName" class="control-label col-md-4">Report Name</label>
+                                <div class="col-md-8">
+                                    <input id="reportName" name="report_name" type="text" class="form-control input-large"
+                                           ng-model="vm.newSchedule.name" ng-required="true">
+                                    <div class="alert alert-danger ng-hide alert-reg-position"
+                                         ng-show="vm.add_schedule_form.report_name.$error.required &&
+                                     (vm.add_schedule_form.report_name.$touched || vm.add_schedule_form.$submitted)"
+                                         role="alert">
+                                        The report name is required.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="frequency" class="control-label col-md-4">frequency</label>
+                                <div class="col-md-8">
+                                    <select name="frequency" class="input-large form-control"
+                                            ng-required="true"
+                                            ng-model="vm.newSchedule.frequency">
+                                        <option class="placeholder-color" value="" selected disabled>Frequency</option>
+                                        <option ng-repeat="frequency in vm.frequency" value="{{frequency.id}}">
+                                            {{frequency.name}}
+                                        </option>
+                                    </select>
+                                    <div class="alert alert-danger ng-hide alert-reg-position"
+                                         ng-show="vm.add_schedule_form.frequency.$error.required &&
+                                     (vm.add_schedule_form.frequency.$touched || vm.add_schedule_form.$submitted)"
+                                         role="alert">
+                                        The frequency is required.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="from" class="control-label col-md-4">From</label>
+                                <div class="col-md-8">
+                                    <input type="date" class="form-control input-large flex-init"
+                                           placeholder="YYYY-MM-DD" name="from"
+                                           ng-required="true" ng-model="vm.newSchedule.start_date">
+                                    <div class="alert alert-danger ng-hide alert-reg-position"
+                                         ng-show="vm.add_schedule_form.from.$error.required &&
+                                     (vm.add_schedule_form.from.$touched || vm.add_schedule_form.$submitted)"
+                                         role="alert">
+                                        Please select the day to start sending the reports.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="to" class="control-label col-md-4">To</label>
+                                <div class="col-md-8">
+                                    <input type="date" class="form-control input-large flex-init"
+                                           placeholder="YYYY-MM-DD" name="to"
+                                           ng-required="true" ng-model="vm.newSchedule.end_date">
+                                    <div class="alert alert-danger ng-hide alert-reg-position"
+                                         ng-show="vm.add_schedule_form.to.$error.required &&
+                                     (vm.add_schedule_form.to.$touched || vm.add_schedule_form.$submitted)"
+                                         role="alert">
+                                        Please select the day to stop sending the reports.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="reportName" class="control-label col-md-4">Send To</label>
+                                <div class="col-md-8">
+                                    <input id="reportRecipient" name="report_recipient" type="email"
+                                           class="form-control input-large"
+                                           ng-model="vm.newSchedule.recipient" ng-required="true">
+                                    <div class="alert alert-danger ng-hide alert-reg-position"
+                                         ng-show="vm.add_schedule_form.report_recipient.$error.required &&
+                                     (vm.add_schedule_form.report_recipient.$touched || vm.add_schedule_form.$submitted)"
+                                         role="alert">
+                                        The recipient is required.
+                                    </div>
+                                    <div class="alert alert-danger ng-hide alert-reg-position"
+                                         ng-show="vm.add_schedule_form.report_recipient.$error.email &&
+                                     (vm.add_schedule_form.report_recipient.$touched || vm.add_schedule_form.$submitted)"
+                                         role="alert">
+                                        Please enter a valid email address.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button class="btn btn-default">
+                            Submit
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

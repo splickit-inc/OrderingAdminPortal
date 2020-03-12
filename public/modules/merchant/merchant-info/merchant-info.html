@@ -1,0 +1,617 @@
+<div class="row">
+    <div class="col-sm-12">
+        <div class="page-header-title merchant-bg white-text">
+            <h4 class="page-title">Info</h4>
+            <ol class="breadcrumb">
+                <li><a href="#/merchants">{{ 'MESSAGE.SHARE.MERCHANT' | translate }}</a></li>
+                <li><a href="#/merchant/general_info">{{ 'MESSAGE.SHARE.INFO' | translate }}</a>
+                </li>
+            </ol>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12 col-lg-6">
+        <!--Location Panel-->
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">{{ 'MERCHANT.INFO.LOCATION' | translate }}</h3></div>
+            <div class="panel-body">
+                <div class="filter-loader-contain" ng-if="info.processing_location">
+                    <div class="filter-loader"></div>
+                </div>
+                <form name="info.location_form" ng-if="!info.processing_location" novalidate
+                      ng-submit="info.updateLocation()" class="form-horizontal">
+                    <div class="form-group">
+                        <label class="control-label col-md-4">
+                            {{ 'MESSAGE.SHARE.NAME' | translate }}
+                            <i class="fa fa-question-circle tooltip-help" aria-hidden="true">
+                                <span
+                                        class="tool-tip-text-responsive">{{ 'MERCHANT.INFO.NAMEBUSINESS' | translate }}</span>
+                            </i>
+                        </label>
+                        <div class="col-md-8">
+                            <input type="text" class="input-large form-control" name="business_name"
+                                   placeholder="Enter Name"
+                                   ng-model="info.location.business_name" ng-required="true" ng-fade>
+                            <div class="input-large alert alert-danger ng-hide alert-reg-position input-large"
+                                 ng-show="info.location_form.business_name.$error.required && (info.location_form.business_name.$faded || info.location.submit)"
+                                 role="alert">
+                                {{ 'MERCHANT.INFO.NAMEBUSINESSREQUIRED' | translate }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-4">{{ 'MERCHANT.INFO.DISPLAYNAME' | translate }}
+                            <i class="fa fa-question-circle tooltip-help" aria-hidden="true">
+                                <span class="tool-tip-text-responsive">{{ 'MERCHANT.INFO.TOOLTIP.DISPLAY_NAME' | translate }}</span>
+                            </i>
+                        </label>
+                        <div class="col-md-8">
+                            <input type="text" class="input-large form-control" name="display_name"
+                                   placeholder="Enter Display Name"
+                                   ng-model="info.location.display_name" ng-required="true" ng-fade>
+                            <div class="input-large alert alert-danger ng-hide alert-reg-position input-large"
+                                 ng-show="info.location_form.display_name.$error.required && (info.location_form.display_name.$faded || info.location.submit)"
+                                 role="alert">
+                                {{ 'MERCHANT.INFO.DISPLAYNAMEREQUIRED' | translate }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-4">External ID</label>
+                        <div class="col-md-8">
+                            <input type="text" class="input-large form-control" name="merchant_external_id"
+                                   placeholder="Enter the external identifier"
+                                   ng-model="info.location.merchant_external_id" ng-fade>
+                            <div class="input-large alert alert-danger ng-hide alert-reg-position input-large"
+                                 ng-show="info.location_form.merchant_external_id.$error.required && (info.location_form.merchant_external_id.$faded || info.location.submit)"
+                                 role="alert">
+                                The external identifier is required.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-4">{{ 'MESSAGE.SHARE.ADDRESS' | translate }}</label>
+                        <div class="col-md-8">
+                            <input type="text" class="input-large form-control" name="address1"
+                                   placeholder="Address Line 1"
+                                   ng-model="info.location.address1" ng-required="true" ng-fade>
+
+                            <div class="alert alert-danger ng-hide alert-reg-position input-large"
+                                 ng-show="info.location_form.addressline1.$error.required && (info.location_form.addressline1.$faded || info.location.submit)"
+                                 role="alert">
+                                {{ 'MESSAGE.SHARE.ADDRESSREQUIRED' | translate }}
+                            </div>
+                            <input type="text" class="input-large form-control margin-top-five" name="address2"
+                                   placeholder="Address Line 2"
+                                   ng-model="info.location.address2" ng-fade>
+
+                            <input type="text" class="input-large form-control margin-top-five" name="city"
+                                   placeholder="City"
+                                   ng-model="info.location.city" ng-required="true" ng-fade>
+
+
+                            <div class="select input-small inline m-t-5">
+                                <select id="fix-small-screen-inline" name="state" class="form-control"
+                                        ng-required="true"
+                                        ng-model="info.location.state"
+                                        ng-options="state.type_id_value as state.type_id_value for state in info.states">
+                                    <option class="placeholder-color" value="" selected disabled>ST</option>
+                                </select></div>
+
+                            <input type="text" class="input-small form-control m-t-5 inline" name="zip"
+                                   placeholder="Zip Code"
+                                   ng-model="info.location.zip" ng-required="true" ng-fade>
+
+                            <div class="alert alert-danger ng-hide alert-reg-position input-med"
+                                 ng-show="info.location_form.city.$error.required && (info.location_form.city.$faded || info.location.submit)"
+                                 role="alert">
+                                {{ 'MESSAGE.SHARE.CITYREQUIRED' | translate }}
+                            </div>
+
+                            <div class="alert alert-danger ng-hide alert-reg-position input-med"
+                                 ng-show="info.location_form.state.$error.required && (info.location_form.state.$faded || info.location.submit)"
+                                 role="alert">
+                                {{ 'MESSAGE.SHARE.STATEREQUIRED' | translate }}
+                            </div>
+
+                            <div class="alert alert-danger ng-hide alert-reg-position input-med"
+                                 ng-show="info.location_form.zip.$error.required && (info.location_form.zip.$faded || info.location.submit)"
+                                 role="alert">
+                                {{ 'MESSAGE.SHARE.ZIPREQUIRED' | translate }}
+                            </div>
+
+                            <div class="input-large alert alert-danger ng-hide alert-reg-position input-large"
+                                 ng-show="info.location_form.country.$error.required && (info.location_form.country.$faded || info.location.submit)"
+                                 role="alert">
+                                {{ 'MESSAGE.SHARE.COUNTRYREQUIRED' | translate }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-4">{{ 'MESSAGE.SHARE.TIMEZONE' | translate }}</label>
+                        <div class="col-md-8">
+                            <div class="select input-large margin-top-five">
+                                <select name="time_zone" class="form-control"
+                                        ng-required="true"
+                                        ng-model="info.location.time_zone" ng-change="test()"
+                                        ng-options="item as item.type_id_name for item in info.time_zones track by item.type_id_value">
+                                    <option class="placeholder-color" value="" disabled>{{ 'MESSAGE.SHARE.TIMEZONE' |
+                                        translate }}
+                                    </option>
+                                </select></div>
+                            <div class="input-large alert alert-danger ng-hide alert-reg-position input-x-large"
+                                 ng-show="info.location_form.timezone.$error.required && (info.location_form.timezone.$faded || info.location.submit)"
+                                 role="alert">
+                                {{ 'MESSAGE.SHARE.TIMEZONEREQUIRED' | translate }}
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label class="control-label col-md-4">{{ 'MERCHANT.INFO.STOREEMAIL' | translate }}</label>
+                        <div class="col-md-8">
+                            <input type="text" class="input-large form-control" name="shop_email"
+                                   ng-model="info.location.shop_email" ng-fade>
+                            <div class="input-large alert alert-danger ng-hide alert-reg-position input-large"
+                                 ng-show="info.location_form.shop_email.$error.required
+                             && (info.location_form.shop_email.$faded || info.location.submit)"
+                                 role="alert">
+                                {{ 'MERCHANT.INFO.STOREEMAILREQUIRED' | translate }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-4">{{ 'MERCHANT.INFO.PHONE' | translate }}</label>
+                        <div class="col-md-8">
+                            <input type="text" class="input-large form-control" name="phone_no"
+                                   ng-model="info.location.phone_no" ng-fade>
+                            <div class="input-large alert alert-danger ng-hide alert-reg-position input-large"
+                                 ng-show="info.location_form.phone_no.$error.required
+                             && (info.location_form.phone_no.$faded || info.location.submit)"
+                                 role="alert">
+                                {{ 'MESSAGE.SHARE.PHONENUMBERREQUIRED' | translate }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-4">Fax</label>
+                        <div class="col-md-8">
+                            <input type="text" class="input-large form-control" name="fax_no"
+                                   ng-model="info.location.fax_no" ng-fade>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-4">Numeric ID</label>
+                        <div class="col-md-8 m-t-10">
+                            {{info.location.numeric_id}}
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-4">Alphanumeric ID</label>
+                        <div class="col-md-8 m-t-10">
+                            {{info.location.alphanumeric_id}}
+                        </div>
+                    </div>
+
+                    <div class="submit-contain flex-init flex-justify-content-space-between">
+                        <div id="location-updated-success"
+                             class="flex-init flex-direction-column flex-justify-content-center">
+                            <div class="alert-success alert-reg-position form-submit-success fade-effect"
+                                 ng-show="info.location.success"
+                                 role="alert">
+                                <i class="fa fa-check-circle" aria-hidden="true"></i> {{ 'MERCHANT.INFO.LOCATIONUPDATED'
+                                | translate }}
+                            </div>
+                        </div>
+
+                        <div class="flex-align-self-end">
+                            <button id='merchant-location-submit' class='btn-soft-blue btn pull-right'>{{
+                                'MESSAGE.SHARE.SUBMIT' | translate }}
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div><!-- panel-body -->
+        </div>
+        <!--Messages Panel-->
+        <div class="panel panel-primary">
+            <div class="panel-heading"><h3 class="panel-title">Customer Messages</h3></div>
+            <div class="panel-body">
+                <div class="filter-loader-contain" ng-if="info.processing_messages">
+                    <div class="filter-loader"></div>
+                </div>
+                <form name="info.message_form" ng-if="!info.processing_messages" novalidate
+                      ng-submit="info.updateMessages()">
+                    <div class="form-group">
+                        <label class="control-label">{{ 'MERCHANT.INFO.ORDERMESSAGE' | translate }}
+                            <i class="fa fa-question-circle tooltip-help" aria-hidden="true">
+                                <span class="tool-tip-text-responsive">{{ 'MERCHANT.INFO.TOOLTIP.ORDER_MESSAGE' | translate }}</span>
+                            </i>
+                        </label>
+
+                        <div class="mt-5">
+                            <textarea class="form-control" rows="3" maxlength="255" name="custom_order_message"
+                                      ng-model="info.message.custom_order_message"></textarea>
+                        </div>
+
+                        <div class="alert alert-info ng-hide alert-reg-position"
+                             ng-show="info.message.custom_order_message.length > 235"
+                             role="alert">
+                            {{info.charactersRemaining(info.message.custom_order_message, 255)}} characters remaining.
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label">{{ 'MERCHANT.INFO.MENUMESSAGE' | translate }}
+                            <i class="fa fa-question-circle tooltip-help" aria-hidden="true">
+                                <span class="tool-tip-text-responsive">{{ 'MERCHANT.INFO.TOOLTIP.MENU_MESSAGE' | translate }}</span>
+                            </i>
+                        </label>
+                        <div class="mt-5">
+                            <textarea class="form-control" rows="3" maxlength="255" name="custom_menu_message"
+                                      ng-model="info.message.custom_menu_message"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="submit-contain flex-init flex-justify-content-space-between">
+                        <div class="flex-init flex-direction-column flex-justify-content-center">
+                            <div id="messages-updated-success"
+                                 class="alert-success alert-reg-position form-submit-success fade-effect"
+                                 ng-show="info.message.success"
+                                 role="alert">
+                                <i class="fa fa-check-circle" aria-hidden="true"></i> {{ 'MERCHANT.INFO.MESSAGEUPDATED'
+                                | translate }}
+                            </div>
+                        </div>
+
+                        <div class="flex-align-self-end">
+                            <button id="merchant-messages-submit" class='btn-soft-blue btn pull-right'>{{
+                                'MESSAGE.SHARE.SUBMIT' | translate }}
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12 col-lg-6">
+        <!--Configuration Panel-->
+        <div class="panel panel-primary">
+            <div class="panel-heading"><h3 class="panel-title">Configurations</h3></div>
+            <div class="panel-body">
+                <div class="filter-loader-contain" ng-if="info.processing_configuration">
+                    <div class="filter-loader"></div>
+                </div>
+                <form name="info.config_form" ng-if="!info.processing_configuration" novalidate
+                      ng-submit="info.updateConfig()" class="form-horizontal">
+
+                    <div class="form-group" ng-if="info.user.visibility == 'global' || info.user.visibility == 'all'">
+                        <label class="control-label col-md-4">{{ 'MESSAGE.SHARE.ACTIVE' | translate }}
+                            <i class="fa fa-question-circle tooltip-help" aria-hidden="true">
+                                <span
+                                        class="tool-tip-text-responsive">{{ 'MERCHANT.INFO.TOOLTIP.ACTIVE' | translate }}</span>
+                            </i>
+                        </label>
+                        <div class="col-md-8">
+                            <toggle-switch id="merchant-active-inactive-toggle" name="active"
+                                           ng-model="info.config.active"></toggle-switch>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-4">{{ 'MERCHANT.INFO.ORDERINGON' | translate }}
+                            <i class="fa fa-question-circle tooltip-help" aria-hidden="true">
+                                <span class="tool-tip-text-responsive">{{ 'MERCHANT.INFO.TOOLTIP.ORDERING_ON' | translate }}</span>
+                            </i>
+                        </label>
+                        <div class="col-md-8">
+                            <toggle-switch name="ordering_on" ng-model="info.config.ordering_on"></toggle-switch>
+                        </div>
+                    </div>
+                    <div class="form-group" ng-show="!info.info.config.active">
+                        <label class="col-md-4 control-label">{{ 'MERCHANT.INFO.INACTIVEREASON' | translate }}</label>
+                        <div class="col-md-8">
+                            <select name="inactive_reason" class="form-control"
+                                    ng-model="info.config.inactive_reason"
+                                    ng-options="inactive_reason.type_id_value as inactive_reason.type_id_name for inactive_reason in info.inactive_reasons">
+                                <option class="placeholder-color" value="" selected disabled>{{
+                                    'MERCHANT.INFO.INACTIVEREASON' | translate }}
+                                </option>
+                            </select></div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-4">{{ 'MERCHANT.INFO.INMEDIATEDELIVERY' | translate }}
+                            <i class="fa fa-question-circle tooltip-help" aria-hidden="true">
+                                <span class="tool-tip-text-responsive">{{ 'MERCHANT.INFO.TOOLTIP.IMMEDIATE_MSG_DELIVERY' | translate }}</span>
+                            </i>
+                        </label>
+                        <div class="col-md-8">
+                            <toggle-switch name="immediate_message_delivery"
+                                           ng-model="info.config.immediate_message_delivery"></toggle-switch>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-4">{{ 'MERCHANT.INFO.LEADTIME' | translate }}
+                            <i class="fa fa-question-circle tooltip-help" aria-hidden="true">
+                                <span class="tool-tip-text-responsive">{{ 'MERCHANT.INFO.TOOLTIP.ORDER_LEAD_TIME' | translate }}</span>
+                            </i>
+                        </label>
+                        <div class="col-md-8">
+                            <input type="number" class="input-med form-control" name="lead_time"
+                                   placeholder="Enter Minutes for Lead Time"
+                                   ng-model="info.config.lead_time" ng-fade>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-4">{{ 'MESSAGE.SHARE.DELIVERY' | translate }}
+                            <i class="fa fa-question-circle tooltip-help" aria-hidden="true">
+                                <span class="tool-tip-text-responsive">{{ 'MERCHANT.INFO.TOOLTIP.DELIVERY' | translate }}</span>
+                            </i>
+                        </label>
+                        <div class="col-md-8">
+                            <toggle-switch name="delivery" ng-model="info.config.delivery"></toggle-switch>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-4">{{ 'MERCHANT.INFO.SHOWTIP' | translate }}
+                            <i class="fa fa-question-circle tooltip-help" aria-hidden="true">
+                                <span class="tool-tip-text-responsive">{{ 'MERCHANT.INFO.TOOLTIP.SHOW_TIP' | translate }}</span>
+                            </i>
+                        </label>
+                        <div class="col-md-8">
+                            <toggle-switch name="show_tip" ng-model="info.config.show_tip"></toggle-switch>
+                        </div>
+                    </div>
+
+                    <div class="submit-contain flex-init flex-justify-content-space-between">
+                        <div class="flex-init flex-direction-column flex-justify-content-center">
+                            <div id="configurations-udpated-success"
+                                 class="alert-success alert-reg-position form-submit-success fade-effect"
+                                 ng-show="info.configurations.success"
+                                 role="alert">
+                                <i class="fa fa-check-circle" aria-hidden="true"></i> {{ 'MERCHANT.INFO.CONFIGUPDATED' |
+                                translate }}
+                            </div>
+                        </div>
+
+                        <div class="flex-align-self-end">
+                            <button id="configurations-submit" class='btn-soft-blue btn pull-right'>{{
+                                'MESSAGE.SHARE.SUBMIT' | translate }}
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div><!-- panel-body -->
+        </div>
+
+        <!--Business Info Panel-->
+        <div class="panel panel-primary">
+            <div class="panel-heading"><h3 class="panel-title">Business Info</h3></div>
+            <div class="panel-body">
+                <div class="filter-loader-contain" ng-if="info.processing_business_info">
+                    <div class="filter-loader"></div>
+                </div>
+                <form name="info.businessInfoForm" ng-if="!info.processing_business_info" novalidate
+                      ng-submit="info.businessUpdateInfo()"
+                      class="form-horizontal">
+                    <div class="form-group">
+                        <label class="control-label col-md-4">Business Name</label>
+                        <div class="col-md-8">
+                            <input type="text" class="input-large form-control" name="business_name"
+                                   placeholder="Name"
+                                   ng-model="info.business_info.filing_name" ng-fade required>
+                            <div class="alert alert-danger ng-hide alert-reg-position input-large"
+                                 ng-show="info.businessInfoForm.business_name.$error.required && (info.businessInfoForm.business_name.$faded || info.businessInfoForm.$submitted)"
+                                 role="alert">
+                                The Business Address is required.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-4">DBA</label>
+                        <div class="col-md-8">
+                            <input type="text" class="input-large form-control" name="business_DBA"
+                                   placeholder="DBA, if any"
+                                   ng-model="info.business_info.dba_name" ng-fade>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-4">Tax ID</label>
+                        <div class="col-md-8">
+                            <input type="text" class="input-large form-control" name="business_tax_id"
+                                   placeholder="{{info.business_info.EIN_SS_TEMP_VIEW}}"
+                                   ng-model="info.business_info.EIN_SS_TEMP" ng-fade ng-minlength="5" ng-required="true"
+                                   federal-tax-id-validator>
+                            <div class="alert alert-danger ng-hide alert-reg-position input-large"
+                                 ng-show="info.businessInfoForm.business_tax_id.$error.required && (info.businessInfoForm.business_tax_id.$faded || info.businessInfoForm.$submitted)"
+                                 role="alert">
+                                The Tax ID is required.
+                            </div>
+                            <div class="alert alert-danger ng-hide alert-reg-position input-large"
+                                 ng-show="info.businessInfoForm.business_tax_id.$error.minlength && (info.businessInfoForm.business_tax_id.$faded || info.businessInfoForm.$submitted)"
+                                 role="alert">
+                                The Tax ID must have more than 4 digits.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-4">Business Address</label>
+                        <div class="col-md-8">
+                            <input type="text" class="input-large form-control" name="business_address1"
+                                   placeholder="Address Line 1"
+                                   ng-model="info.business_info.address" ng-required="true" ng-fade>
+
+                            <div class="alert alert-danger ng-hide alert-reg-position input-large"
+                                 ng-show="info.businessInfoForm.business_address1.$error.required && (info.businessInfoForm.business_address1.$faded || info.businessInfoForm.$submitted)"
+                                 role="alert">
+                                The Business Address is required.
+                            </div>
+                            <!--                            <input type="text" class="input-large form-control margin-top-five" name="business_address2"
+                                                               placeholder="Address Line 2"
+                                                               ng-model="info.business_info.address2" ng-fade>-->
+
+                            <input type="text" class="input-large form-control margin-top-five" name="business_city"
+                                   placeholder="City"
+                                   ng-model="info.business_info.city" ng-required="true" ng-fade>
+
+
+                            <div class="select input-small inline m-t-5">
+                                <select id="fix-small-screen-inline" name="business_state" class="form-control"
+                                        required
+                                        ng-model="info.business_info.state"
+                                        ng-options="state.type_id_value as state.type_id_value for state in info.states">
+                                    <option class="placeholder-color" value="" selected disabled>ST</option>
+                                </select></div>
+
+                            <input type="text" class="input-small form-control m-t-5 inline" name="business_zip"
+                                   placeholder="Zip Code"
+                                   ng-model="info.business_info.zip" ng-required="true" ng-fade>
+
+                            <div class="alert alert-danger ng-hide alert-reg-position input-med"
+                                 ng-show="info.businessInfoForm.business_city.$error.required && (info.businessInfoForm.business_city.$faded || info.businessInfoForm.$submitted)"
+                                 role="alert">
+                                {{ 'MESSAGE.SHARE.CITYREQUIRED' | translate }}
+                            </div>
+
+                            <div class="alert alert-danger ng-hide alert-reg-position input-med"
+                                 ng-show="info.businessInfoForm.business_state.$error.required && (info.businessInfoForm.business_state.$touched || info.businessInfoForm.$submitted)"
+                                 role="alert">
+                                {{ 'MESSAGE.SHARE.STATEREQUIRED' | translate }}
+                            </div>
+
+                            <div class="alert alert-danger ng-hide alert-reg-position input-med"
+                                 ng-show="info.businessInfoForm.business_zip.$error.required && (info.businessInfoForm.business_zip.$faded || info.businessInfoForm.$submitted)"
+                                 role="alert">
+                                {{ 'MESSAGE.SHARE.ZIPREQUIRED' | translate }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="submit-contain flex-init flex-justify-content-space-between">
+                        <div class="flex-init flex-direction-column flex-justify-content-center">
+                            <div id="business-info-udpated-success"
+                                 class="alert-success alert-reg-position form-submit-success fade-effect"
+                                 ng-show="info.business_info_success"
+                                 role="alert">
+                                <i class="fa fa-check-circle" aria-hidden="true"></i> {{ 'MERCHANT.INFO.CONFIGUPDATED' |
+                                translate }}
+                            </div>
+                        </div>
+
+                        <div class="flex-align-self-end">
+                            <button id="business-info-submit" class='btn-soft-blue btn pull-right'>{{
+                                'MESSAGE.SHARE.SUBMIT' | translate }}
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!--Business Banking Panel-->
+        <div class="panel panel-primary">
+            <div class="panel-heading"><h3 class="panel-title">Business Banking</h3></div>
+            <div class="panel-body">
+                <div class="filter-loader-contain" ng-if="info.processing_business_banking">
+                    <div class="filter-loader"></div>
+                </div>
+                <form name="info.businessBankingForm" ng-if="!info.processing_business_banking" novalidate
+                      ng-submit="info.businessUpdateBanking()"
+                      class="form-horizontal">
+
+                    <div class="form-group">
+                        <label class="control-label col-md-4">Account Name</label>
+                        <div class="col-md-8">
+                            <input type="text" class="input-large form-control" name="banking_name"
+                                   placeholder="Name"
+                                   ng-model="info.business_banking.name_on_acct" ng-fade required>
+                            <div class="alert alert-danger ng-hide alert-reg-position input-med"
+                                 ng-show="info.businessBankingForm.banking_name.$error.required && (info.businessBankingForm.banking_name.$faded || info.businessBankingForm.$submitted)"
+                                 role="alert">
+                                The Account Name is required.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-4">Routing Number</label>
+                        <div class="col-md-8">
+                            <input type="text" class="input-large form-control" name="banking_routing"
+                                   placeholder="000 000 000" ng-model="info.business_banking.routing" ng-fade
+                                   ng-required="true" bank-routing-validator>
+                            <div class="alert alert-danger ng-hide alert-reg-position input-med"
+                                 ng-show="info.businessBankingForm.banking_routing.$error.required && (info.businessBankingForm.banking_routing.$faded || info.businessBankingForm.$submitted)"
+                                 role="alert">
+                                The Routing Number is required.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-4">Account Number</label>
+                        <div class="col-md-8">
+                            <input type="text" class="input-large form-control" name="banking_number"
+                                   placeholder="{{info.business_banking.account_TEMP_VIEW}}"
+                                   ng-model="info.business_banking.account_TEMP" ng-fade ng-minlength="4"
+                                   ng-required="true" bank-account-validator>
+                            <div class="alert alert-danger ng-hide alert-reg-position input-med"
+                                 ng-show="info.businessBankingForm.banking_number.$error.required && (info.businessBankingForm.banking_number.$faded || info.businessBankingForm.$submitted)"
+                                 role="alert">
+                                The Account Number is required.
+                            </div>
+                            <div class="alert alert-danger ng-hide alert-reg-position input-large"
+                                 ng-show="info.businessBankingForm.banking_number.$error.minlength && (info.businessBankingForm.banking_number.$faded || info.businessBankingForm.$submitted)"
+                                 role="alert">
+                                The Account Number must have more than 4 digits.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-4"></div>
+                        <div class="col-md-8">
+                            <div class="alert alert-danger ng-hide alert-reg-position"
+                                 ng-show="info.business_banking_error"
+                                 role="alert">
+                                In order to set the Business Banking info please fill and save the Business Info Address
+                                first.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="submit-contain flex-init flex-justify-content-space-between">
+                        <div class="flex-init flex-direction-column flex-justify-content-center">
+                            <div id="business-bank-udpated-success"
+                                 class="alert-success alert-reg-position form-submit-success fade-effect"
+                                 ng-show="info.business_banking_success"
+                                 role="alert">
+                                <i class="fa fa-check-circle" aria-hidden="true"></i> {{ 'MERCHANT.INFO.CONFIGUPDATED' |
+                                translate }}
+                            </div>
+                        </div>
+
+                        <div class="flex-align-self-end">
+                            <button id="business-bank-submit" class='btn-soft-blue btn pull-right'>{{
+                                'MESSAGE.SHARE.SUBMIT' | translate }}
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div><!-- panel-body -->
+        </div>
+    </div>
+</div>

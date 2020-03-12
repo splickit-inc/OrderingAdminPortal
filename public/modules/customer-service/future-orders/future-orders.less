@@ -1,0 +1,14 @@
+#customer-service-future-orders-table{
+    @max-small-cards: 424px;
+    @min-medium-cards: 425px;
+    @max-medium-cards: 1099px;
+    @min-table-screen: 1100px;
+
+    .content-table {
+        .content-table(@min-table-screen);
+    }
+
+    .content-responsive {
+        .content-responsive(@max-small-cards, @min-medium-cards, @max-medium-cards);
+    }
+}

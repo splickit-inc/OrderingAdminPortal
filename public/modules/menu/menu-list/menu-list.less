@@ -1,0 +1,38 @@
+@import "../../shared/styles/flex.less";
+.menu-list{
+    @max-small-cards: 399px;
+    @min-medium-cards: 400px;
+    .content-table {
+        .content-table;
+    }
+
+    .content-responsive {
+        .content-responsive(@max-small-cards, @min-medium-cards, @max-medium-cards);
+    }
+}
+
+#create-menu-modal{
+    .description-text-area{
+        width: 210px;
+        height: 60px;
+        -webkit-box-sizing: border-box; /* <=iOS4, <= Android  2.3 */
+        -moz-box-sizing: border-box; /* FF1+ */
+        box-sizing: border-box; /* Chrome, IE8, Opera, Safari 5.1*/
+        resize: none;
+    }
+
+    .buttons-create-merchant{
+        .flex-init;
+        .flex-justify-content-space-between;
+    }
+    #table-size {
+        max-height: 100px;
+        overflow-x: hidden;
+        overflow-y: scroll;
+    }
+    .buttons-create-merchant{
+        .flex-init;
+        .flex-justify-content-space-between;
+    }
+
+}

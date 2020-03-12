@@ -1,0 +1,18 @@
+.btn {
+  font-family: @font-family-arial-rounded-mt;
+  text-transform: uppercase;
+  box-shadow: 0 0 0 1px @out-border;
+  font-size: @button-font-size;
+  min-height: @button-min-height;
+  line-height: 12px;
+  //fix for buttons that existed in app css
+  &.btn-dark {
+    .btn-default;
+  }
+}
+
+.btn-soft-blue{
+  color: #fff;
+  background-color: #0288D1;
+  border-color: #F2F2F2;
+}

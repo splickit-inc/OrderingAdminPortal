@@ -1,0 +1,146 @@
+<div class="row">
+    <div class="col-sm-12">
+        <div class="page-header-title menu-bg white-text">
+            <h4 class="page-title">Menu</h4>
+        </div>
+    </div>
+</div>
+
+<div class="menu-list">
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title">Report Criteria</h3>
+        </div>
+        <div class="panel-body">
+            <div class="col-md-8">
+                <div class="btn-group">
+                    <button type="button" ng-click="mo.current_report = 'menu_type_item'" ng-class="mo.reportButtonClass('menu_type_item')">Menu Type & Item Report</button>
+                    <button type="button" ng-click="mo.current_report = 'mod_group_mod_item'" ng-class="mo.reportButtonClass('mod_group_mod_item')">Mod Group & Mod Item Report</button>
+                    <button type="button" ng-click="mo.current_report = 'merchant_menu'" ng-class="mo.reportButtonClass('merchant_menu')">Merchant Menu Report</button>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <button type="button" ng-show="mo.userService.hasPermission('multi_merchs_filter')"
+                                      ng-click="mo.loadZeroRecordMenu()" class="btn btn-danger">Load Master Menu</button>
+
+                <button type="button" data-toggle="modal" data-target="#merchant-single-select-modal"
+                        ng-show="mo.userService.hasPermission('multi_merchs_filter')"  class="btn btn-success">Select Merchant's Menu</button>
+            </div>
+
+
+
+        </div>
+    </div>
+</div>
+
+<div class="menu-list" ng-show="mo.current_report == 'menu_type_item'">
+    <div class="panel panel-primary">
+        <div class="panel-heading flex-justify-content-space-between">
+            <h3 class="panel-title">Menu Section & Items</h3>
+            <button type="button" csv-header="mo.exportMenuTypeHeaders" ng-csv="mo.menuTypeMenuItemReport" filename="menu_type_item_report.csv" class="btn btn-danger pull-right">Export CSV</button>
+        </div>
+        <div class="panel-body">
+            <h5 class="pre-load-text" ng-show="mo.menuTypeMenuItemReport.length == 0">No records</h5>
+            <table class="table table-hover content-table"
+                   ng-show="mo.menuTypeMenuItemReport.length > 0">
+                <thead>
+                <tr>
+                    <th class="cursor-pointer">Section</th>
+                    <th class="cursor-pointer">Active</th>
+                    <th class="cursor-pointer">Item Name</th>
+                    <th class="cursor-pointer">Item Desc</th>
+                    <th class="cursor-pointer">Active</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="record in mo.menuTypeMenuItemReport">
+                    <td>{{record.menu_type_name}}</td>
+                    <td>{{record.Menu_Type_Active}}</td>
+                    <td>{{record.item_name}}</td>
+                    <td>{{record.description}}</td>
+                    <td>{{record.Item_Active}}</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="menu-list" ng-show="mo.current_report == 'mod_group_mod_item'">
+    <div class="panel panel-primary">
+        <div class="panel-heading flex-justify-content-space-between">
+            <h3 class="panel-title">Menu Modifier Groups & Modifier Items</h3>
+            <button type="button" csv-header="mo.exportModGroupHeaders" ng-csv="mo.modifierGroupModifierItemReport" filename="mod_group_mod_item_report.csv" class="btn btn-danger pull-right">Export CSV</button>
+        </div>
+
+        <div class="panel-body">
+            <h5 class="pre-load-text" ng-show="mo.modifierGroupModifierItemReport.length == 0">No records</h5>
+            <table class="table table-hover content-table"
+                   ng-show="mo.modifierGroupModifierItemReport.length > 0">
+                <thead>
+                <tr>
+                    <th class="cursor-pointer">Modifier Group</th>
+                    <th class="cursor-pointer">MG Active</th>
+                    <th class="cursor-pointer">Mod Item Name</th>
+                    <th class="cursor-pointer">Mod Item Active</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="record in mo.modifierGroupModifierItemReport">
+                    <td>{{record.modifier_group_name}}</td>
+                    <td>{{record.MG_active}}</td>
+                    <td>{{record.modifier_item_name}}</td>
+                    <td>{{record.MI_active}}</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="menu-list" ng-show="mo.current_report == 'merchant_menu'">
+    <div class="panel panel-primary">
+        <div class="panel-heading flex-justify-content-space-between">
+            <h3 class="panel-title">Merchant Menu Report</h3>
+            <button type="button" csv-header="mo.exportMerchatHeaders" ng-csv="mo.merchantMenuReport" filename="merchant_menu_report.csv" class="btn btn-danger pull-right">Export CSV</button>
+        </div>
+        <div class="panel-body">
+            <h5 class="pre-load-text" ng-show="mo.merchantMenuReport.length == 0">No records</h5>
+            <table class="table table-hover content-table"
+                   ng-show="mo.merchantMenuReport.length > 0">
+                <thead>
+                <tr>
+                    <th class="cursor-pointer">Section ID</th>
+                    <th class="cursor-pointer">Section Name</th>
+                    <th class="cursor-pointer">Section Priority</th>
+                    <th class="cursor-pointer">Item ID</th>
+                    <th class="cursor-pointer">Item Name</th>
+                    <th class="cursor-pointer">Item Priority</th>
+                    <th class="cursor-pointer">Mod Group ID</th>
+                    <th class="cursor-pointer">Mod Group Name</th>
+                    <th class="cursor-pointer">Mod Group Priority</th>
+                    <th class="cursor-pointer">IMGM ID</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="record in mo.merchantMenuReport">
+                    <td>{{record.mt_id}}</td>
+                    <td>{{record.menu_type_name}}</td>
+                    <td>{{record.mt_priority}}</td>
+                    <td>{{record.item_id}}</td>
+                    <td>{{record.item_name}}</td>
+                    <td>{{record.i_priority}}</td>
+                    <td>{{record.mg_id}}</td>
+                    <td>{{record.modifier_group_name}}</td>
+                    <td>{{record.mg_priority}}</td>
+                    <td>{{record.imgm_id}}</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+<merchant-single-selector close-merchant-select="mo.loadReportWithMerchant(merchant)"
+                          selected-merchant-id="mo.menu_merchant_id" search-function="mo.merchantSearchByMenu" auto-submit="true"></merchant-single-selector>

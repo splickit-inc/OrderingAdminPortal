@@ -1,0 +1,199 @@
+<div class="row">
+    <div class="col-sm-12">
+        <div class="page-header-title">
+            <h4 class="pull-left page-title">Customer Service</h4>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">Search Orders</h3>
+            </div>
+            <div class="panel-body">
+                <form name="customer_service.search_form" novalidate
+                      ng-submit="customer_service.searchOrders()">
+                    <div class="form-group">
+                        <div class="flex-init flex-align-items-center">
+                            <div class="search-box" style="width: 270px">
+                                <input type="text" class="form-control" id="search_text"
+                                       name="search_text"
+                                       ng-model="customer_service.search.text">
+                            </div>
+                            <button type="submit" class='btn-default btn m-l-10'>Search</button>
+                        </div>
+
+                        <div class=" alert alert-danger ng-hide alert-reg-position"
+                             ng-show="(customer_service.search_form.search_text.$error.required && customer_service.search_form.search_text.$touched) ||
+                                 (customer_service.search_form.search_text.$error.required && customer_service.search_form.$submitted)"
+                             role="alert">
+                            You must type at least one letter on search field.
+                        </div>
+                    </div>
+                    <div class="checkbox m-l-2">
+                        <label>
+                            <input type="checkbox" name="search_past_seven_days"
+                                   ng-model="customer_service.search.past_seven_days">
+                            Search Beyond 7 Days
+                            <span></span>
+                        </label>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6" ng-class="customer_service.hasSearchResult()">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">Recently Visited</h3>
+            </div>
+            <div class="panel-body recently-visited-container">
+                <div class="panel panel-body row-table"
+                     ng-repeat="recent_order in customer_service.recently_visited_orders"
+                     data-toggle="modal"
+                     ng-click="customer_service.viewOrder(recent_order)">
+                    <div>
+                        <h5 class="bold">{{recent_order.order_id}} -
+                            ${{recent_order.grand_total}}</h5>
+                    </div>
+                    <div>
+                        {{recent_order.order_dt_tm}}<br>
+                        {{recent_order.merchant.name}}<br>
+                        {{recent_order.order_user.first_name}} {{recent_order.order_user.last_name}}<br>
+                    </div>
+                </div>
+                <div ng-show="customer_service.recently_visited_orders.length %2 == 1"
+                     class="fake-div"></div>
+                <div ng-show="customer_service.recently_visited_orders.length == 1"
+                     class="fix-div-1"></div>
+                <div ng-show="customer_service.recently_visited_orders.length >= 4"
+                     class="fake-div"></div>
+                <div ng-show="customer_service.recently_visited_orders.length >= 4"
+                     class="fake-div"></div>
+                <div ng-show="customer_service.recently_visited_orders.length == 5"></div>
+                <div ng-show="customer_service.recently_visited_orders.length == 5"></div>
+                <div ng-show="customer_service.recently_visited_orders.length == 5"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row customer-service">
+    <div class="col-md-12" ng-show="customer_service.first_search">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">Search Results</h3>
+            </div>
+            <div class="panel-body">
+                <paginated-table container-id="'customer-service-search-results-table'"
+                                 field-names="customer_service.fieldNames" params="customer_service.searchParams"
+                                 click-event="customer_service.viewOrder" endpoint-string="'/orders_search'">
+                    <content-responsive>
+                        <div class="panel panel-body row-table"
+                             ng-click="customer_service.viewOrder($parent.item)">
+                            <div class="name">
+                                <h5 class="dark-grey"><b>{{$parent.item.name}}</b></h5>
+                            </div>
+                            <div class="id">
+                                <h5 class="dark-grey id-title">Order ID
+                                    <span class="id-number" ng-bind-html="$parent.item.order_id"></span>
+                                </h5>
+                            </div>
+                            <div class="description clear">
+                                <div>Merchant ID: {{$parent.item.merchant_id}}</div>
+                                <div>Name: {{$parent.item.first_name}} {{$parent.item.last_name}}</div>
+                                <div class="merchant-address">{{$parent.item.address1}}</div>
+                                <div ng-show="!!$parent.item.order_dt_tm">Date: {{$parent.item.order_dt_tm}}
+                                </div>
+                                <div>Status: {{$parent.item.status}}</div>
+                                <div>Qty: {{$parent.item.order_qty}} - Total: {{$parent.item.grand_total}}
+                                </div>
+                                <div>Cash: {{$parent.item.cash}} - Type: {{$parent.item.order_type}}</div>
+                            </div>
+                        </div>
+                    </content-responsive>
+                </paginated-table>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="col-md-12 customer-service" ng-show="!customer_service.first_search">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">Last 25 Orders</h3>
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="filter-loader-contain" ng-show="customer_service.loading">
+                        <div class="filter-loader"></div>
+                    </div>
+                    <table class="table table-hover table-condensed content-table"
+                           ng-show="!customer_service.loading">
+                        <thead>
+                        <tr>
+                            <th>Order ID</th>
+                            <th>First</th>
+                            <th>Last</th>
+                            <th>Merchant ID</th>
+                            <th>Merchant Name</th>
+                            <th>Address</th>
+                            <th>Qty</th>
+                            <th>Total</th>
+                            <th>In Store Payment</th>
+                            <!--<th>Order Type</th>-->
+                            <th>Order Status</th>
+                            <th>Order Date</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="order in customer_service.last_25_orders"
+                            ng-click="customer_service.viewOrder(order)">
+                            <td ng-bind-html="order.order_id"></td>
+                            <td class="text-wrap-word-break">{{order.first_name}}</td>
+                            <td class="text-wrap-word-break">{{order.last_name}}</td>
+                            <td>{{order.merchant_id}}</td>
+                            <td class="text-wrap-word-break">{{order.name}}</td>
+                            <td>{{order.address1}}</td>
+                            <td>{{order.order_qty}}</td>
+                            <td>{{order.grand_total}}</td>
+                            <td>{{order.cash}}</td>
+                            <!--<td>{{order.order_type_complete}}</td>-->
+                            <td>{{order.status}}</td>
+                            <td>{{order.order_dt_tm}}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <div class="content-responsive">
+                        <div ng-repeat="order in customer_service.last_25_orders"
+                             ng-click="customer_service.viewOrder(order)">
+                            <div class="panel panel-body row-table">
+                                <div class="name">
+                                    <h5 class="dark-grey"><b>{{order.name}}</b></h5>
+                                </div>
+                                <div class="id">
+                                    <h5 class="dark-grey id-title">Order ID <span
+                                        class="id-number" ng-bind-html="order.order_id"></span>
+                                    </h5>
+                                </div>
+                                <div class="description clear">
+                                    <div>Merchant ID: {{order.merchant_id}}</div>
+                                    <div>Name: {{order.first_name}} {{order.last_name}}</div>
+                                    <div class="merchant-address">{{order.address1}}</div>
+                                    <div ng-show="!!order.order_dt_tm">Date: {{order.order_dt_tm}}
+                                    </div>
+                                    <div>Status: {{order.status}}</div>
+                                    <div>Qty: {{order.order_qty}} - Total: {{order.grand_total}}
+                                    </div>
+                                    <div>Cash: {{order.cash}} - Type: {{order.order_type_complete}}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

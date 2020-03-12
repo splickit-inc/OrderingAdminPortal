@@ -1,0 +1,20 @@
+@import "../../shared/styles/rows-as-card-items.less";
+
+.customer-service-live-orders{
+    @max-small-cards: 474px;
+    @min-medium-cards: 475px;
+    @max-medium-cards: 1099px;
+    @min-table-screen: 1100px;
+    .table
+    {
+        table-layout: fixed;
+        width: 100%;
+    }
+    .content-table {
+        .content-table(@min-table-screen);
+    }
+
+    .content-responsive {
+        .content-responsive(@max-small-cards, @min-medium-cards, @max-medium-cards);
+    }
+}

@@ -1,0 +1,85 @@
+<div id="merchant-single-select-modal" class="modal fade" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Select Merchant</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <div class="col-md-9 col-lg-9">
+                        <form name="merchant_search_form" novalidate ng-submit="merchantSearch()">
+                        <div class="flex-init flex-align-items-baseline">
+                            <label class="col-md-3 col-lg-3 control-label">Merchant Search</label>
+                                <input type="text" class="input-large form-control"
+                                       name="search_text" placeholder=""
+                                       ng-model="search.text" ng-required="true">
+
+                                <div class="submit-contain">
+                                    <button class='btn-primary menu-btn btn'>Search</button>
+                                </div>
+                        </div>
+                        </form>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-xs-12 create-promo-view">
+                            <div class="filter-loader-contain" ng-show="search.processing">
+                                <div class="filter-loader"></div>
+                            </div>
+                            <div class="m-t-20 table-fixed-with-scroll" ng-show="!search.processing">
+                                <table class="content-table table table-hover" ng-show="search_results.length > 0">
+                                    <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Name</th>
+                                        <th>Address</th>
+                                        <th>City</th>
+                                        <th>State</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr ng-repeat="merchant in search_results"
+                                        ng-click="setMerchant(merchant)">
+                                        <td>{{merchant.merchant_id}}</td>
+                                        <td>{{merchant.name}}</td>
+                                        <td>{{merchant.address1}}</td>
+                                        <td>{{merchant.city}}</td>
+                                        <td>{{merchant.state}}</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+
+                                <div class="content-responsive">
+                                    <div ng-repeat="merchant in search_results"
+                                         ng-click="setMerchant(merchant)">
+                                        <div class="panel panel-body row-table">
+                                            <div class="name">
+                                                <h5 class="dark-grey"><b>{{merchant.name}}</b></h5>
+                                            </div>
+                                            <div class="id">
+                                                <h5 class="dark-grey id-title">Merchant ID <span class="id-number">{{merchant.merchant_id}}</span>
+                                                </h5>
+                                            </div>
+                                            <div class="description clear">
+                                                <div class="merchant-address">
+                                                    {{merchant.address1}} {{merchant.city}}, {{merchant.state}} {{merchant.zip}}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" ng-disabled class="btn btn-default" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>

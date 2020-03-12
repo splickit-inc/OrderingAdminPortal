@@ -1,0 +1,106 @@
+<div class="row">
+    <div class="col-sm-12">
+        <div class="page-header-title">
+            <h4 class="page-title">Brand</h4>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="panel panel-primary">
+            <div class="panel-heading"><h3 class="panel-title">Edit Merchant Group {{mge.edit_merchant_group.id}}</h3></div>
+            <div class="panel-body">
+                <form name="mge.edit_merchant_group_form" class="form-horizontal" novalidate ng-submit="mge.updateMerchantGroup()">
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Group Name</label>
+                        <div class="col-md-8 m-t-5-sm">
+                            <input type="text" class="input-large form-control" name="name"
+                                   ng-model="mge.edit_merchant_group.name" ng-fade ng-required="true">
+                            <div class="error-large error-large alert alert-danger ng-hide alert-reg-position"
+                                 ng-show="mge.edit_merchant_group_form.name.$error.required
+                                            && (mge.edit_merchant_group_form.name.$touched || edit_merchant_group_form.edit_merchant_group_form.$submitted)"
+                                 role="alert">
+                                Name is required.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group" ng-show="mge.edit_merchant_group.group_type == 'merchant'">
+                        <label class="col-md-4 control-label">Merchants</label>
+                        <div class="col-md-8 m-t-5-sm">
+                            <button type='button' class='btn menu-btn btn-primary fix-button-wrap-text' data-toggle="modal" ng-disabled
+                                    data-target="#merchant-select-modal">Select Merchants
+                            </button>
+                        </div>
+
+                        <label class="col-md-4 control-label m-t-10" ng-show="mge.embeddedMerchantSearch.selected_merchants.length > 0">Selected Merchants</label>
+                        <div class="col-md-8 m-t-10"
+                             ng-show="mge.embeddedMerchantSearch.selected_merchants.length > 0">
+                            <div class="table-fixed-with-scroll">
+                                <table class="table table-hover">
+                                    <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Name</th>
+                                        <th>Address</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr ng-repeat="merchant in mge.embeddedMerchantSearch.selected_merchants">
+                                        <td>{{merchant.merchant_id}}</td>
+                                        <td>{{merchant.name}}</td>
+                                        <td>
+                                            {{merchant.address1}}<BR>
+                                            {{merchant.city}}, {{merchant.state}} {{merchant.zip}}
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group" ng-show="mge.edit_merchant_group.group_type == 'group'">
+                        <label class="col-md-4 control-label">Groups</label>
+                        <div class="col-md-8 m-t-5-sm">
+                            <button type='button' class='btn menu-btn btn-primary fix-button-wrap-text' data-toggle="modal" ng-disabled
+                                    data-target="#merchant-group-select-modal">Select Groups
+                            </button>
+                        </div>
+
+                        <label class="col-md-4 control-label m-t-10" ng-show="mge.merchantGroupFactory.selected_merchant_groups.length > 0">Selected Groups</label>
+                        <div class="col-md-8 m-t-10"
+                             ng-show="mge.merchantGroupFactory.selected_merchant_groups.length > 0">
+                            <div class="table-fixed-with-scroll">
+                                <table class="table table-hover">
+                                    <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Name</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr ng-repeat="group in mge.merchantGroupFactory.selected_merchant_groups">
+                                        <td>{{group.id}}</td>
+                                        <td>{{group.name}}</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex-init flex-justify-content-space-between">
+                        <div class="col-md-12">
+                            <button class='btn-success btn pull-right'>Submit</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<merchant-selector close-merchant-select="mge.setMerchants()" all-option="1" master-only="1" propation-options="0"></merchant-selector>
+<merchant-group-selector close-merchant-group-select="mge.setGroups()" all-option="1" master-only="1" propation-options="0"></merchant-group-selector>

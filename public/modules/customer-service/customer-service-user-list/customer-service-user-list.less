@@ -1,0 +1,12 @@
+.customer-service-user-list{
+    @max-medium-cards: 989px;
+    @min-table-screen: 990px;
+
+    .content-table {
+        .content-table(@min-table-screen);
+    }
+
+    .content-responsive {
+        .content-responsive(@max-small-cards, @min-medium-cards, @max-medium-cards);
+    }
+}

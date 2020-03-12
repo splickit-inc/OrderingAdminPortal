@@ -1,0 +1,170 @@
+<div class="brand-section" ng-if="!vm.isUserOperator()">
+    <div class="page-header-title">
+        <h4 class="page-title">Brand</h4>
+        <a href="#/brand/create" class="btn center brand-button-color" role="button">
+            Create new Brand
+        </a>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h3 class="panel-title">SEARCH BRANDS</h3>
+                </div>
+                <div class="panel-body">
+                    <form name="vm.search_form" novalidate ng-submit="vm.brandsSearch()">
+                        <div class="form-group">
+                            <div class="flex-init flex-align-items-center">
+                                <div class="search-box" style="width: 270px">
+                                    <input type="text" class="form-control" id="search_text"
+                                           name="search_text"
+                                           placeholder=""
+                                           ng-model="vm.search_text">
+                                </div>
+                                <button class='btn-default btn m-l-10'>SEARCH</button>
+                            </div>
+                        </div>
+                    </form>
+                    <div>
+                        <label>Filter by First Letter</label>
+                        <div class="alphabet">
+                        <span ng-class="vm.currentLetter('A')"
+                              ng-click="vm.brandLetter('A')">A
+                        </span>
+                            <span ng-class="vm.currentLetter('B')"
+                                  ng-click="vm.brandLetter('B')">B
+                        </span>
+                            <span ng-class="vm.currentLetter('C')"
+                                  ng-click="vm.brandLetter('C')">C
+                        </span>
+                            <span ng-class="vm.currentLetter('D')"
+                                  ng-click="vm.brandLetter('D')">D
+                        </span>
+                            <span ng-class="vm.currentLetter('E')"
+                                  ng-click="vm.brandLetter('E')">E
+                        </span>
+                            <span ng-class="vm.currentLetter('F')"
+                                  ng-click="vm.brandLetter('F')">F
+                        </span>
+                            <span ng-class="vm.currentLetter('G')"
+                                  ng-click="vm.brandLetter('G')">G
+                        </span>
+                            <span ng-class="vm.currentLetter('H')"
+                                  ng-click="vm.brandLetter('H')">H
+                        </span>
+                            <span ng-class="vm.currentLetter('I')"
+                                  ng-click="vm.brandLetter('I')">I
+                        </span>
+                            <span ng-class="vm.currentLetter('J')"
+                                  ng-click="vm.brandLetter('J')">J
+                        </span>
+                            <span ng-class="vm.currentLetter('K')"
+                                  ng-click="vm.brandLetter('K')">K
+                        </span>
+                            <span ng-class="vm.currentLetter('L')"
+                                  ng-click="vm.brandLetter('L')">L
+                        </span>
+                            <span ng-class="vm.currentLetter('M')"
+                                  ng-click="vm.brandLetter('M')">M
+                        </span>
+                            <span ng-class="vm.currentLetter('N')"
+                                  ng-click="vm.brandLetter('N')">N
+                        </span>
+                            <span ng-class="vm.currentLetter('O')"
+                                  ng-click="vm.brandLetter('O')">O
+                        </span>
+                            <span ng-class="vm.currentLetter('P')"
+                                  ng-click="vm.brandLetter('P')">P
+                        </span>
+                            <span ng-class="vm.currentLetter('Q')"
+                                  ng-click="vm.brandLetter('Q')">Q
+                        </span>
+                            <span ng-class="vm.currentLetter('R')"
+                                  ng-click="vm.brandLetter('R')">R
+                        </span>
+                            <span ng-class="vm.currentLetter('S')"
+                                  ng-click="vm.brandLetter('S')">S
+                        </span>
+                            <span ng-class="vm.currentLetter('T')"
+                                  ng-click="vm.brandLetter('T')">T
+                        </span>
+                            <span ng-class="vm.currentLetter('U')"
+                                  ng-click="vm.brandLetter('U')">U
+                        </span>
+                            <span ng-class="vm.currentLetter('V')"
+                                  ng-click="vm.brandLetter('V')">V
+                        </span>
+                            <span ng-class="vm.currentLetter('W')"
+                                  ng-click="vm.brandLetter('W')">W
+                        </span>
+                            <span ng-class="vm.currentLetter('X')"
+                                  ng-click="vm.brandLetter('X')">X
+                        </span>
+                            <span ng-class="vm.currentLetter('Y')"
+                                  ng-click="vm.brandLetter('Y')">Y
+                        </span>
+                            <span ng-class="vm.currentLetter('Z')"
+                                  ng-click="vm.brandLetter('Z')">Z
+                        </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title">SEARCH RESULTS</h3>
+        </div>
+        <div class="panel-body">
+            <div class="filter-loader-contain" ng-show="vm.processing">
+                <div class="filter-loader"></div>
+            </div>
+
+            <div ng-if="!vm.processing">
+                <h5 class="pre-load-text" ng-show="vm.search_result.length === 0 && vm.first_search">No records</h5>
+                <div ng-if="vm.search_result.length > 0">
+                    <table class="table table-hover content-table">
+                        <thead>
+                        <tr>
+                            <th>Brand ID</th>
+                            <th>Name</th>
+                            <th>Support Email</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="brand in vm.search_result"
+                            ng-click="vm.viewBrand(brand)">
+                            <td class="fix-table-wrap">{{brand.brand_id}}</td>
+                            <td>{{brand.brand_name}}</td>
+                            <td>{{brand.support_email}}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <div class="content-responsive">
+                        <div ng-repeat="brand in vm.search_result">
+                            <div class="panel panel-body row-table"
+                                 ng-click="vm.viewBrand(brand)">
+                                <div class="name">
+                                    <h5 class="dark-grey"><b>{{brand.brand_name}}</b></h5>
+                                </div>
+
+                                <div class="id">
+                                    <h5 class="dark-grey id-title">Brand ID
+                                        <span class="id-number">{{brand.brand_id}}</span>
+                                    </h5>
+                                </div>
+                                <div class="description">
+                                    <div>{{brand.support_email}}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

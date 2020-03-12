@@ -1,0 +1,272 @@
+<div ng-if="vm.validGuid">
+    <div class="splickit-img-container">
+        <img class="hidden-xs"
+             src="https://d38o1hjtj2mzwt.cloudfront.net/admin_portal/merchant_form_1/img/girl_with_ipad.jpg">
+        <img class="visible-xs"
+             src="https://d38o1hjtj2mzwt.cloudfront.net/admin_portal/merchant_form_1/img/girl_with_ipad_small.jpg">
+        <div class="after yellow">
+            <div class="logo-container">
+                <img src="https://d38o1hjtj2mzwt.cloudfront.net/admin_portal/merchant_form_1/img/logo.png">
+                <span class="slogan">DIGITAL ORDERING PLATFORM</span>
+            </div>
+        </div>
+    </div>
+    <div class="splickit-steps">
+        <div class="center-box">
+            <h4 class="yellow-title">Just a Few More Steps to Get Your Digital Ordering Live!</h4>
+            <ol>
+                <li>Answer a few questions about your ordering preferences and sales tax.</li>
+                <li>Upload a copy of your menu.</li>
+                <li>Let us know the best time to have our on-boarding specialist call you to review your ordering site.</li>
+            </ol>
+        </div>
+    </div>
+
+    <form name="vm.form" novalidate ng-submit="vm.create()">
+        <div class="splickit-setup">
+            <h4 class="black-title">Customer Setup</h4>
+            <div class="inline-flex-column-start">
+                <h4 class="subtitle">Ordering info</h4>
+                <div class="setup-row">
+                    <label class="control-label">Sales Tax Rate</label>
+                    <div class="input-group input-group-sm input-large">
+                        <input type="number" class="input-control input-full margin-4"
+                               ng-class="{'error-border': (vm.form.sales_tax_rate.$error.required
+                                                 && (vm.form.sales_tax_rate.$faded || vm.customerInfo.submit))}"
+                                           name="sales_tax_rate"
+                                           step="0.1" min="0" max="500"
+                                           ng-pattern="/^[0-9]+(\.[0-9]{1,3})?$/"
+                                           placeholder="Enter Sales Tax Rate" maxlength="6"
+                                           ng-model="vm.customerInfo.sales_tax_rate" ng-fade
+                                           ng-required="true">
+                        <span class="input-group-addon"
+                              ng-class="{'error-border': (vm.form.sales_tax_rate.$error.required
+                                                 && (vm.form.sales_tax_rate.$faded || vm.customerInfo.submit))}">
+                            %
+                        </span>
+                    </div>
+                    <div class="error-full margin-5"
+                         ng-show="vm.form.sales_tax_rate.$error.required
+                                      && (vm.form.sales_tax_rate.$faded || vm.customerInfo.submit)">
+                        <div class="backgroundless-error ng-hide"
+                             ng-show="vm.form.sales_tax_rate.$error.required
+                                      && (vm.form.sales_tax_rate.$faded || vm.customerInfo.submit)"
+                              role="alert">Sales Tax Rate is required.
+                        </div>
+                        <div class="backgroundless-error ng-hide"
+                             ng-show="vm.form.sales_tax_rate.$error.max"
+                             role="alert">Sales Tax Rate cannot be greater than 500.
+                        </div>
+                        <div class="backgroundless-error ng-hide"
+                             ng-show="vm.form.sales_tax_rate.$error.pattern ||
+                                      vm.form.sales_tax_rate.$error.number"
+                             role="alert">Sales Tax Rate has to be a valid positive number, with at most 3 decimal places
+                        </div>
+                    </div>
+                </div>
+                <div class="setup-row">
+                    <label class="control-label">Do you Deliver?</label>
+                    <div class="m-t-5">
+                        <toggle-switch name="has_delivery"
+                                               on-label="Yes"
+                                               off-label="No"
+                                               ng-model="vm.customerInfo.has_delivery">
+                        </toggle-switch>
+                    </div>
+
+                </div>
+                <div class="setup-row" ng-show="vm.customerInfo.has_delivery">
+                    <label class="control-label">Delivery Tax Rate</label>
+                    <div class="input-group input-group-sm input-large">
+                        <input type="number" class="input-control input-full margin-4"
+                               ng-class="{'error-border': (vm.form.delivery_tax_rate.$error.max) ||
+                                                          (vm.form.delivery_tax_rate.$error.pattern ||
+                                                 vm.form.delivery_tax_rate.$error.number)}"
+                               name="delivery_tax_rate"
+                               step="0.1" min="0" max="500"
+                               ng-pattern="/^[0-9]+(\.[0-9]{1,3})?$/"
+                               placeholder="Enter Delivery Tax Rate" maxlength="6"
+                               ng-model="vm.customerInfo.delivery_tax_rate" ng-fade>
+                        <span class="input-group-addon"
+                              ng-class="{'error-border': (vm.form.delivery_tax_rate.$error.max) ||
+                                                          (vm.form.delivery_tax_rate.$error.pattern ||
+                                                 vm.form.delivery_tax_rate.$error.number)}">%</span>
+                    </div>
+                    <div class="error-full margin-5">
+                        <div class="backgroundless-error"
+                                     ng-show="vm.form.delivery_tax_rate.$error.max"
+                                     role="alert">
+                                    Delivery Tax Rate cannot be greater than 500.
+                        </div>
+                        <div class="backgroundless-error"
+                                     ng-show="vm.form.delivery_tax_rate.$error.pattern ||
+                                                 vm.form.delivery_tax_rate.$error.number"
+                                     role="alert">
+                                    Delivery Tax Rate has to be a valid positive number, with
+                                    at most 3 decimal places
+                        </div>
+                    </div>
+                </div>
+                <div class="setup-row">
+                    <label class="control-label">Allow Tipping?</label>
+                    <div class="m-t-5">
+                        <toggle-switch name="allow_tipping"
+                                       on-label="Yes"
+                                       off-label="No"
+                                       ng-model="vm.customerInfo.allow_tipping">
+                        </toggle-switch>
+                    </div>
+                </div>
+                <div class="setup-row">
+                    <label class="control-label">Allow Group Orders?</label>
+                    <div class="m-t-5">
+                        <toggle-switch name="allow_group_orders"
+                                   on-label="Yes"
+                                   off-label="No"
+                                   ng-model="vm.customerInfo.allow_group_orders">
+                        </toggle-switch>
+                    </div>
+                </div>
+                <div class="setup-row">
+                    <label class="control-label">Allow Advance Orders?</label>
+                    <div class="m-t-5">
+                        <toggle-switch name="allow_advanced_orders"
+                                   on-label="Yes"
+                                   off-label="No"
+                                   ng-model="vm.customerInfo.allow_advanced_orders">
+                        </toggle-switch>
+                    </div>
+                </div>
+                <div class="setup-row" ng-show="vm.customerInfo.allow_advanced_orders">
+                    <label class="control-label">Max Days</label>
+                    <div class="input-group input-group-sm input-large">
+                        <input type="number" class="input-control input-full margin-4"
+                               ng-class="{'error-border': (vm.form.advance_orders_max_days.$error.required
+                                         && (vm.form.advance_orders_max_days.$faded || vm.customerInfo.submit)) ||
+                                         (vm.form.advance_orders_max_days.$error.pattern ||
+                                             vm.form.advance_orders_max_days.$error.min
+                                             && (vm.form.advance_orders_max_days.$faded || vm.customerInfo.submit))
+                                             }"
+                               name="advance_orders_max_days" min="1" max="7"
+                               placeholder="Enter How Many Days"
+                               ng-pattern="/^\d*$/"
+                               ng-model="vm.customerInfo.advance_orders_max_days" ng-fade
+                               ng-required="vm.customerInfo.allow_advanced_orders">
+                    </div>
+                    <div class="error-full margin-5">
+                        <div class="backgroundless-error ng-hide"
+                             ng-show="vm.form.advance_orders_max_days.$error.required
+                                             && (vm.form.advance_orders_max_days.$faded || vm.customerInfo.submit)"
+                             role="alert">
+                                Maximum number of days is required when 'Allow Advance Orders' is
+                                selected.
+                        </div>
+                        <div class="backgroundless-error ng-hide"
+                             ng-show="vm.form.advance_orders_max_days.$error.pattern ||
+                                             vm.form.advance_orders_max_days.$error.min
+                                             && (vm.form.advance_orders_max_days.$faded || vm.customerInfo.submit)"
+                             role="alert">
+                                The Maximum number of days can't be lesser than 1
+                        </div>
+                        <div class="backgroundless-error ng-hide"
+                             ng-show="vm.form.advance_orders_max_days.$error.pattern ||
+                                             vm.form.advance_orders_max_days.$error.max
+                                             && (vm.form.advance_orders_max_days.$faded || vm.customerInfo.submit)"
+                             role="alert">
+                                The Maximum number of days can't be greater than 7
+                        </div>
+                        <div class="backgroundless-error ng-hide"
+                             ng-show="vm.form.advance_orders_max_days.$error.pattern ||
+                                             vm.form.advance_orders_max_days.$error.number"
+                                 role="alert">
+                                The Maximum number of days has to be a valid positive non-decimal
+                                number
+                        </div>
+                    </div>
+                </div>
+
+                <h4 class="subtitle">Menu</h4>
+                <div class="setup-row">
+                    <label class="control-label">Upload Menu Files</label>
+                    <div class="btn-container">
+                        <input type="file" class="input-large form-control input-file"
+                               id="menu_files"
+                               name="menu_files" multiple="true"
+                               ng-show="false"
+                               placeholder="Select Menu Files"
+                               on-file-change="vm.imagesChanged"
+                               accept="application/pdf,image/jpg,image/jpeg,image/png,image/bmp"
+                               ng-model="vm.customerInfo.menu_files" ng-fade>
+                        <button class="btn btn-sm fixed-width"
+                                ng-click="vm.openFilesDialog()" ng-disabled=""
+                                type="button">Add Files
+                        </button>
+                        <button class="m-l-5 btn btn-default btn-sm fixed-width clear"
+                                ng-show="!!vm.menuFiles.length"
+                                ng-click="vm.clearImages()"
+                                type="button">Clear
+                        </button>
+                    </div>
+                    <div class="error-full margin-5">
+                        <div class="backgroundless-error ng-hide"
+                         ng-show="!vm.menuFiles.length && vm.customerInfo.submit"
+                         role="alert">
+                        You have to select at least one menu file.
+                        </div>
+                            <div class="backgroundless-error ng-hide"
+                             ng-show="vm.menuFiles.length > 5"
+                             role="alert">
+                            You can't select more than 5 files.
+                        </div>
+                            <div class="backgroundless-error ng-hide"
+                             ng-show="!vm.sizesAreValid()"
+                             role="alert">
+                            The max size for each file is 5MB.
+                        </div>
+                            <div class="backgroundless-error ng-hide"
+                             ng-show="!vm.typesAreValid()"
+                             role="alert">
+                            You have selected one or more invalid file types.
+                        </div>
+                    </div>
+                </div>
+                <div class="setup-row">
+                    <h6 class="pre-load-text" style="text-align: left; margin-top: -2px">
+                        Up to 5 files. Valid formats are: .png, .jpg, .bmp and .pdf (max. 5MB)
+                    </h6>
+                </div>
+
+                <div class="col-md-12 gallery" ng-show="!!vm.menuFiles.length">
+                <div class="img-wrap" ng-repeat="image in vm.imagesPreview">
+                    <i class="fa fa-minus-circle close"
+                       aria-hidden="true"
+                       ng-click="vm.removeImage(image.mainIndex, $index, 'image')"></i>
+                    <img ng-src="{{image.url}}"
+                         title="{{vm.fileTitle(image.file)}}"
+                         ng-class="{img_error: !(vm.fileSizeIsValid(image.file) && vm.fileTypeIsValid(image.file))}"/>
+                </div>
+                <div class="img-wrap" ng-repeat="pdf in vm.pdfsPreview">
+                    <i class="fa fa-minus-circle close"
+                       aria-hidden="true"
+                       ng-click="vm.removeImage(pdf.mainIndex, $index, 'pdf')"></i>
+                    <pdf-thumbnail
+                      data-file="pdf.file"
+                      data-thumbnail="pdf.thumbnail_data"
+                      title="{{vm.fileTitle(pdf.file)}}"
+                      ng-class="{error: !(vm.fileSizeIsValid(pdf.file) && vm.fileTypeIsValid(pdf.file))}"
+                      data-thumb-width="180"></pdf-thumbnail>
+                </div>
+            </div>
+            </div>
+            <div ng-show="vm.processing" class="margin-30">
+                <div>
+                    <div class="line"></div>
+                    <div class="line"></div>
+                    <div class="line"></div>
+                    <div class="line"></div>
+                </div>
+            </div>
+            <button class='btn-submit btn submit-margins'>Submit</button>
+        </div>
+    </form>
+</div>

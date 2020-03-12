@@ -1,0 +1,124 @@
+<div class="row">
+    <div class="col-sm-12">
+        <div class="page-header-title menu-bg">
+            <h4 class="page-title">Nutrition</h4>
+            <ol class="breadcrumb">
+                <li><a href="#/menus">Menus</a></li>
+                <li><a href="javascript:void(0);" href="#/menu/nutrition_grid">Nutrition Grid</a></li>
+            </ol>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="panel-body">
+            <div ng-repeat="menu_type in ng.nutrition.menu_types">
+                <div class="panel panel-primary">
+                    <div class="panel-heading section-select"
+                         ng-click="menu_type.opened = !menu_type.opened">
+                        <div class="panel-title sub-panel-title">
+                            <i class="fa inline"
+                               ng-class="{ 'fa-plus':!menu_type.opened,
+                                       'fa-minus':menu_type.opened }"
+                               aria-hidden="true"></i>
+                            <div class="title inline">{{menu_type.menu_type_name}}</div>
+                        </div>
+                    </div>
+                    <table class="table content-table" ng-show="menu_type.opened">
+                        <thead>
+                            <tr>
+                                <th>Name Size</th>
+                                <th>Svg. Size</th>
+                                <th>Calories</th>
+                                <th>Cal from Fat</th>
+                                <th>Total Fat (g)</th>
+                                <th>Saturated Fat (g)</th>
+                                <th>Trans Fat (g)</th>
+                                <th>Cholesterol (mg)</th>
+                                <th>Sodium (mg)</th>
+                                <th>Carb (g)</th>
+                                <th>Fiber (g)</th>
+                                <th>Sugar (g)</th>
+                                <th>Protein (g)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="offering in menu_type.offerings" ng-class="{successeffect: offering.success, loadingeffect: false, faileffect:item.fail}">
+
+                                <td>{{offering.offering_label}}</td>
+                                <td>
+                                    <input type="text" class='input-micro black-text-input' ng-model="offering.offering_data.serving_size"
+                                           ng-keyup="ng.updateMenuOffering(offering,$index, $parent.$index)" >
+                                </td>
+                                <td>
+                                    <input type="text" class='input-micro black-text-input' ng-model="offering.offering_data.calories"
+                                           ng-keyup="ng.updateMenuOffering(offering,$index, $parent.$index)" >
+                                </td>
+                                <td>
+                                    <input type="text" class='input-micro black-text-input' ng-model="offering.offering_data.calories_from_fat"
+                                           ng-keyup="ng.updateMenuOffering(offering,$index, $parent.$index)" >
+                                </td>
+                                <td>
+                                    <input type="text" class='input-micro black-text-input' ng-model="offering.offering_data.total_fat"
+                                           ng-keyup="ng.updateMenuOffering(offering,$index, $parent.$index)" >
+                                </td>
+                                <td>
+                                    <input type="text" class='input-micro black-text-input' ng-model="offering.offering_data.saturated_fat"
+                                           ng-keyup="ng.updateMenuOffering(offering,$index, $parent.$index)" >
+                                </td>
+                                <td>
+                                    <input type="text" class='input-micro black-text-input' ng-model="offering.offering_data.trans_fat" ng-keyup="ng.updateMenuOffering(offering,$index, $parent.$index)">
+                                </td>
+                                <td>
+                                    <input type="text" class='input-micro black-text-input' ng-model="offering.offering_data.cholesterol" ng-keyup="ng.updateMenuOffering(offering,$index, $parent.$index)">
+                                </td>
+                                <td>
+                                    <input type="text" class='input-micro black-text-input' ng-model="offering.offering_data.sodium" ng-keyup="ng.updateMenuOffering(offering,$index, $parent.$index)">
+                                </td>
+                                <td>
+                                    <input type="text" class='input-micro black-text-input' ng-model="offering.offering_data.total_carbohydrates" ng-keyup="ng.updateMenuOffering(offering,$index, $parent.$index)">
+                                </td>
+                                <td>
+                                    <input type="text" class='input-micro black-text-input' ng-model="offering.offering_data.dietary_fiber" ng-keyup="ng.updateMenuOffering(offering,$index, $parent.$index)">
+                                </td>
+                                <td>
+                                    <input type="text" class='input-micro black-text-input' ng-model="offering.offering_data.sugars" ng-keyup="ng.updateMenuOffering(offering,$index, $parent.$index)">
+                                </td>
+                                <td>
+                                    <input type="text" class='input-micro black-text-input' ng-model="offering.offering_data.protein" ng-keyup="ng.updateMenuOffering(offering,$index, $parent.$index)">
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+        </div>
+    </div>
+
+
+
+    <!--<div class="panel-body" >-->
+        <!--<table id="table-fix" class="table content-table">-->
+            <!--<thead>-->
+            <!--<tr>-->
+                <!--<th>Item Name</th>-->
+                <!--<th>Size</th>-->
+                <!--<th>Ext Identifier</th>-->
+                <!--<th>Price</th>-->
+                <!--<th>Active</th>-->
+                <!--<th>P/U & Delivery</th>-->
+                <!--<th>Advanced Settings</th>-->
+            <!--</tr>-->
+            <!--</thead>-->
+            <!--<tbody>-->
+            <!--<tr ng-repeat="section in ng.nutrition.data.menu_types">-->
+                <!--<td>{{section}}</td>-->
+                <!--<td>{{section}}</td>-->
+                <!--<td>{{section}}</td>-->
+                <!--<td>{{section}}</td>-->
+                <!--<td>{{section}}</td>-->
+                <!--<td>{{section}}</td>-->
+            <!--</tr>-->
+            <!--</tbody>-->
+        <!--</table>-->
+    <!--</div>-->
+</div>

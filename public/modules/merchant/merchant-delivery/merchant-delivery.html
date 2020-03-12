@@ -1,0 +1,538 @@
+<div class="row">
+    <div class="col-sm-12">
+        <div class="page-header-title merchant-bg">
+            <h4 class="page-title">{{ 'MESSAGE.SHARE.DELIVERY' | translate }}</h4>
+            <ol class="breadcrumb">
+                <li><a href="#/merchants">{{ 'MESSAGE.SHARE.MERCHANT' | translate }}</a></li>
+                <li><a href="#/merchant/delivery">{{ 'MESSAGE.SHARE.DELIVERY' | translate }}</a>
+                </li>
+            </ol>
+        </div>
+    </div>
+</div>
+
+<div class="filter-loader-contain" ng-if="delivery.processing">
+    <div class="filter-loader"></div>
+</div>
+
+<div id="delivery-section" class="row" ng-if="!delivery.processing">
+    <!-- Basic example -->
+    <div class="col-md-4 col-lg-5">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">{{ 'MERCHANT.DELIVERY.DELIVERYFEES' | translate }}</h3>
+            </div>
+            <div class="panel-body">
+                <form name="delivery.delivery_form" novalidate
+                      ng-submit="delivery.editDeliveryInfo()">
+                    <div class="form-group">
+                        <label class="control-label">{{ 'MERCHANT.DELIVERY.ADVANCEDSCHEDULINGDAYS' | translate }}</label>
+                        <div class="tool-tip-fix">
+                            <label>
+                                <i class="fa fa-question-circle tooltip-help" aria-hidden="true">
+                                    <span class="tool-tip-text">{{ 'MERCHANT.CONTACT.TOOLTIP.DELIVERY.DELIVERY_FEES.ADVANCED_SCHEDULING' | translate }}</span>
+                                </i>
+                            </label>
+                        </div>
+                        <div class="m-t-5">
+                            <input type="number" class="input-med form-control" name="max_days_out"
+                                   placeholder="Max Days"
+                                   ng-model="delivery.delivery_info.max_days_out" ng-required="true" ng-fade min="0">
+
+                            <div class="input-med alert alert-danger ng-hide alert-reg-position input-med"
+                                 ng-show="(delivery.delivery_form.max_days_out.$error.required || delivery.delivery_form.max_days_out.$error.number)
+                                    && (delivery.delivery_form.max_days_out.$faded || delivery.delivery_info.submit)"
+                                 role="alert">
+                                {{ 'MERCHANT.DELIVERY.MAXDAYSREQUIRED' | translate }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label">{{ 'MERCHANT.DELIVERY.LEADTIME' | translate }}</label>
+                        <div class="tool-tip-fix">
+                            <label>
+                                <i class="fa fa-question-circle tooltip-help" aria-hidden="true">
+                                    <span class="tool-tip-text">{{ 'MERCHANT.CONTACT.TOOLTIP.DELIVERY.DELIVERY_FEES.LEAD_TIME' | translate }}</span>
+                                </i>
+                            </label>
+                        </div>
+                        <div class="m-t-5">
+                            <input type="number" class="input-med form-control" name="minimum_delivery_time"
+                                   placeholder="Min in Minutes"
+                                   ng-model="delivery.delivery_info.minimum_delivery_time" ng-required="true" ng-fade min="0">
+
+                            <div class="input-med alert alert-danger ng-hide alert-reg-position"
+                                 ng-show="(delivery.delivery_form.minimum_delivery_time.$error.required || delivery.delivery_form.minimum_delivery_time.$error.number)
+                                        && (delivery.delivery_form.minimum_delivery_time.$faded || delivery.delivery_info.submit)"
+                                 role="alert">
+                                {{ 'MERCHANT.DELIVERY.MINIMUMLEADTIME' | translate }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label">{{ 'MERCHANT.DELIVERY.APPDELIVERYINCREMENT' | translate }}
+                            <div class="tool-tip-fix">
+                                <label>
+                                    <i class="fa fa-question-circle tooltip-help" aria-hidden="true">
+                                        <span class="tool-tip-text">{{ 'MERCHANT.CONTACT.TOOLTIP.DELIVERY.DELIVERY_FEES.DELIVERY_INCREMENTS' | translate }}</span>
+                                    </i>
+                                </label>
+                            </div>
+                        </label>
+                        <div class="m-t-5">
+                            <input type="number" class="input-med form-control" name="delivery_increment"
+                                   placeholder="In Minutes"
+                                   ng-model="delivery.delivery_info.delivery_increment" ng-required="true" ng-fade min="0">
+
+                            <div class="input-med alert alert-danger ng-hide alert-reg-position"
+                                 ng-show="(delivery_form.delivery_increment.$error.required || delivery_form.delivery_increment.$error.number)
+                                        && (delivery_form.delivery_increment.$faded || delivery.delivery_info.submit)"
+                                 role="alert">
+                                Delivery Increment is required.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label">{{ 'MERCHANT.DELIVERY.DELIVERYASAP' | translate }}</label>
+                        <div class="tool-tip-fix">
+                            <label>
+                                <i class="fa fa-question-circle tooltip-help" aria-hidden="true">
+                                    <span class="tool-tip-text">{{ 'MERCHANT.CONTACT.TOOLTIP.DELIVERY.DELIVERY_FEES.DELIVERY_ASAP' | translate }}</span>
+                                </i>
+                            </label>
+                        </div>
+                        <div class="m-t-5">
+                            <toggle-switch name="allow_asap_on_delivery"
+                                           ng-model="delivery.delivery_info.allow_asap_on_delivery"></toggle-switch>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12">
+                        <div ng-show="delivery.delivery_info.processing" class="form-loader">
+                            <div class="line"></div>
+                            <div class="line"></div>
+                            <div class="line"></div>
+                            <div class="line"></div>
+                        </div>
+                    </div>
+
+                    <div class="submit-contain flex-init flex-justify-content-space-between">
+                        <div class="flex-init flex-direction-column flex-justify-content-center">
+                            <div id="delivery-increments-success" class="alert-success alert-reg-position form-submit-success fade-effect"
+                                 ng-show="delivery.delivery_info.success"
+                                 role="alert">
+                                <i class="fa fa-check-circle" aria-hidden="true"></i> {{ 'MERCHANT.DELIVERY.DELIVERYFEESUPDATED' | translate }}
+                            </div>
+                        </div>
+
+                        <div class="flex-align-self-end">
+                            <button id="delivery-increments-submit" class='btn-soft-blue btn pull-right submit'>{{ 'MESSAGE.SHARE.SUBMIT' | translate }}</button>
+                        </div>
+                    </div>
+                </form>
+            </div><!-- panel-body -->
+        </div> <!-- panel -->
+    </div> <!-- col-->
+    <div class="col-md-8 col-lg-7">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">{{ 'MERCHANT.DELIVERY.DELIVERYZONES' | translate }}</h3>
+            </div>
+            <div class="panel-body">
+                <div class="form-group">
+                    <label class="control-label">{{ 'MERCHANT.DELIVERY.ZONEDEFINEDBY' | translate }}
+                        <i class="fa fa-question-circle tooltip-help" aria-hidden="true">
+                            <span class="tool-tip-text-responsive">{{ 'MERCHANT.CONTACT.TOOLTIP.DELIVERY.DELIVERY_ZONES.ZONE_DEFINED_BY' | translate }}</span>
+                        </i>
+                    </label>
+                    <div class="">
+                        <div class="input-med flex-init flex-justify-content-space-between flex-align-items-center">
+                            <label class="m-0">
+                                <i class="fa fa-question-circle tooltip-help" aria-hidden="true" ng-show="delivery.saved_delivery_zone == 'driving'">
+                                    <span class="tool-tip-text">{{ 'MERCHANT.CONTACT.TOOLTIP.DELIVERY.DELIVERY_ZONES.EDIT_DELIVERY_ZONE' | translate }}</span>
+                                </i>
+
+                                <i class="fa fa-question-circle tooltip-help" aria-hidden="true" ng-show="delivery.saved_delivery_zone == 'polygon'">
+                                    <span class="tool-tip-text">{{ 'MERCHANT.CONTACT.TOOLTIP.DELIVERY.DELIVERY_ZONES.DELIVERY_MAP' | translate }}</span>
+                                </i>
+
+                                <i class="fa fa-question-circle tooltip-help" aria-hidden="true" ng-show="delivery.saved_delivery_zone == 'zip'">
+                                    <span class="tool-tip-text">{{ 'MERCHANT.CONTACT.TOOLTIP.DELIVERY.DELIVERY_ZONES.ZIP_CODE' | translate }}</span>
+                                </i>
+                            </label>
+                            <div>
+                                <select name="delivery_zone_type" class="form-control"
+                                        ng-model="delivery.delivery_info.delivery_price_type"
+                                        ng-change="delivery.updateDeliveryZoneDefinedByDialog('{{delivery.delivery_info.delivery_price_type}}')"
+                                        ng-options="delivery_definition.id as delivery_definition.name
+                                for delivery_definition in delivery.lookup.delivery_area_defined_bys">
+                                </select>
+                            </div>
+                        </div>
+                        <div class="input-med alert alert-success alert-reg-position m-t-5"
+                             ng-show="delivery.delivery_info.delivery_zone_defined_by_success"
+                             role="alert">
+                            <i class="fa fa-check-circle" aria-hidden="true"></i> {{ 'MERCHANT.DELIVERY.DELIVERYZONEDEFINED' | translate }}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="m-b-15">
+                    <table class="table table-hover m-t-30 content-table">
+                        <thead>
+                        <tr>
+                            <th>{{ 'MESSAGE.SHARE.NAME' | translate }}</th>
+                            <th ng-show="delivery.saved_delivery_zone == 'driving'">{{ 'MERCHANT.DELIVERY.DISTANCEINMILES' | translate }}</th>
+                            <th ng-show="delivery.saved_delivery_zone == 'zip'">{{ 'MERCHANT.DELIVERY.ZIPCODES' | translate }}</th>
+                            <th ng-show="delivery.saved_delivery_zone == 'polygon'">{{ 'MERCHANT.DELIVERY.POLYGON' | translate }}</th>
+                            <th>{{ 'MERCHANT.DELIVERY.PRICE' | translate }}</th>
+                            <th>{{ 'MERCHANT.DELIVERY.MINORDER' | translate }}</th>
+                            <th>{{ 'MESSAGE.SHARE.TYPE' | translate }}</th>
+                            <th width="40px"></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="delivery_zone in delivery.delivery_zones"
+                            data-toggle="modal" data-target="#edit-delivery-zone-modal"
+                            tooltip-placement="bottom" uib-tooltip="Click to Edit"
+                            ng-click="delivery.editDeliveryZoneDialog(delivery_zone, $index)"
+                        >
+                            <td>
+                                <div class="trim-info" uib-tooltip="{{delivery_zone.name}}">{{delivery_zone.name}}</div>
+                            </td>
+                            <td ng-show="delivery.saved_delivery_zone == 'driving'">{{delivery_zone.distance_up_to}}</td>
+                            <td ng-show="delivery.saved_delivery_zone == 'zip'">
+                                {{delivery.shorten(delivery_zone.zip_codes)}}
+                            </td>
+                            <td ng-show="delivery.saved_delivery_zone == 'polygon'">
+                                {{delivery.shorten(delivery_zone.polygon_coordinates)}}
+                            </td>
+                            <td>{{delivery_zone.price}}</td>
+                            <td>{{delivery_zone.minimum_order_amount}}</td>
+                            <td>{{delivery_zone.delivery_type}}</td>
+                            <td class="delete-icon" style="padding: 0px;">
+                                <i class="fa fa-times" aria-hidden="true"
+                                   ng-click="delivery.deleteDeliveryZoneDialog(delivery_zone, $index,$event)"></i>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <div class="content-responsive m-t-20">
+                        <div ng-repeat="delivery_zone in delivery.delivery_zones" aria-hidden="true"
+                             data-toggle="modal" data-target="#edit-delivery-zone-modal"
+                             ng-click="delivery.editDeliveryZoneDialog(delivery_zone, $index)">
+                            <div class="panel panel-body row-table">
+                                <div class="name">
+                                    <h5 class="dark-grey"><b>{{delivery_zone.name}}</b></h5>
+                                </div>
+                                <div class="description">
+                                    <div class="clear">
+                                        <div ng-show="delivery.saved_delivery_zone == 'driving'">
+                                            {{ 'MERCHANT.DELIVERY.DISTANCEINMILES' | translate }} {{delivery_zone.distance_up_to}}
+                                        </div>
+                                        <div ng-show="delivery.saved_delivery_zone == 'zip'">
+                                            {{ 'MERCHANT.DELIVERY.ZIPCODESDOTS' | translate }} {{delivery.shorten(delivery_zone.zip_codes)}}
+                                        </div>
+                                        <div ng-show="delivery.saved_delivery_zone == 'polygon'">
+                                            {{ 'MERCHANT.DELIVERY.POLYGONDOTS' | translate }} {{delivery.shorten(delivery_zone.polygon_coordinates)}}
+                                        </div>
+                                        <div>
+                                            {{ 'MERCHANT.DELIVERY.PRICEDOTS' | translate }} {{delivery_zone.price}}
+                                        </div>
+                                        <div>
+                                            {{ 'MERCHANT.DELIVERY.MINORDERDOTS' | translate }} {{delivery_zone.minimum_order_amount}}
+                                        </div>
+                                        <div class="last-row-container-with-delete-icon">
+                                            <div>
+                                                {{ 'MESSAGE.SHARE.TYPEDOTS' | translate }} {{delivery_zone.delivery_type}}
+                                            </div>
+                                            <div class="fa fa-times delete-icon-small-screen" aria-hidden="true"
+                                                 ng-click="delivery.deleteDeliveryZoneDialog(delivery_zone, $index, $event)"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="alert-success alert-reg-position form-submit-success fade-effect"
+                     ng-show="delivery_zone_update_success"
+                     role="alert">
+                    <i class="fa fa-check-circle" aria-hidden="true"></i> The delivery zone
+                    <strong>{{edit_delivery_zone.name}}</strong>
+                    {{ 'MESSAGE.SHARE.UPDATED' | translate }}
+                </div>
+                <div class="submit-contain flex-init flex-justify-content-end" ng-show="delivery.delivery_info.delivery_price_type != 'door_dash'">
+                    <button id="open-delivery-zone-create" type="button" ng-disabled class="btn btn-soft-blue pull-right"
+                            ng-click="delivery.openCreateDeliveryZone()"
+                            data-toggle="modal" data-target="#create-delivery-zone-modal">
+                        <i class="fa fa-plus" aria-hidden="true"></i>
+                        {{ 'MERCHANT.DELIVERY.CREATEDELIVERYZONE' | translate }}
+                    </button>
+                </div>
+            </div><!-- panel-body -->
+        </div> <!-- panel -->
+    </div>
+
+</div>
+
+
+<div id="create-delivery-zone-modal" class="modal fade" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true">
+    <div ng-class="delivery.getDeliveryZoneModal()">
+        <div class="modal-content modal-md">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="myModalLabel">{{ 'MERCHANT.DELIVERY.NEWDELIVERYZONE' | translate }}</h4>
+            </div>
+            <form class="m-l-15 m-r-15" name="delivery.create_delivery_zone_form" novalidate ng-submit="delivery.createDeliveryZone()">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="block" for="name" ng-click="delivery.resizeMap()">{{ 'MESSAGE.SHARE.NAME' | translate }}</label>
+                        <input type="text" class="input-med form-control" name="name" placeholder="Enter Name"
+                               ng-model="delivery.new_delivery_zone.name" ng-required="true" ng-fade>
+                        <div class="input-med alert alert-danger ng-hide alert-reg-position"
+                             ng-show="delivery.create_delivery_zone_form.name.$error.required && (delivery.create_delivery_zone_form.name.$faded || delivery.new_delivery_zone.submit)"
+                             role="alert">
+                            {{ 'MESSAGE.SHARE.NAMEREQUIRED' | translate }}
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="block" for="distance_up_to" ng-show="delivery.saved_delivery_zone == 'driving'">{{
+                            'MERCHANT.DELIVERY.DISTANCEUPTO' | translate }}</label>
+                        <input type="text" class="input-med form-control" name="driving_distance" placeholder="Enter Mile Radius"
+                               ng-model="delivery.new_delivery_zone.distance_up_to"
+                               ng-show="delivery.saved_delivery_zone == 'driving'">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="zip_codes" ng-show="delivery.saved_delivery_zone == 'zip'">{{ 'MERCHANT.DELIVERY.ZIPCODES' |
+                            translate }}</label>
+                        <input type="text" class="input-x-large form-control" name="zip_codes" placeholder="Enter Zip Codes"
+                               ng-model="delivery.new_delivery_zone.zip_codes"
+                               ng-show="delivery.saved_delivery_zone == 'zip'">
+                    </div>
+
+                    <div ng-show="delivery.saved_delivery_zone == 'polygon'" class="col-md-12 map">
+                        <label for="polygon_coordinates">{{ 'MERCHANT.DELIVERY.POLYGON' | translate }}
+                            <i class="fa fa-question-circle tooltip-help" aria-hidden="true">
+                                <span class="tool-tip-text">{{ 'MERCHANT.CONTACT.TOOLTIP.DELIVERY.DELIVERY_ZONES.DELIVERY_MAP_MODAL' | translate }}</span>
+                            </i>
+                        </label>
+                        <div id="create-polygon-map" class="google-modal-map"></div>
+                        <button type="button" ng-disabled
+                                ng-click="delivery.clearPolygon()" class="pull-right btn btn-primary btn-xs m-t-5">{{
+                            'MERCHANT.DELIVERY.REDOPOLIGON' | translate }}
+                        </button>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="price">{{ 'MERCHANT.DELIVERY.PRICE' | translate }}</label>
+                        <input type="number" class="input-med form-control" name="price" placeholder="Enter Price"
+                               ng-model="delivery.new_delivery_zone.price" ng-fade min="0" min="0">
+                        <div class="input-med alert alert-danger ng-hide alert-reg-position"
+                             ng-show="delivery.create_delivery_zone_form.price.$error.number && (delivery.create_delivery_zone_form.price.$faded || delivery.new_delivery_zone.submit)"
+                             role="alert">
+                            {{ 'MERCHANT.DELIVERY.PRICENUMERIC' | translate }}
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="minimum_order_amount">{{ 'MERCHANT.DELIVERY.MINORDER' | translate }}</label>
+                        <input type="number" class="input-med form-control" name="min_order_amount"
+                               placeholder="Enter Amount"
+                               ng-model="delivery.new_delivery_zone.minimum_order_amount" ng-fade min="0">
+                        <div class="input-med alert alert-danger ng-hide alert-reg-position"
+                             ng-show="delivery.create_delivery_zone_form.min_order_amount.$error.number
+                                        && (delivery.create_delivery_zone_form.min_order_amount.$faded || delivery.new_delivery_zone.submit)"
+                             role="alert">
+                            {{ 'MERCHANT.DELIVERY.MINIMUMORDER' | translate }}
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="delivery_type">{{ 'MERCHANT.DELIVERY.DELIVERYTYPE' | translate }}</label>
+                        <div class="select input-med">
+                            <select name="dz_type" class="form-control" ng-required="true"
+                                    ng-model="delivery.new_delivery_zone.delivery_type" ng-fade
+                                    ng-options="delivery_type for delivery_type in delivery.delivery_types">
+                                <option class="placeholder-color" value="" selected disabled>{{
+                                    'MERCHANT.DELIVERY.DELIVERYTYPE' | translate }}
+                                </option>
+                            </select></div>
+                        <div class="input-med alert alert-danger ng-hide alert-reg-position"
+                             ng-show="delivery.create_delivery_zone_form.delivery_type.$error.required
+                                        && (delivery.create_delivery_zone_form.delivery_type.$faded || delivery.new_delivery_zone.submit)"
+                             role="alert">
+                            {{ 'MERCHANT.DELIVERY.DELIVERYTYPEREQUIRED' | translate }}
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" ng-disabled class="btn btn-default" data-dismiss="modal">{{ 'MESSAGE.SHARE.CANCEL' | translate }}</button>
+                    <button id="create-dz-submit" type="submit" class="btn btn-info">{{ 'MESSAGE.SHARE.SUBMIT' | translate }}</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div id="edit-delivery-zone-modal" class="modal fade" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true">
+    <div ng-class="delivery.getDeliveryZoneModal()">
+        <div class="modal-content modal-md">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">{{ 'MERCHANT.DELIVERY.EDITDELIVERY' | translate }}</h4>
+            </div>
+            <form name="delivery.update_delivery_zone_form" class="m-l-15 m-r-15" novalidate
+                  ng-submit="delivery.editDeliveryZone()">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="control-label">{{ 'MESSAGE.SHARE.NAME' | translate }}</label>
+                        <div class="mt-15">
+                            <input type="text" class="input-med form-control" name="name" placeholder="Enter Name"
+                                   ng-model="delivery.edit_delivery_zone.name" ng-required="true" ng-fade>
+                            <div class="input-med alert alert-danger ng-hide alert-reg-position"
+                                 ng-show="delivery.update_delivery_zone_form.name.$error.required && (update_delivery_zone_form.name.$faded || location.submit)"
+                                 role="alert">
+                                {{ 'MESSAGE.SHARE.NAMEREQUIRED' | translate }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group" ng-show="delivery.saved_delivery_zone == 'driving'">
+                        <label class="control-label">{{ 'MERCHANT.DELIVERY.DISTANCEUPTO' | translate }}---Distance Up To</label>
+                        <div class="mt-15">
+                            <input type="text" class="input-med form-control" name="name"
+                                   placeholder="Enter Mile Radius"
+                                   ng-model="delivery.edit_delivery_zone.distance_up_to">
+                        </div>
+                    </div>
+                    <div class="form-group" ng-show="delivery.saved_delivery_zone == 'zip'">
+                        <label class="control-label" for="minimum_order_amount">{{ 'MERCHANT.DELIVERY.ZIPCODES' | translate }}</label>
+                        <div class="mt-15">
+                            <input type="text" class="input-x-large form-control" name="zip_codes"
+                                   placeholder="Enter Zip Codes"
+                                   ng-model="delivery.edit_delivery_zone.zip_codes">
+                        </div>
+                    </div>
+                    <div ng-show="delivery.saved_delivery_zone == 'polygon'" class="">
+                        <label for="polygon_coordinates">{{ 'MERCHANT.DELIVERY.POLYGON' | translate }}
+                            <i class="fa fa-question-circle tooltip-help" aria-hidden="true">
+                                <span class="tool-tip-text">{{ 'MERCHANT.CONTACT.TOOLTIP.DELIVERY.DELIVERY_ZONES.DELIVERY_MAP_MODAL' | translate }}</span>
+                            </i>
+                        </label>
+                        <div id="edit-polygon-map" class="google-modal-map"></div>
+                        <button type="button" ng-disabled
+                                ng-click="delivery.clearPolygon()" class="pull-right btn btn-primary btn-xs m-t-5">{{ 'MERCHANT.DELIVERY.REDOPOLIGON' | translate }}
+                        </button>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label" for="price">{{ 'MERCHANT.DELIVERY.PRICE' | translate }}</label>
+                        <div class="mt-15">
+                            <input type="number" class="input-med form-control" name="price" placeholder="Enter Price"
+                                   ng-model="delivery.edit_delivery_zone.price" ng-fade min="0">
+                            <div class="input-med alert alert-danger ng-hide alert-reg-position"
+                                 ng-show="delivery.update_delivery_zone_form.price.$error.number && (delivery.update_delivery_zone_form.price.$faded || delivery.edit_delivery_zone.submit)"
+                                 role="alert">
+                                {{ 'MERCHANT.DELIVERY.PRICENUMERIC' | translate }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label" for="minimum_order_amount">{{ 'MERCHANT.DELIVERY.MINORDER' | translate }}</label>
+                        <div class="mt-15">
+                            <input type="number" class="input-med form-control" name="min_order_amount"
+                                   placeholder="Enter Amount"
+                                   ng-model="delivery.edit_delivery_zone.minimum_order_amount" ng-fade min="0">
+                            <div class="input-med alert alert-danger ng-hide alert-reg-position"
+                                 ng-show="delivery.update_delivery_zone_form.min_order_amount.$error.number
+                                && (delivery.update_delivery_zone_form.min_order_amount.$faded || delivery.edit_delivery_zone.submit)"
+                                 role="alert">
+                                {{ 'MERCHANT.DELIVERY.MINIMUMORDER' | translate }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label" for="delivery_type">{{ 'MERCHANT.DELIVERY.DELIVERYTYPE' | translate }}</label>
+                        <div class="mt-15">
+                            <div class="select input-med">
+                                <select name="delivery_type" class="form-control" ng-required="true"
+                                        ng-model="delivery.edit_delivery_zone.delivery_type" ng-fade
+                                        ng-options="delivery_type for delivery_type in delivery.delivery_types">
+                                    <option class="placeholder-color" value="" selected disabled>{{ 'MERCHANT.DELIVERY.DELIVERYTYPE' | translate }}</option>
+                                </select></div>
+                            <div class="input-med alert alert-danger ng-hide alert-reg-position"
+                                 ng-show="delivery.update_delivery_zone_form.delivery_type.$error.required
+                                && (delivery.update_delivery_zone_form.delivery_type.$faded || delivery.edit_delivery_zone.submit)"
+                                 role="alert">
+                                {{ 'MERCHANT.DELIVERY.DELIVERYTYPEREQUIRED' | translate }}
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" ng-disabled class="btn btn-default" data-dismiss="modal">{{ 'MESSAGE.SHARE.CANCEL' | translate }}</button>
+                    <button type="submit" class="btn btn-info">{{ 'MESSAGE.SHARE.SUBMIT' | translate }}</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div id="delete-delivery-zone-modal" class="modal fade" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">{{ 'MERCHANT.DELIVERY.DELETEDELIVERY' | translate }}</h4>
+            </div>
+            <div class="modal-body">
+                {{ 'MERCHANT.DELIVERY.SUREDELETERELIVERY' | translate }}
+                <strong>{{delivery.delete_delivery_zone_name}}</strong>?
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" ng-disabled class="btn btn-default" data-dismiss="modal">{{ 'MESSAGE.SHARE.CANCEL' | translate }}</button>
+                <button class="btn btn-danger" ng-click="delivery.confirmDeleteDeliveryZone()">{{ 'MESSAGE.SHARE.DELETE' | translate }}</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="change-zone-defined-by-modal" class="modal fade" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">{{ 'MERCHANT.DELIVERY.CHANGEZONEBY' | translate }}</h4>
+            </div>
+            <div class="modal-body">
+                <p>{{ 'MERCHANT.DELIVERY.SURETOCHANGEDELIVERY' | translate }}</p>
+                <!--TODO send param to translate-->
+                <p>{{ 'MERCHANT.DELIVERY.LOSETHEPREVIOUSZONE' | translate }} {{delivery.previousZonedDefinedBy()}} data for all existing delivery zones.</p>
+            </div>
+
+            <div class="modal-footer">
+                <button id="confirm-delivery-zone-definition-change" type="button" ng-disabled class="btn btn-default" data-dismiss="modal" ng-click="delivery.closeDeliveryZoneDefinedByDialog()">{{ 'MESSAGE.SHARE.CANCEL' | translate }}</button>
+                <button class="btn btn-info" ng-click="delivery.updateDeliveryZoneDefinedBy()">{{ 'MESSAGE.SHARE.CONFIRMCHANGE' | translate }}</button>
+            </div>
+        </div>
+    </div>
+</div>

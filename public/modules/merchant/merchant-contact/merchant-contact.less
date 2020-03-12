@@ -1,0 +1,21 @@
+@max-small-cards: 375px;
+@min-medium-cards: 376px;
+@max-medium-cards: 739px;
+@min-table-screen: 740px;
+
+.content-table{
+    .content-table(@min-table-screen)
+}
+.content-responsive{
+    .content-responsive(@max-small-cards,@min-medium-cards,@max-medium-cards)
+}
+@media (max-width: 1280px) {
+    .contact-box .col-md-6 {
+        width: 100%;
+    }
+}
+
+.fix-email-nowrap-table {
+    table-layout: fixed;
+    word-wrap: break-word
+}

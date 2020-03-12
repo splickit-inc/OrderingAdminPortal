@@ -1,0 +1,47 @@
+<div class="row">
+    <div class="col-sm-12">
+        <div class="page-header-title menu-bg">
+            <h4 class="page-title">Cart Upsells</h4>
+            <button type="button" ng-disabled class="btn btn-info" ng-click="vm.createNew()">
+                Create New Cart Upsell
+            </button>
+        </div>
+    </div>
+</div>
+
+
+<div>
+    <div class="panel panel-primary">
+        <div class="panel-heading section-select">
+            <h3 class="panel-title" ng-if="!!vm.menu.menuWithCardUpsells.menu_id">
+                Menu ID:
+                {{vm.menu.menuWithCardUpsells.menu_id}} -
+                Menu Name: {{vm.menu.menuWithCardUpsells.name}}
+            </h3>
+        </div>
+        <div class="panel-body">
+            <div class="text-center" ng-if="!vm.menu.menuWithCardUpsells.cart_upsells || (!!vm.menu.menuWithCardUpsells.cart_upsells && vm.menu.menuWithCardUpsells.cart_upsells.length == 0)">
+                <h5 class="pre-load-text">No Items Found</h5>
+            </div>
+            <table class="table" ng-if="!!vm.menu.menuWithCardUpsells.cart_upsells && vm.menu.menuWithCardUpsells.cart_upsells.length > 0">
+                <thead>
+                <tr>
+                    <th class="fix-table-wrap">Upsell ID</th>
+                    <th>Name</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="upsell in vm.menu.menuWithCardUpsells.cart_upsells">
+                    <td class="fix-table-wrap">{{upsell.item_id}}</td>
+                    <td>{{upsell.item_name}}</td>
+                    <td class="delete-icon">
+                        <i class="fa fa-times" aria-hidden="true"
+                           ng-click="vm.deleteUpsellConfirmation(upsell)"></i>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

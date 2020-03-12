@@ -1,0 +1,508 @@
+<div class="row">
+    <div class="col-sm-12">
+        <div class="page-header-title">
+            <h4 class="page-title">Users & Roles</h4>
+        </div>
+    </div>
+</div>
+
+<div id="delivery-section" class="row">
+    <!-- Basic example -->
+    <div class="col-md-6">
+        <div class="panel panel-primary">
+            <div class="panel-heading"><h3 class="panel-title">Create User</h3></div>
+            <div class="panel-body">
+                <div class="filter-loader-contain" ng-if="uc.new_user_processing">
+                    <div class="filter-loader"></div>
+                </div>
+                <form name="uc.create_user_form" class="form-horizontal" novalidate
+                      ng-submit="uc.createNewUser()">
+                    <div ng-if="!uc.new_user_processing">
+
+                        <div class="form-group">
+                            <label class="col-md-5 control-label">Name</label>
+                            <div class="col-md-7">
+                                <input id='first_name' name="first_name" class='input-large form-control' type='text'
+                                       ng-required="true" ng-model="uc.new_user.first_name" ng-fade placeholder="First">
+                                <div class="alert alert-danger ng-hide alert-reg-position"
+                                     ng-show="(uc.create_user_form.first_name.$error.required && uc.create_user_form.first_name.$touched) || (uc.create_user_form.first_name.$error.required && uc.create_user_form.$submitted)"
+                                     role="alert">First Name is required.
+                                </div>
+                                <input id='last_name' name="last_name" class='input-large form-control margin-top'
+                                       type='text'
+                                       ng-required="true" ng-model="uc.new_user.last_name" ng-fade placeholder="Last">
+                                <div class="alert alert-danger ng-hide alert-reg-position"
+                                     ng-show="(uc.create_user_form.last_name.$error.required && uc.create_user_form.last_name.$touched) || (uc.create_user_form.last_name.$error.required && uc.create_user_form.$submitted)"
+                                     role="alert">Last Name is required.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-md-5 control-label">Email</label>
+                            <div class="col-md-7">
+                                <input name="email" class='input-large form-control' type='email'
+                                       ng-required="true" ng-model="uc.new_user.email" ng-fade placeholder="Email">
+
+                                <div class="alert alert-danger ng-hide alert-reg-position"
+                                     ng-show="uc.create_user_form.email.$error.required && (uc.create_user_form.email.$faded || uc.submit)"
+                                     role="alert">Email is required.
+                                </div>
+
+                                <div class="alert alert-danger ng-hide alert-reg-position"
+                                     ng-show="(uc.create_user_form.email.$error.email && !uc.create_user_form.email.$error.required) && (uc.create_user_form.email.$faded || uc.submit)"
+                                     role="alert">Entered email is invalid.
+                                </div>
+
+                                <div class="alert alert-danger alert-reg-position ng-hide"
+                                     ng-show="uc.email_exist">This email has already been registered.
+                                </div>
+                            </div>
+                        </div>
+
+                        <!--<div class="col-md-12">-->
+                        <!--<div class="col-md-6">-->
+                        <!--<div class="form-group">-->
+                        <!--<label class="col-md-3 control-label">Visibility</label>-->
+                        <!--<div class="col-md-9">-->
+                        <!--<div class="select input-large"><select name="visibility" class="form-control" ng-required="true"-->
+                        <!--ng-model="uc.new_user.visibility" ng-fade-->
+                        <!--ng-options="visibility.type_id_value as visibility.type_id_name for visibility in uc.visibilities">-->
+                        <!--<option class="placeholder-color" value="" selected disabled>Select</option>-->
+                        <!--</select></div>-->
+
+                        <!--<div class="alert alert-danger ng-hide alert-reg-position"-->
+                        <!--ng-show="uc.create_user_form.visibility.$error.required && (uc.create_user_form.visibility.$faded || uc.submit)"-->
+                        <!--role="alert">Visibility is required.</div>-->
+                        <!--</div>-->
+                        <!--</div>-->
+                        <!--</div>-->
+                        <!--</div>-->
+
+                        <div class="form-group">
+                            <label class="col-md-5 control-label">Role</label>
+                            <div class="col-md-7">
+                                <div class="input-large">
+                                    <select name="role" class="form-control" ng-required="true"
+                                            ng-model="uc.new_user.role" ng-fade
+                                            ng-options="role.id as role.name for role in uc.roles"
+                                            ng-change="uc.setVisibility()">
+                                        <option class="placeholder-color" value="" selected disabled>Select</option>
+                                    </select></div>
+
+                                <div class="alert alert-danger ng-hide alert-reg-position"
+                                     ng-show="uc.create_user_form.role.$error.required && (uc.create_user_form.role.$faded || uc.submit)"
+                                     role="alert">Role is required.
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div ng-if="uc.current_user.permissions.includes('create_usr_org_select')">
+                            <div class="form-group">
+                                <label class="col-md-5 control-label">Organization</label>
+                                <div class="col-md-7">
+                                    <div class="input-large">
+                                        <select name="organization" class="form-control" ng-required="true"
+                                                ng-model="uc.new_user.organization" ng-fade
+                                                ng-options="organization.id as organization.name for organization in uc.organizations">
+                                            <option class="placeholder-color" value="" selected disabled>Select</option>
+                                        </select></div>
+
+                                    <div class="alert alert-danger ng-hide alert-reg-position"
+                                         ng-show="uc.create_user_form.organization.$error.required && (uc.create_user_form.organization.$faded || uc.submit)"
+                                         role="alert">Organization is required.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div ng-show="uc.new_user.visibility == 'brand' && uc.user.hasPermission('brands_filter')">
+
+                            <div class="form-group">
+                                <label class="col-md-5 control-label">Brand</label>
+                                <div class="col-md-7 m-t-5">
+                                    <select name="brand" class="form-control input-large margin-top-five"
+                                            ng-required="uc.new_user.visibility == 'brand'"
+                                            ng-model="uc.new_user.brand"
+                                            ng-fade
+                                            ng-options="brand.brand_id as brand.brand_name for brand in uc.brands">
+                                        <option class="placeholder-color" value="" selected disabled>Brand</option>
+                                    </select>
+
+                                    <div class="alert alert-danger ng-hide alert-reg-position"
+                                         ng-show="(uc.create_user_form.brand.$error.required)
+                                                    && (create_user_form.brand.$faded || uc.submit)"
+                                         role="alert">Brand is required for Brand level Visibility.
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div ng-if="uc.current_user.visibility == 'global'">
+                            <div class="form-group">
+                                <label class="control-label col-md-5">Set default Password</label>
+                                <div class="col-md-7 m-t-5">
+                                    <input id="set-password-checkbox" type="checkbox" name="setPassword"
+                                           ng-init="uc.setPassword = false" ng-model="uc.setPassword">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div ng-if="uc.current_user.visibility == 'global' && uc.setPassword">
+
+                            <div class="form-group">
+                                <label class="col-md-5 control-label">Password</label>
+                                <div class="col-md-7">
+                                    <div class="inner-addon left-addon">
+                                            <span class="fa fa-times" style="color: black"
+                                                  ng-show="(uc.create_user_form.password.$error.required || uc.create_user_form.password.$error.pattern) && uc.create_user_form.password.$touched"></span>
+                                        <span class="fa fa-check" style="color: black"
+                                              ng-show="(!uc.create_user_form.password.$error.required && !uc.create_user_form.password.$error.pattern)"></span>
+                                        <input type="password" name="password" id="password"
+                                               class="form-control input-large"
+                                               placeholder="Password" required autofocus
+                                               ng-required="true" ng-model="uc.new_user.password" ng-fade
+                                               ng-minlength="8"
+                                               ng-pattern="/^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[\/\W+\/g])(?=\S+$).{8,}$/"
+                                        >
+                                    </div>
+
+                                    <div class="inner-addon left-addon m-t-15">
+                                            <span class="fa fa-times"
+                                                  ng-show="(uc.new_user.retype_password !==  uc.new_user.password && !!uc.new_user.password)"
+                                                  style="color: black"></span>
+                                        <span class="fa fa-check"
+                                              ng-show="uc.new_user.retype_password ===  uc.new_user.password && !!uc.new_user.password"
+                                              style="color: black"></span>
+                                        <input type="password" name="retype_password" id="retype_password"
+                                               class="form-control input-large"
+                                               placeholder="Confirm Password" required autofocus
+                                               ng-required="true" ng-model="uc.new_user.retype_password" ng-fade
+                                               ng-minlength="8"
+                                               ng-pattern='/^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[\/\W+\/g])(?=\S+$).{8,}$/'
+                                        >
+                                    </div>
+                                    <h5 class="pre-load-text alert"
+                                        ng-show="(uc.create_user_form.password.$error.required || uc.create_user_form.password.$error.pattern)">
+                                        Password must include at least 8 characters, both alpha and numeric
+                                        characters, capital letter, and a special character.</h5>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div ng-show="uc.new_user.visibility == 'mine_only' || uc.new_user.visibility == 'operator'">
+                        <div class="form-group">
+                            <label class="col-md-5 control-label">Assign Merchant Locations</label>
+                            <div class="col-md-7">
+                                <input type="text" class="input-large form-control inline m-r-5 m-b-10"
+                                       name="merchants_filter"
+                                       ng-enter="uc.searchMerchantByProperty()"
+                                       ng-model="uc.search_text" ng-fade
+                                       placeholder="Search by Name or Address">
+                                <button type="button" ng-click="uc.searchMerchantByProperty()" class="btn btn-success">
+                                    Search
+                                </button>
+                            </div>
+
+
+                            <div class="col-md-12 button-select" ng-if="uc.merchant_search_processing">
+                                <div class="filter-loader-contain">
+                                    <div class="filter-loader"></div>
+                                </div>
+                            </div>
+
+                            <div ng-show="uc.selectable_merchants.length > 0" class="col-md-12">
+                                Click on one or more locations to select
+                            </div>
+
+                            <div ng-if="!uc.merchant_search_processing">
+                                <div class="table-fixed-with-scroll button-select m-t-15 col-md-12">
+                                    <table class="table table-hover">
+                                        <tr ng-repeat="merchant in uc.selectable_merchants"
+                                            ng-click="uc.addMerchant(merchant)">
+                                            <td class="add-merchant">
+                                                <i class="fa fa-plus-circle" aria-hidden="true"></i>
+                                            </td>
+                                            <td>{{merchant.merchant_id}}</td>
+                                            <td>{{merchant.name}}</td>
+                                            <td>
+                                                {{merchant.address1}}<BR>
+                                                {{merchant.city}}, {{merchant.state}} {{merchant.zip}}
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="alert alert-danger ng-hide alert-reg-position"
+                                 ng-show="uc.show_selected_merchant_error"
+                                 role="alert">Please select a related merchant in order to create this kind
+                                of user.
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label m-l-10">Selected Merchants:</label>
+                            <div class="m-t-15 col-md-12">
+                                <div class="table-fixed-with-scroll">
+                                    <table class="table table-hover">
+                                        <tr ng-repeat="merchant in uc.new_user.merchants"
+                                            ng-click="uc.removeMerchant(merchant)">
+                                            <td>
+                                                <i class="fa fa-minus-circle" aria-hidden="true"></i>
+                                            </td>
+                                            <td>{{merchant.merchant_id}}</td>
+                                            <td>{{merchant.name}}</td>
+                                            <td>
+                                                {{merchant.address1}}<BR>
+                                                {{merchant.city}}, {{merchant.state}} {{merchant.zip}}
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12 m-t-10 m-b-10" ng-if="!uc.new_user_processing">
+                        <div ng-show="create_user_success">
+                            <div class="alert alert-success alert-reg-position"
+                                 role="alert">
+                                <i class="fa fa-check-circle" aria-hidden="true"></i> The user
+                                {{uc.success_new_user}} Created!
+                            </div>
+                        </div>
+
+                        <button id='create-user-submit' class='btn-success btn pull-right'>Create</button>
+                    </div>
+                </form><!-- panel-body -->
+            </div> <!-- panel -->
+        </div> <!-- col-->
+    </div>
+    <div class="col-md-6">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">Current Permissions Selected</h3>
+            </div>
+            <div class="panel-body">
+                <div ng-if="!uc.new_user_processing">
+                    <table class="table table-striped">
+                        <tbody>
+                        <tr ng-repeat="permission in uc.currentRolePermissions">
+                            <td colspan="2">{{permission}}</td>
+                            <td style="line-height: 20px"><span class="circle pull-right"
+                                                                style="display: flex"></span></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="permissions-table" class="col-md-12">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">Roles and Permissions Table</h3>
+            </div>
+            <div class="panel-body">
+                <table role="table" class="table table-striped">
+                    <thead role="rowgroup">
+                    <tr role="row">
+                        <th role="columnheader" colspan="2">Roles And Permissions</th>
+                        <th role="columnheader">Manage Users</th>
+                        <th role="columnheader">Manage Brand</th>
+                        <th role="columnheader">Manage Accounts</th>
+                        <th role="columnheader">Operator Dashboard</th>
+                        <th role="columnheader">Customer Service</th>
+                        <th role="columnheader">Manage Menu</th>
+                        <th role="columnheader">Menu Quick-Edit</th>
+                        <th role="columnheader">Manage Orders</th>
+                        <th role="columnheader">Ordering On/Off</th>
+                        <th role="columnheader">Marketing</th>
+                        <th role="columnheader">Reporting</th>
+                        <th role="columnheader">Creative</th>
+                    </tr>
+                    </thead>
+                    <tbody role="rowgroup">
+                    <tr role="row" ng-if="uc.checkEnabledRoles('Splickit Super User')">
+                        <td role="cell" class="first-row" colspan="2">Splickit.it Super-User</td>
+                        <td role="cell" class="cell"><span class="circle"
+                                                           style="display: flex"></span></td>
+                        <td role="cell" class="cell"><span class="circle"
+                                                           style="display: flex"></span></td>
+                        <td role="cell" class="cell"><span class="circle"
+                                                           style="display: flex"></span></td>
+                        <td role="cell" class="cell"></td>
+                        <td role="cell" class="cell"><span class="circle"
+                                                           style="display: flex"></span></td>
+                        <td role="cell" class="cell"><span class="circle"
+                                                           style="display: flex"></span></td>
+                        <td role="cell" class="cell"><span class="circle"
+                                                           style="display: flex"></span></td>
+                        <td role="cell" class="cell"></td>
+                        <td role="cell" class="cell"></td>
+                        <td role="cell" class="cell"><span class="circle"
+                                                           style="display: flex"></span></td>
+                        <td role="cell" class="cell"><span class="circle"
+                                                           style="display: flex"></span></td>
+                        <td role="cell" class="cell"><span class="circle"
+                                                           style="display: flex"></span></td>
+                    </tr>
+                    <tr role="row" ng-if="uc.checkEnabledRoles('Partner Admin')">
+                        <td role="cell" class="first-row" colspan="2">Partner Admin</td>
+                        <td role="cell" class="cell"><span class="circle"
+                                                           style="display: flex"></span></td>
+                        <td role="cell" class="cell"><span class="circle"
+                                                           style="display: flex"></span></td>
+                        <td role="cell" class="cell"><span class="circle"
+                                                           style="display: flex"></span></td>
+                        <td role="cell" class="cell"></td>
+                        <td role="cell" class="cell"></td>
+                        <td role="cell" class="cell"><span class="circle"
+                                                           style="display: flex"></span></td>
+                        <td role="cell" class="cell"><span class="circle"
+                                                           style="display: flex"></span></td>
+                        <td role="cell" class="cell"></td>
+                        <td role="cell" class="cell"></td>
+                        <td role="cell" class="cell"><span class="circle"
+                                                           style="display: flex"></span></td>
+                        <td role="cell" class="cell"><span class="circle"
+                                                           style="display: flex"></span></td>
+                        <td role="cell" class="cell"><span class="circle"
+                                                           style="display: flex"></span></td>
+                    </tr>
+                    <tr role="row" ng-if="uc.checkEnabledRoles('Reseller Account Manager')">
+                        <td role="cell" class="first-row" colspan="2">Re-Seller Account Manager</td>
+                        <td role="cell" class="cell"><span class="circle"
+                                                           style="display: flex"></span></td>
+                        <td role="cell" class="cell"><span class="circle"
+                                                           style="display: flex"></span></td>
+                        <td role="cell" class="cell"><span class="circle"
+                                                           style="display: flex"></span></td>
+                        <td role="cell" class="cell"></td>
+                        <td role="cell" class="cell"></td>
+                        <td role="cell" class="cell"><span class="circle"
+                                                           style="display: flex"></span></td>
+                        <td role="cell" class="cell"><span class="circle"
+                                                           style="display: flex"></span></td>
+                        <td role="cell" class="cell"></td>
+                        <td role="cell" class="cell"></td>
+                        <td role="cell" class="cell"><span class="circle"
+                                                           style="display: flex"></span></td>
+                        <td role="cell" class="cell"><span class="circle"
+                                                           style="display: flex"></span></td>
+                        <td role="cell" class="cell"><span class="circle"
+                                                           style="display: flex"></span></td>
+                    </tr>
+                    <tr role="row" ng-if="uc.checkEnabledRoles('Brand Manager')">
+                        <td role="cell" colspan="2" class="first-row">Brand Manager</td>
+                        <td role="cell" class="cell"><span class="circle"
+                                                           style="display: flex"></span></td>
+                        <td role="cell" class="cell"><span class="circle"
+                                                           style="display: flex"></span></td>
+                        <td role="cell" class="cell"><span class="circle"
+                                                           style="display: flex"></span></td>
+                        <td role="cell" class="cell"></td>
+                        <td role="cell" class="cell"><span class="circle"
+                                                           style="display: flex"></span></td>
+                        <td role="cell" class="cell"><span class="circle"
+                                                           style="display: flex"></span></td>
+                        <td role="cell" class="cell"><span class="circle"
+                                                           style="display: flex"></span></td>
+                        <td role="cell" class="cell"></td>
+                        <td role="cell" class="cell"></td>
+                        <td role="cell" class="cell"><span class="circle"
+                                                           style="display: flex"></span></td>
+                        <td role="cell" class="cell"><span class="circle"
+                                                           style="display: flex"></span></td>
+                        <td role="cell" class="cell"></td>
+                    </tr>
+                    <tr role="row" ng-if="uc.checkEnabledRoles('Store Owner Operator')">
+                        <td role="cell" colspan="2" class="first-row">Store Owner-Operator</td>
+                        <td role="cell" class="cell"><span class="circle"
+                                                           style="display: flex"></span></td>
+                        <td role="cell" class="cell"></td>
+                        <td role="cell" class="cell"><span class="circle"
+                                                           style="display: flex"></span></td>
+                        <td role="cell" class="cell"><span class="circle"
+                                                           style="display: flex"></span></td>
+                        <td role="cell" class="cell"></td>
+                        <td role="cell" class="cell"></td>
+                        <td role="cell" class="cell"><span class="circle"
+                                                           style="display: flex"></span></td>
+                        <td role="cell" class="cell"><span class="circle"
+                                                           style="display: flex"></span></td>
+                        <td role="cell" class="cell"><span class="circle"
+                                                           style="display: flex"></span></td>
+                        <td role="cell" class="cell"><span class="circle"
+                                                           style="display: flex"></span></td>
+                        <td role="cell" class="cell"><span class="circle"
+                                                           style="display: flex"></span></td>
+                        <td role="cell" class="cell"></td>
+                    </tr>
+                    <tr role="row" ng-if="uc.checkEnabledRoles('Multi Location Operator')">
+                        <td role="cell" colspan="2" class="first-row">Multi-Location Owner-Operator</td>
+                        <td role="cell" class="cell"><span class="circle"
+                                                           style="display: flex"></span></td>
+                        <td role="cell" class="cell"></td>
+                        <td role="cell" class="cell"><span class="circle"
+                                                           style="display: flex"></span></td>
+                        <td role="cell" class="cell"><span class="circle"
+                                                           style="display: flex"></span></td>
+                        <td role="cell" class="cell"></td>
+                        <td role="cell" class="cell"></td>
+                        <td role="cell" class="cell"><span class="circle"
+                                                           style="display: flex"></span></td>
+                        <td role="cell" class="cell"><span class="circle"
+                                                           style="display: flex"></span></td>
+                        <td role="cell" class="cell"></td>
+                        <td role="cell" class="cell"><span class="circle"
+                                                           style="display: flex"></span></td>
+                        <td role="cell" class="cell"><span class="circle"
+                                                           style="display: flex"></span></td>
+                        <td role="cell" class="cell"></td>
+                    </tr>
+                    <tr role="row" ng-if="uc.checkEnabledRoles('Store Manager')">
+                        <td role="cell" colspan="2" class="first-row">Store Manager</td>
+                        <td role="cell" class="cell"><span class="circle"
+                                                           style="display: flex"></span></td>
+                        <td role="cell" class="cell"></td>
+                        <td role="cell" class="cell"></td>
+                        <td role="cell" class="cell"><span class="circle"
+                                                           style="display: flex"></span></td>
+                        <td role="cell" class="cell"></td>
+                        <td role="cell" class="cell"></td>
+                        <td role="cell" class="cell"><span class="circle"
+                                                           style="display: flex"></span></td>
+                        <td role="cell" class="cell"><span class="circle"
+                                                           style="display: flex"></span></td>
+                        <td role="cell" class="cell"><span class="circle"
+                                                           style="display: flex"></span></td>
+                        <td role="cell" class="cell"></td>
+                        <td role="cell" class="cell"></td>
+                        <td role="cell" class="cell"></td>
+                    </tr>
+                    <tr role="row" ng-if="uc.checkEnabledRoles('Store Associate')">
+                        <td role="cell" colspan="2" class="first-row">Store Associate</td>
+                        <td role="cell" class="cell"></td>
+                        <td role="cell" class="cell"></td>
+                        <td role="cell" class="cell"></td>
+                        <td role="cell" class="cell"></td>
+                        <td role="cell" class="cell"></td>
+                        <td role="cell" class="cell"></td>
+                        <td role="cell" class="cell"></td>
+                        <td role="cell" class="cell"><span class="circle"
+                                                           style="display: flex"></span></td>
+                        <td role="cell" class="cell"></td>
+                        <td role="cell" class="cell"></td>
+                        <td role="cell" class="cell"></td>
+                        <td role="cell" class="cell"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+

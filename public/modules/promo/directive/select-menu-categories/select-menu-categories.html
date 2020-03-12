@@ -1,0 +1,53 @@
+<div id="menu-select-categories" class="modal fade" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Select Menu Categories</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="col-md-12 control-label">Unselected Categories</label>
+                            </div>
+                            <div class="col-md-12 m-t-10">
+                                <div class="col-md-12 button-select">
+                                    <table class="table table-hover m-t-10">
+                                        <tr ng-repeat="category in menu.unselected_menu_categories" ng-click="addCategory(category, $index)">
+                                            <td><i class="fa fa-plus-circle" aria-hidden="true"></i></td>
+                                            <td>{{category.type_id_name}} </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="col-md-12 control-label">Selected Categories</label>
+                            </div>
+                            <div class="col-md-12 m-t-10">
+                                <div class="col-md-12 button-select">
+                                    <table class="table table-hover">
+                                        <tr ng-repeat="category in menu.selected_menu_categories" ng-click="removeCategory(category, $index)">
+                                            <td><i class="fa fa-minus-circle" aria-hidden="true"></i></td>
+                                            <td>{{category.type_id_name}} </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" ng-disabled class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button class="btn btn-info" ng-click="closeMenuObjectSelect()">Submit</button>
+            </div>
+        </div>
+    </div>
+</div>

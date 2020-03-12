@@ -1,0 +1,189 @@
+<div ng-if="vm.validGuid">
+    <div class="splickit-img-container">
+        <img class="hidden-xs"
+             src="https://s3.amazonaws.com/com.yourbiz.products/admin_portal/merchant_form_1/img/girl_with_ipad.jpg">
+        <img class="visible-xs"
+             src="https://d38o1hjtj2mzwt.cloudfront.net/admin_portal/merchant_form_1/img/girl_with_ipad_small.jpg">
+        <div class="after yellow">
+            <div class="logo-container">
+                <img src="https://d38o1hjtj2mzwt.cloudfront.net/admin_portal/merchant_form_1/img/logo.png">
+                <span class="slogan">DIGITAL ORDERING PLATFORM</span>
+            </div>
+        </div>
+    </div>
+    <div class="splickit-benefits">
+        <h4 class="title">Start Taking Online Orders Now</h4>
+        <div class="row">
+            <div class="center-elements-column col-md-3 col-sm-3 col-xs-6">
+                <div class="benefit-container">
+                    <img src="https://d38o1hjtj2mzwt.cloudfront.net/admin_portal/merchant_form_1/img/icon1.png">
+                    <span class="benefit-desc">Get online in days,<br>not months</span>
+                </div>
+            </div>
+            <div class="center-elements-column col-md-3 col-sm-3 col-xs-6">
+                <div class="benefit-container">
+                    <img src="https://d38o1hjtj2mzwt.cloudfront.net/admin_portal/merchant_form_1/img/icon2.png">
+                    <span class="benefit-desc">Increase<br>sales</span>
+                </div>
+            </div>
+            <div class="center-elements-column col-md-3 col-sm-3 col-xs-6">
+                <div class="benefit-container">
+                    <img src="https://d38o1hjtj2mzwt.cloudfront.net/admin_portal/merchant_form_1/img/icon3.png">
+                    <span class="benefit-desc">Branded<br>customer experience</span>
+                </div>
+            </div>
+            <div class="center-elements-column col-md-3 col-sm-3 col-xs-6">
+                <div class="benefit-container">
+                    <img src="https://d38o1hjtj2mzwt.cloudfront.net/admin_portal/merchant_form_1/img/icon4.png">
+                    <span class="benefit-desc">Unlimited orders,<br>no high commissions</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="splickit-pricing">
+        <h4 class="title">Pricing</h4>
+        <div class="row vdivide">
+            <div class="center-elements-column col-md-4 col-sm-4 col-xs-6">
+                <div class="pricing">
+                    <span class="plan">Monthly Plan</span>
+                    <div class="price">
+                        <span class="usd">$</span>149<span class="month">/mo</span>
+                    </div>
+                    <div class="setup-fee">
+                        <span class="plus">+</span>$199 Setup Fee
+                    </div>
+                    <span class="per-location">Per Location</span>
+                </div>
+            </div>
+            <div class="center-elements-column col-md-4 col-sm-4 col-xs-6 last-border">
+                <div class="pricing">
+                    <span class="plan">Annual Plan</span>
+                    <div class="price">
+                        <span class="usd">$</span>119<span class="month">/mo</span>
+                    </div>
+                    <div class="setup-fee">
+                        <span class="plus">+</span>$199 Setup Fee
+                    </div>
+                    <span class="per-location">Per Location</span>
+                </div>
+            </div>
+            <div class="center-elements-column col-md-4 col-sm-4 col-xs-12">
+                <div class="pricing">
+                    <span class="plan">Two-Year Plan</span>
+                    <div class="price">
+                        <span class="usd">$</span>99<span class="month">/mo</span>
+                    </div>
+                    <div class="setup-fee">
+                        <span class="plus">+</span>$199 Setup Fee
+                    </div>
+                    <span class="per-location">Per Location</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="splickit-features">
+        <h4 class="title">FEATURES</h4>
+        <div class="row">
+            <div class="feature-block col-md-4 col-sm-6 col-xs-6">
+                <span class="feature">Web and Mobile Ordering</span>
+            </div>
+            <div class="feature-block col-md-4 col-sm-6 col-xs-6">
+                <span class="feature">Easy Menu Management</span>
+            </div>
+            <div class="feature-block col-md-4 col-sm-6 col-xs-6">
+                <span class="feature">Loyalty and Rewards</span>
+            </div>
+            <div class="feature-block col-md-4 col-sm-6 col-xs-6">
+                <span class="feature">Promotions</span>
+            </div>
+            <div class="feature-block col-md-4 col-sm-6 col-xs-6">
+                <span class="feature">Favorites and Re-order</span>
+            </div>
+            <div class="feature-block col-md-4 col-sm-6 col-xs-6">
+                <span class="feature">Reporting and Insights</span>
+            </div>
+        </div>
+    </div>
+    <form name="vm.form" novalidate ng-submit="vm.create()">
+        <div class="splickit-img-container cropped-area">
+            <img class="hidden-sm hidden-xs"
+                 src="https://d38o1hjtj2mzwt.cloudfront.net/admin_portal/merchant_form_1/img/blue_doorway_blurred.jpg">
+            <img class="visible-sm visible-xs"
+                 src="https://d38o1hjtj2mzwt.cloudfront.net/admin_portal/merchant_form_1/img/blue_doorway_blurred_small.jpg">
+            <div class="after black">
+                <div class="splickit-options">
+                    <h4 class="title">Select Your Options To Get Started!</h4>
+                    <h5 class="sub-title">Choose Your Plan</h5>
+                    <div class="plans">
+                        <div>
+                            <label class="control control-checkbox plan">Monthly
+                                <input type="radio" name="offer" ng-model="vm.customerPlan.offer"
+                                       value="id-1"
+                                       ng-required="true"/>
+                                <div class="control-indicator"></div>
+                            </label>
+                        </div>
+                        <div>
+                            <label class="control control-checkbox plan">Annual
+                                <input type="radio" name="offer" ng-model="vm.customerPlan.offer"
+                                       value="id-2"
+                                       ng-required="true"/>
+                                <div class="control-indicator"></div>
+                            </label>
+                        </div>
+                        <div>
+                            <label class="control control-checkbox plan">2-Year
+                                <input type="radio" name="offer" ng-model="vm.customerPlan.offer"
+                                       value="id-3"
+                                       ng-required="true"/>
+                                <div class="control-indicator"></div>
+                            </label>
+                        </div>
+                    </div>
+                    <h5 class="sub-title">Add-Ons</h5>
+                    <span class="sub-title-info">(<span class="info">Optional</span>)</span>
+                    <div class="add-ons">
+                        <div class="center-elements-column">
+                            <label class="control control-checkbox add-on">Branded Apps
+                                <input type="checkbox" name="addons[]"
+                                       ng-model="vm.customerPlan.addons[0]" value="id-1"/>
+                                <div class="control-indicator"></div>
+                            </label>
+                            <div class="add-on price">
+                                <span class="usd">$</span>49<span class="month">/MO</span>
+                            </div>
+                        </div>
+                        <div class="center-elements-column">
+                            <label class="control control-checkbox add-on">Wi-Fi Printer
+                                <input type="checkbox" name="addons[]"
+                                       ng-model="vm.customerPlan.addons[1]" value="id-2"/>
+                                <div class="control-indicator"></div>
+                            </label>
+                            <div class="add-on price">
+                                <span class="usd">$</span>199
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="ng-hide flat-alert"
+             ng-show="vm.form.offer.$error.required && (vm.form.offer.$faded || vm.customerPlan.submit)"
+             role="alert">
+            You have to select a plan
+        </div>
+        <div class="splickit-payment">
+            <h4 class="title">CREDIT CARD INFO</h4>
+            <div ng-show="vm.processing" class="margin-30">
+                <div>
+                    <div class="line"></div>
+                    <div class="line"></div>
+                    <div class="line"></div>
+                    <div class="line"></div>
+                </div>
+            </div>
+            <stripe-form disable="vm.processing"></stripe-form>
+            <input id="inviInput" type="tel" style="border: 0px; color: transparent; width: 0px; height: 0px; background: transparent;">
+        </div>
+    </form>
+</div>

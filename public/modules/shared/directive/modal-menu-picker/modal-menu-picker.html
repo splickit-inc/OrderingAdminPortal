@@ -1,0 +1,93 @@
+<div id="{{handler}}" class="modal-picker modal fade {{handler}}">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Select Menu</h4>
+            </div>
+            <div class="modal-body">
+                <p class="text-warning">{{body}}</p>
+                <div class="row">
+                    <div class="col-md-6 m-b-15">
+                        <label class="control-label">Menu Search</label>
+                        <input type="text" class="m-b-10 input-large form-control" ng-enter="search()"
+                               ng-model="search_text" ng-fade placeholder="Filter">
+                        <div class="button-select" ng-show="search_processing">
+                            <div class="filter-loader-contain">
+                                <div class="filter-loader"></div>
+                            </div>
+                        </div>
+
+                        <div ng-show="!search_processing && selectable.length > 0">
+                            <div class="m-t-10">
+                                <label>Select Type</label>
+                                <select class="form-control input-med text-capitalize"
+                                        ng-model="current_menu_type"
+                                        ng-click="$event.stopPropagation();"
+                                        ng-options="option as option for option in select_options">
+                                </select>
+                            </div>
+                            <div class="m-t-20">
+                                <label>Select Menu</label>
+                            </div>
+                            <div class="table-fixed-with-scroll" class="m-t-10">
+                                <table class="table table-hover">
+                                    <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th class="fix-table-wrap">Menu ID</th>
+                                        <th class="fix-table-wrap">Name</th>
+                                        <th class="fix-table-wrap">Description</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody style="margin-top: -1px">
+                                    <tr ng-repeat="item in selectable" ng-click="add(item, current_menu_type)">
+                                        <td class="vertical-align-middle">
+                                            <i class="fa fa-plus-circle" aria-hidden="true"></i>
+                                        </td>
+                                        <td class="vertical-align-middle">{{item.menu_id}}</td>
+                                        <td class="vertical-align-middle">{{item.name}}</td>
+                                        <td class="vertical-align-middle">{{item.description}}</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="control-label">Selected Menu:</label>
+                        <div class="m-t-10" ng-show="selected_values.length > 0">
+                            <div class="table-fixed-with-scroll">
+                                <table class="table table-hover">
+                                    <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th class="fix-table-wrap">Menu ID</th>
+                                        <th class="fix-table-wrap">Name</th>
+                                        <th class="fix-table-wrap">Type</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr ng-repeat="item in selected_values" ng-click="remove(item)">
+                                        <td class="vertical-align-middle">
+                                            <i class="fa fa-minus-circle" aria-hidden="true"></i>
+                                        </td>
+                                        <td class="vertical-align-middle">{{item.menu_id}}</td>
+                                        <td class="vertical-align-middle">{{item.name}}</td>
+                                        <td class="vertical-align-middle text-capitalize">{{item['pivot'].merchant_menu_type}}</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <p class="text-left">{{footer}}</p>
+                <button type="button" class="btn btn-default" data-dismiss="modal" data-ng-click="callbackbuttonleft()">Cancel</button>
+                <button type="button" class="btn btn-success" data-ng-click="callbackbuttonright(); $event.stopPropagation()">Submit</button>
+            </div>
+        </div>
+    </div>
+</div>

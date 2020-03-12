@@ -1,0 +1,272 @@
+<div id="overview-component">
+    <div class="row" ng-if="!!vm.summary">
+        <div class="col-md-12">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Summary</h3>
+                </div>
+                <div class="panel-body">
+                    <div class="col-md-6">
+                        <div class="col-md-4">
+                            <div class="panel panel-body dash-table m-t-40">
+                                <div>
+                                    <h5 class="bold text-center ">
+                                        SALES
+                                    </h5>
+                                </div>
+                                <h1 class="text-center">
+                                    ${{vm.summary.order_total}}
+                                </h1>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="panel panel-body dash-table m-t-40">
+                                <div>
+                                    <h5 class="bold text-center">
+                                        ORDERS
+                                    </h5>
+                                </div>
+                                <h1 class="text-center">
+                                    {{vm.summary.order_count}}
+                                </h1>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="panel panel-body dash-table m-t-40">
+                                <div>
+                                    <h5 class="bold text-center">
+                                        AVERAGE SALE
+                                    </h5>
+                                </div>
+                                <h1 class="text-center">
+                                    ${{vm.summary.order_average}}
+                                </h1>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="col-md-2"></div>
+                        <div class="col-md-3">
+                            <h6 class="bold text-center">CATERING</h6>
+                            <table class="table table-hover">
+                                <tbody>
+                                <tr>
+                                    <td>Sales </td>
+                                    <td>${{vm.summary_secondary.catering.sales}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Count</td>
+                                    <td>{{vm.summary_secondary.catering.order_count}}</td>
+                                </tr>
+                                </tbody>
+                            </table>
+
+                            <h6 class="bold text-center m-t-15">GROUP ORDER</h6>
+                            <table class="table table-hover">
+                                <tbody>
+                                <tr>
+                                    <td>Sales </td>
+                                    <td>${{vm.summary_secondary.group.sales}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Count</td>
+                                    <td>{{vm.summary_secondary.group.order_count}}</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="col-md-2"></div>
+                        <div class="col-md-3">
+                            <h6 class="bold text-center">GUEST SALES</h6>
+                            <table class="table table-hover m-b-10">
+                                <tbody>
+                                <tr>
+                                    <td>Sales </td>
+                                    <td>${{vm.summary_secondary.guest.sales}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Count</td>
+                                    <td>{{vm.summary_secondary.guest.order_count}}</td>
+                                </tr>
+                                </tbody>
+                            </table>
+
+                            <h6 class="bold text-center m-t-15">PROMOS</h6>
+                            <table class="table table-hover m-b-10">
+                                <tbody>
+                                <tr>
+                                    <td>Discounts </td>
+                                    <td>${{vm.summary.promo_total}}</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="col-md-2"></div>
+                    </div>
+
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12" ng-class="vm.fiftyOpacityOffset()">
+            <div class="panel panel-primary">
+                <div class="panel-heading-with-tooltip">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Overview</h3>
+                    </div>
+                    <div class="panel-heading-tooltip-right">
+                        <h4>
+                            <i class="fa fa-question-circle tooltip-help" aria-hidden="true">
+                            <span
+                                class="tool-tip-text-responsive">{{ 'MENU.TOOLTIP.REPORTS.OVERVIEW' | translate }}</span>
+                            </i>
+                        </h4>
+                    </div>
+                </div>
+
+                <div class="panel-body">
+                    <div class="m-b-15 flex-init flex-wrap">
+                        <select name="brand" class="input-large form-control m-r-15 m-t-10"
+                                ng-required="true"
+                                ng-model="vm.current_time_period"
+                                ng-options="time_period.url as time_period.desc for time_period in vm.time_periods" ng-disabled="vm.processing">
+                            <option class="placeholder-color" value="" selected disabled>Time Period
+                            </option>
+                        </select>
+                        <div class="btn-group m-r-15 m-t-10"
+                             ng-show="vm.usersService.hasPermission('brands_filter') && vm.usersService.hasPermission('multi_merchs_filter')">
+                            <button type="button" class="btn  btn-sm"
+                                    ng-class="vm.filterTypeClass('brand',vm.filter_type)"
+                                    ng-click="vm.filter_type = 'brand'" ng-disabled="vm.processing">Brand
+                            </button>
+                            <button type="button" class="btn  btn-sm"
+                                    ng-class="vm.filterTypeClass('merchant',vm.filter_type)"
+                                    ng-click="vm.filter_type = 'merchant'" ng-disabled="vm.processing">Merchant(s)
+                            </button>
+                        </div>
+
+                        <!--ng-show="vm.usersService.hasPermission('brands_filter')"-->
+                        <div class="input-large m-r-15 ">
+                            <select name="brand" class="form-control m-t-10"
+                                    ng-show="vm.filter_type == 'brand' && vm.usersService.hasPermission('brands_filter')"
+                                    ng-model="vm.brand_filter"
+                                    ng-options="brand.brand_id as brand.brand_name for brand in vm.brands" ng-disabled="vm.processing">
+                                <option class="placeholder-color" value="" selected disabled>Brands
+                                </option>
+                            </select>
+                        </div>
+
+                        <label class="m-t-15 m-r-10"
+                               ng-show="!vm.usersService.hasPermission('brands_filter') && vm.usersService.hasPermission('multi_merchs_filter') && !vm.usersService.hasPermission('op_merch_select')">
+                            <input type="checkbox" ng-model="vm.merchant_subset" ng-change="vm.merchantSubsetChange()">
+                            Select Merchant Subset
+                        </label>
+                        <button type="button" class="btn btn-info btn-sm input-large m-r-15 m-t-10" data-toggle="modal"
+                                ng-show="vm.filter_type == 'merchant' && vm.usersService.hasPermission('multi_merchs_filter')"
+                                ng-click="vm.merchant_open_source = 'graphs'"
+                                data-target="#merchant-select-modal" ng-disabled="vm.processing">
+                            Select Merchants
+                        </button>
+
+                        <button type="button" class="btn btn-success btn-sm input-large m-r-15 m-t-10" data-toggle="modal"
+                                ng-click="vm.runGraphReports()" ng-disabled="vm.processing">
+                            Run Reports
+                        </button>
+                    </div>
+                    <div class="col-md-12" ng-show="!vm.initial_reports_load">
+                        <h5 class="pre-load-text">
+                            Select Criteria and Run Report
+                        </h5>
+                    </div>
+                    <div ng-show="vm.initial_reports_load">
+                        <div class="margin-padding-none col-md-6 col-lg-6 col-xl-5">
+                            <!--Sales and Transactions Line Chart-->
+                            <canvas id="line" class="chart chart-line" chart-data="vm.sales"
+                                    chart-labels="vm.labels_hours"
+                                    chart-options="vm.options"
+                                    chart-series="vm.line_sales_series"
+                                    chart-dataset-override="vm.datasetOverride" chart-click="onClick">
+                            </canvas>
+
+
+                            <div class="col-md-12">
+                                <canvas id="doughnut" class="chart chart-doughnut"
+                                        chart-data="vm.pickup_delivery_counts"
+                                        chart-options="vm.default_report_options"
+                                        chart-labels="vm.pickup_delivery_labels">
+                                </canvas>
+                                <h4 class="bottom-center-chart-label">Pickup vs Delivery</h4>
+                            </div>
+                        </div>
+                        <div class="margin-padding-none col-md-6 col-lg-6 col-xl-5">
+                            <canvas id="bar" class="chart chart-bar" chart-data="vm.day_of_week_sales"
+                                    chart-labels="vm.day_of_week_labels"
+                                    chart-series="vm.day_of_week_sales.series">
+                            </canvas>
+
+                            <div class="col-md-12">
+                                <canvas id="doughnut2" class="chart chart-doughnut"
+                                        chart-options="vm.default_report_options"
+                                        chart-data="vm.device_counts" chart-labels="vm.device_labels">
+                                </canvas>
+                                <h4 class="bottom-center-chart-label">Sales by Device</h4>
+                            </div>
+                        </div>
+
+                        <div style="margin-top: 20px" class="margin-padding-none col-md-12 col-lg-12 col-xl-2">
+                            <div class="panel panel-primary">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">Top Items</h3>
+                                </div>
+                                <div class="panel-body margin-padding-none">
+                                    <table class="table table-hover">
+                                        <thead>
+                                        </thead>
+                                        <tbody>
+                                        <tr ng-repeat="item_leader in vm.item_leaders">
+                                            <td>
+                                                {{item_leader.item_name}}
+                                            </td>
+                                            <td>
+                                                ${{item_leader.item_sales | number}}
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="panel panel-primary">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">Top Customers</h3>
+                                </div>
+                                <div class="panel-body margin-padding-none">
+                                    <table class="table table-hover">
+                                        <thead>
+                                        </thead>
+                                        <tbody>
+                                        <tr ng-repeat="user_leader in vm.user_leaders">
+                                            <td>
+                                                {{user_leader.full_name}}
+
+                                            </td>
+                                            <td>
+                                                ${{user_leader.user_sales | number}}
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

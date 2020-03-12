@@ -1,0 +1,717 @@
+<div class="row">
+    <div class="col-sm-12">
+        <div class="page-header-title customer-service-bg">
+            <h4 class="page-title">Customer Service - User</h4>
+            <ol class="breadcrumb">
+                <li><a href="#/customer_service/users">Customer Service - Users</a></li>
+                <li><a href="javascript:void(0);">User {{cs_user.current_user.first_name}}
+                    {{cs_user.current_user.last_name}}</a></li>
+            </ol>
+        </div>
+    </div>
+</div>
+
+<div id="user-panel" class="row customer-service-user">
+    <div class="col-md-7 col-lg-5">
+        <div class="panel panel-primary">
+            <div class="panel-heading  flex-justify-content-space-between">
+                <h3 class="panel-title">User #{{cs_user.current_user.user_id}}</h3>
+                <button type="button" data-toggle="modal" data-target="#edit-user-modal"
+                        ng-click="cs_user.openEditUser()"
+                        class="btn-primary btn-danger btn">Edit
+                </button>
+            </div>
+            <div class="panel-body">
+                <div class="row-container">
+                    <div>
+                        <label>Email</label>
+                        <div class="text-wrap-word-break">{{cs_user.current_user.email}}</div>
+                    </div>
+                    <a class="align-text-right" href="javascript:void(0);"
+                       ng-click="cs_user.getDeliveryAddresses()">Delivery Addresses</a>
+                </div>
+
+                <div class="row-container">
+                    <div>
+                        <label>First Name</label>
+                        <div>{{cs_user.current_user.first_name}}</div>
+                    </div>
+                    <a class="align-text-right" href="javascript:void(0);"
+                       ng-click="cs_user.getOrderHistory()">Order
+                        History</a>
+                </div>
+
+                <div class="row-container">
+                    <div>
+                        <label>Last Name</label>
+                        <div>{{cs_user.current_user.last_name}}</div>
+                    </div>
+                    <a class="align-text-right" href="javascript:void(0);"
+                       ng-click="cs_user.getRefundHistory()">Refund
+                        Information</a>
+                </div>
+
+                <div class="row-container">
+                    <div>
+                        <label>Last Four</label>
+                        <div>{{cs_user.current_user.last_four}}</div>
+                    </div>
+                    <a class="align-text-right" href="javascript:void(0);"
+                       ng-click="cs_user.getBrandLoyalty()">Brand Loyalty</a>
+                </div>
+
+                <div class="row-container">
+                    <div>
+                        <label>Phone</label>
+                        <div>{{cs_user.formatPhone(cs_user.current_user.contact_no)}}</div>
+                    </div>
+                    <a ng-show='!cs_user.current_user.blacklisted' class="align-text-right" href="javascript:void(0);"
+                       ng-click="cs_user.openBlacklistUser()">Blacklist User</a>
+                    <a ng-show='cs_user.current_user.blacklisted' class="align-text-right" href="javascript:void(0);"
+                       ng-click="cs_user.showBlackListUserReason()">User Blacklisted</a>
+                </div>
+                <a ng-click="cs_user.openDeleteUserPopup()" class="pull-right margin" href="javascript:void(0);">Permanently Delete User</a>
+
+                <div ng-show="cs_user.user_service.hasPermission('set_default_loyalty')" class="row-container clear">
+                    <div ng-show="!cs_user.current_user.primary_loyalty_default">
+                        <div>
+                            <a class="align-text-right" href="javascript:void(0);"
+                               ng-click="cs_user.setPrimaryLoyaltyAccount()">
+                                Set Primary Loyalty Account</a>
+                        </div>
+                    </div>
+                    <div ng-show="cs_user.current_user.primary_loyalty_default">
+                        <div>
+                            <i class="fa fa-check-circle" aria-hidden="true"></i> Primary Loyalty Account
+                        </div>
+                    </div>
+                </div>
+
+                <div class="alert alert-success alert-reg-position fade-effect"
+                     ng-show="cs_user.edit_user.success"
+                     role="alert">
+                    <i class="fa fa-check-circle" aria-hidden="true"></i>The user
+                    {{cs_user.current_user.first_name}}
+                    {{cs_user.current_user.last_name}} has been created!
+                </div>
+            </div><!-- panel-body -->
+        </div> <!-- panel -->
+    </div> <!-- col-->
+</div>
+
+<div class="customer-service-user" ng-show="cs_user.current_bottom_panel == 'delivery_addresses'">
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title">Delivery Address</h3>
+        </div>
+        <div class="panel-body">
+            <div class="filter-loader-contain" ng-show="cs_user.delivery_address.loading">
+                <div class="filter-loader"></div>
+            </div>
+            <table class="table content-table" ng-show="!cs_user.delivery_address.loading">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Address</th>
+                    <th class="fix-table-wrap">Address 2</th>
+                    <th>City</th>
+                    <th>ST</th>
+                    <th>Zip</th>
+                    <th>Phone</th>
+                    <th>Inst</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="address in cs_user.delivery_address.addresses">
+                    <td>{{address.name}}</td>
+                    <td>{{address.address1}}</td>
+                    <td>{{address.address2}}</td>
+                    <td>{{address.city}}</td>
+                    <td>{{address.state}}</td>
+                    <td class="fix-table-wrap">{{address.zip}}</td>
+                    <td class="fix-table-wrap">{{address.phone_no}}</td>
+                    <td class="text-wrap-word-break">{{address.instructions}}</td>
+                </tr>
+                </tbody>
+            </table>
+            <div id="disable-hover-card" class="content-responsive">
+                <div ng-repeat="address in cs_user.delivery_address.addresses">
+                    <div class="panel panel-body row-table">
+                        <div class="name" ng-show="!!address.address1">
+                            <h5 class="dark-grey"><b>{{address.address1}}</b></h5>
+                        </div>
+                        <div class="id" ng-show="!!address.zip">
+                            <h5 class="dark-grey id-title">Zip Code:
+                                <span class="id-number">{{address.zip}}</span>
+                            </h5>
+                        </div>
+                        <div class="description clear">
+                            <div class="merchant-address" ng-show="!!address.address2">
+                                Address 2: {{address.address2}}
+                            </div>
+                            <div>
+                                City: {{address.city}}
+                                State: {{address.state}}
+                            </div>
+                            <div ng-show="!!address.name">Name: {{address.name}}</div>
+                            <div ng-show="!!address.phone_no">Phone: {{address.phone_no}}</div>
+                            <div ng-show="!!address.instructions">{{address.instructions}}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="customer-service-user-order-history"
+     ng-show="cs_user.current_bottom_panel == 'order_history'">
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title">Order History</h3>
+        </div>
+        <div class="panel-body">
+            <div class="filter-loader-contain" ng-show="cs_user.order_history.loading">
+                <div class="filter-loader"></div>
+            </div>
+            <table class="table table-hover content-table" ng-show="!cs_user.order_history.loading">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Order Date</th>
+                    <th>Amount</th>
+                    <th>Item Qty</th>
+                    <th>Grand Total</th>
+                    <th>Promo</th>
+                    <th>Promo Amt</th>
+                    <th>Status</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="order in cs_user.order_history.orders"
+                    ng-click="cs_user.viewOrder(order)">
+                    <td>{{order.order_id}}</td>
+                    <td>{{order.order_dt_tm}}</td>
+                    <td>{{order.order_amt}}</td>
+                    <td>{{order.order_qty}}</td>
+                    <td>{{order.grand_total}}</td>
+                    <td>{{order.promo_code}}</td>
+                    <td>{{order.promo_amt}}</td>
+                    <td>{{order.status}}</td>
+                </tr>
+                </tbody>
+            </table>
+            <div class="content-responsive">
+                <div ng-repeat="order in cs_user.order_history.orders"
+                     ng-click="cs_user.viewOrder(order)">
+                    <div class="panel panel-body row-table">
+                        <div class="name">
+                            <h5 class="dark-grey"><b>Order ID: {{order.order_id}}</b></h5>
+                        </div>
+                        <div class="id">
+                            <h5 class="dark-grey id-title">
+                                <span class="id-number">{{order.order_dt_tm}}</span>
+                            </h5>
+                        </div>
+                        <div class="description clear">
+                            <div ng-show="!!order.order_qty">Item Qty: {{order.order_qty}} - Status:
+                                {{order.status}}
+                            </div>
+                            <div>Amount: {{order.order_amt}} - Grand Total: {{order.grand_total}}
+                            </div>
+                            <div class="text-wrap-word-break" ng-show="!!order.promo_code">Promo
+                                Code: {{order.promo_code}}
+                            </div>
+                            <div ng-show="!!order.promo_amt">Promo Amount: {{order.promo_amt}}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="customer-service-user-refund-history"
+     ng-show="cs_user.current_bottom_panel == 'refund_history'">
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title">Refund History</h3>
+        </div>
+        <div class="panel-body">
+            <div class="filter-loader-contain" ng-show="cs_user.refund_history.loading">
+                <div class="filter-loader"></div>
+            </div>
+            <table class="table content-table" ng-show="!cs_user.refund_history.loading">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Date</th>
+                    <th>Balance Before</th>
+                    <th>Change Amt</th>
+                    <th>Balance After</th>
+                    <th>Process</th>
+                    <th>Notes</th>
+                    <th class="fix-table-wrap">Order ID</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="refund in cs_user.refund_history.refunds">
+                    <td>{{refund.id}}</td>
+                    <td>{{refund.created}}</td>
+                    <td>{{refund.balance_before}}</td>
+                    <td>{{refund.charge_amt}}</td>
+                    <td>{{refund.balance_after}}</td>
+                    <td>{{refund.process}}</td>
+                    <td>{{refund.notes}}</td>
+                    <td>{{refund.order_id}}</td>
+                </tr>
+                </tbody>
+            </table>
+            <div class="content-responsive">
+                <div ng-repeat="refund in cs_user.refund_history.refunds">
+                    <div class="panel panel-body row-table">
+                        <div class="name">
+                            <h5 class="dark-grey"><b>Refund ID: {{refund.id}}</b></h5>
+                        </div>
+                        <div class="id">
+                            <h5 class="dark-grey id-title">
+                                <span class="id-number">{{refund.created}}</span>
+                            </h5>
+                        </div>
+                        <div class="description clear">
+                            <div>Order ID: {{refund.order_id}}</div>
+                            <div>Charge Amount: {{refund.charge_amt}}</div>
+                            <div>
+                                Balance, Before: {{refund.balance_before}} After:
+                                {{refund.balance_after}}
+                            </div>
+                            <div>Progress: {{refund.process}}</div>
+                            <div ng-show="!!refund.notes">Notes: {{refund.notes}}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="customer-service-user-brand-loyalty_history"
+     ng-show="cs_user.current_bottom_panel == 'brand_loyalty_history'">
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title">Brand Loyalty History</h3>
+        </div>
+        <div class="panel-body">
+            <div class="filter-loader-contain" ng-show="cs_user.brand_loyalty_history.loading">
+                <div class="filter-loader"></div>
+            </div>
+            <table class="table content-table" ng-show="!cs_user.brand_loyalty_history.loading">
+                <thead>
+                <tr>
+                    <th>Brand</th>
+                    <th class="fix-table-wrap">Order ID</th>
+                    <th>Process</th>
+                    <th>Points Added</th>
+                    <th>Points Redeemed</th>
+                    <th>Date</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="brand_loyalty in cs_user.brand_loyalty_history.histories">
+                    <td>{{brand_loyalty.brand.brand_name}}</td>
+                    <td>{{brand_loyalty.order_id}}</td>
+                    <td>{{brand_loyalty.process}}</td>
+                    <td>{{brand_loyalty.points_added}}</td>
+                    <td>{{brand_loyalty.points_redeemed}}</td>
+                    <td class="fix-table-wrap">{{brand_loyalty.action_date}}</td>
+                </tr>
+                </tbody>
+            </table>
+            <div id="disable-hover-card" class="content-responsive">
+                <div ng-repeat="brand_loyalty in cs_user.brand_loyalty_history.histories">
+                    <div class="panel panel-body row-table">
+                        <div class="name">
+                            <h5 class="dark-grey"><b>{{brand_loyalty.brand.brand_name}}</b></h5>
+                        </div>
+                        <div class="id">
+                            <h5 class="dark-grey id-title">Order ID <span
+                                    class="id-number">{{brand_loyalty.order_id}}</span></h5>
+                        </div>
+                        <div class="description clear">
+                            <div>{{brand_loyalty.action_date}}</div>
+                            <div>Points Added: {{brand_loyalty.points_added}}</div>
+                            <div>Points Redeemed: {{brand_loyalty.points_redeemed}}</div>
+                            <div>Process: {{brand_loyalty.process}}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="customer-service-user-loyalty" ng-show="cs_user.current_bottom_panel == 'brand_loyalty'">
+    <div class="panel panel-primary">
+        <div class="panel-heading flex-init flex-justify-content-space-between">
+            <h3 class="panel-title">Brand Loyalty</h3>
+            <button type="button" data-toggle="modal" data-target="#adjust-loyalty-modal" ng-click="cs_user.adjustLoyalty()" class="btn-primary btn-danger btn"
+                    ng-disabled="cs_user.brand_loyalty.loading || cs_user.brand_loyalty.details.length == 0">
+                Adjust Loyalty
+            </button>
+        </div>
+        <div class="panel-body">
+            <div class="filter-loader-contain" ng-show="cs_user.brand_loyalty.loading">
+                <div class="filter-loader"></div>
+            </div>
+            <table class="table table-hover content-table" ng-show="!cs_user.brand_loyalty.loading">
+                <thead>
+                <tr>
+                    <th>Brand</th>
+                    <th>Loyalty Number</th>
+                    <th>Points</th>
+                    <th>Created</th>
+                    <th>Modified</th>
+                </tr>
+                </thead>
+                <tbody ng-repeat="detail in cs_user.brand_loyalty.details">
+                <tr ng-click="cs_user.getLoyaltyDetails(detail)">
+                    <td>
+                        <i ng-show="!detail.details.show" class="fa fa-plus-square inline m-r-5" aria-hidden="true"></i>
+                        <i ng-show="detail.details.show" class="fa fa-minus-square inline m-r-5" aria-hidden="true"></i>
+                        {{detail.brand.brand_name}}
+                    </td>
+                    <td>{{detail.loyalty_number}}</td>
+                    <td>{{detail.points}}</td>
+                    <td>{{detail.created}}</td>
+                    <td>{{detail.modified}}</td>
+                </tr>
+                <tr class="row-hover-fix" ng-show="detail.details.loading">
+                    <td colspan="6">
+                        <div class="filter-loader-contain">
+                            <div class="filter-loader"></div>
+                        </div>
+                    </td>
+                </tr>
+                <tr class="row-hover-fix" ng-if="!detail.details.loading && !!detail.details.data && detail.details.data.length == 0 && detail.details.show">
+                    <td colspan="6">
+                        No records
+                    </td>
+                </tr>
+                <tr class="row-hover-fix" ng-if="!detail.details.loading && !!detail.details.data && detail.details.data.length > 0 && detail.details.show">
+                    <th class="fix-table-wrap">Order ID</th>
+                    <th>Process</th>
+                    <th>Points Added</th>
+                    <th>Points Redeemed</th>
+                    <th>Date</th>
+                </tr>
+                <tr class="row-hover-fix" ng-repeat="item in detail.details.data"
+                    ng-if="!detail.details.loading && !!detail.details.data && detail.details.data.length > 0 && detail.details.show">
+                    <td>{{item.order_id}}</td>
+                    <td>{{item.process}}{{!!item.notes && item.notes !== ''? ' - '+item.notes :''}}</td>
+                    <td>{{item.points_added}}</td>
+                    <td>{{item.points_redeemed}}</td>
+                    <td class="fix-table-wrap">{{item.action_date}}</td>
+                </tr>
+                </tbody>
+            </table>
+            <div class="content-responsive">
+                <div ng-repeat="detail in cs_user.brand_loyalty.details">
+                    <div class="panel panel-body row-table" ng-click="cs_user.getLoyaltyDetails(detail)">
+                        <div class="name">
+                            <h5 class="dark-grey"><b>{{detail.brand.brand_name}}</b></h5>
+                        </div>
+                        <div class="description clear">
+                            <div>Loyalty Number: {{detail.loyalty_number}}</div>
+                            <div>Points: {{detail.points}}</div>
+                            <div>Created: {{detail.created}}</div>
+                            <div>Modified: {{detail.modified}}</div>
+                        </div>
+                    </div>
+                    <div ng-if="detail.details.loading">
+                        <div class="filter-loader-contain">
+                            <div class="filter-loader"></div>
+                        </div>
+                    </div>
+                    <div class="text-center panel-body"
+                         ng-show="!detail.details.loading && !!detail.details.data && detail.details.data.length == 0 && detail.details.show">
+                        No records
+                    </div>
+                    <div ng-if="!detail.details.loading && !!detail.details.data && detail.details.data.length > 0 && detail.details.show">
+                        <div class="line-box-container">
+                            <div class="line-border">
+                        <span class="text">
+                            Details
+                        </span>
+                            </div>
+                        </div>
+                        <div ng-repeat="item in detail.details.data">
+                            <hr ng-if="$index !== 0">
+                            <div class="panel panel-body">
+                                <div class="id">
+                                    <h5 class="dark-grey id-title">Order ID
+                                        <span class="id-number">{{item.order_id}}</span>
+                                    </h5>
+                                </div>
+                                <div class="description clear">
+                                    <div>
+                                        Process: {{item.process}}
+                                    </div>
+                                    <div>
+                                        Points Added: {{item.points_added}}
+                                    </div>
+                                    <div>
+                                        Points Redeemed: {{item.points_redeemed}}
+                                    </div>
+                                    <div ng-if="!!item.notes && item.notes !== ''">
+                                        Notes: {{item.notes}}
+                                    </div>
+                                    <div class="pull-right">
+                                        {{item.action_date}}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="line-box-container">
+                            <div class="line-border">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="edit-user-modal" class="modal fade" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">User Detail {{cs_user.edit_user.user_id}}</h4>
+            </div>
+            <div class="modal-body">
+                <form name="cs_user.edit_user_form" class="form-horizontal" novalidate
+                      ng-submit="cs_user.updateUser()">
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">First Name</label>
+                        <div class="col-md-8 m-t-5">
+                            <input type="text" class="input-large form-control" name="first_name"
+                                   ng-model="cs_user.edit_user.first_name" ng-fade>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Last Name</label>
+                        <div class="col-md-8 m-t-5">
+                            <input type="text" class="input-large form-control" name="last_name"
+                                   ng-model="cs_user.edit_user.last_name" ng-fade>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Email</label>
+                        <div class="col-md-8 m-t-5">
+                            <input type="email" class="input-large form-control" name="email"
+                                   ng-model="cs_user.edit_user.email" ng-fade ng-required="true">
+                            <div class="input-large alert alert-danger ng-hide alert-reg-position"
+                                 ng-show="cs_user.edit_user_form.email.$error.required
+                                 && cs_user.edit_user.submit"
+                                 role="alert">
+                                Email is required.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Phone</label>
+                        <div class="col-md-8 m-t-5">
+                            <input type="text" class="input-large form-control" name="contact_no"
+                                   ng-model="cs_user.edit_user.contact_no" ng-fade
+                                   ng-required="true">
+                            <div class="input-large alert alert-danger ng-hide alert-reg-position"
+                                 ng-show="cs_user.edit_user_form.contact_no.$error.required
+                                 && cs_user.edit_user.submit"
+                                 role="alert">
+                                Email is required.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <div ng-show="cs_user.edit_user.processing" class="form-loader">
+                            <div class="line"></div>
+                            <div class="line"></div>
+                            <div class="line"></div>
+                            <div class="line"></div>
+                        </div>
+
+                        <button type="button" ng-disabled class="btn btn-default"
+                                data-dismiss="modal">Cancel
+                        </button>
+                        <button class="btn btn-success">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div id="adjust-loyalty-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">Adjust Loyalty for {{cs_user.current_user.first_name+' '+cs_user.current_user.last_name}}</h4>
+            </div>
+            <div class="modal-body">
+                <form name="cs_user.adjust_loyalty_form" novalidate ng-submit="cs_user.adjustLoyaltySubmit()">
+                    <div class="form-group" ng-show="cs_user.user_service.hasPermission('brands_filter')">
+                        <label class="control-label">Brand Name</label>
+                        <select name="brand_name"
+                                class="form-control"
+                                ng-model="cs_user.loyalty.brand_id" required
+                                ng-options="item.brand_id as item.brand_name for item in cs_user.user_loyalty_programs">
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Adjust Points +/-</label>
+                        <input type="number" class="form-control"
+                               name="points"
+                               ng-model="cs_user.loyalty.points" ng-pattern="/^[+-]?(?!(0))[0-9]{1,}$/" required>
+                        <div class="alert alert-danger alert-reg-position"
+                             ng-if="(cs_user.adjust_loyalty_form.points.$touched || cs_user.adjust_loyalty_form.$submitted) && cs_user.adjust_loyalty_form.points.$error.required"
+                             role="alert">
+                            The points number is required.
+                        </div>
+                        <div class="alert alert-danger alert-reg-position"
+                             ng-if="(cs_user.adjust_loyalty_form.points.$touched || cs_user.adjust_loyalty_form.$submitted) && cs_user.adjust_loyalty_form.points.$error.pattern"
+                             role="alert">
+                            Please enter a valid number.
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label">Notes</label>
+                        <textarea type="text" class="form-control" style="resize: none;"
+                                  name="notes"
+                                  ng-model="cs_user.loyalty.notes" required></textarea>
+                        <div class="alert alert-danger alert-reg-position"
+                             ng-if="(cs_user.adjust_loyalty_form.notes.$touched || cs_user.adjust_loyalty_form.$submitted) && cs_user.adjust_loyalty_form.notes.$error.required"
+                             role="alert">
+                            The notes field  is required.
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="alert alert-danger alert-reg-position"
+                             ng-if="cs_user.loyalty.error"
+                             role="alert">
+                            There was an error please contact support.
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" ng-disabled class="btn btn-default"
+                                data-dismiss="modal" ng-click="cs_user.reset()">Cancel
+                        </button>
+                        <input type="submit" id="submit" value="Submit" class="btn btn-success" />
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div id="blacklist-user-modal" class="modal fade" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">Blacklist User {{cs_user.current_user.first_name}}  {{cs_user.current_user.last_name}} </h4>
+            </div>
+            <div class="modal-body">
+                <form name="cs_user.blacklist_user_form" class="form-horizontal" novalidate
+                      ng-submit="cs_user.blacklistUser()">
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Note</label>
+                        <div class="col-md-8 m-t-5">
+                            <input type="text" class="input-large form-control" name="black_list_note" placeholder="Enter Blacklist Reason"
+                                   ng-model="cs_user.blacklist_reason" maxlength="50" ng-required="true" ng-fade>
+
+                            <div class="alert alert-danger alert-reg-position"
+                                 ng-if="(cs_user.blacklist_user_form.black_list_note.$touched || cs_user.blacklist_user_form.$submitted) && cs_user.blacklist_user_form.black_list_note.$error.required"
+                                 role="alert">
+                                A note is required to blacklist a user.
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="alert alert-danger alert-reg-position"
+                         role="alert">
+                        This will permanently affect this user's account, and all associated with this phone number. This action cannot be reversed.
+                    </div>
+
+
+                    <div class="modal-footer">
+                        <div ng-show="cs_user.edit_user.processing" class="form-loader">
+                            <div class="line"></div>
+                            <div class="line"></div>
+                            <div class="line"></div>
+                            <div class="line"></div>
+                        </div>
+
+                        <button type="button" ng-disabled class="btn btn-default"
+                                data-dismiss="modal">Cancel
+                        </button>
+                        <button class="btn btn-success">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="delete-user-modal" class="modal fade" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                    aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">Delete User {{cs_user.current_user.first_name}}  {{cs_user.current_user.last_name}} </h4>
+            </div>
+            <div class="modal-body">
+
+
+                    <div class="alert alert-danger alert-reg-position"
+                         role="alert">
+                        This will permanently delete this user's account, and all associated personally identifiable information. This action cannot be reversed.
+                    </div>
+
+
+                    <div class="modal-footer">
+                        <div ng-show="cs_user.edit_user.processing" class="form-loader">
+                            <div class="line"></div>
+                            <div class="line"></div>
+                            <div class="line"></div>
+                            <div class="line"></div>
+                        </div>
+
+                        <button type="button" ng-disabled class="btn btn-default"
+                                data-dismiss="modal">Cancel
+                        </button>
+                        <button class="btn btn-success" ng-click="cs_user.deleteUser()">Submit</button>
+                    </div>
+
+            </div>
+        </div>
+    </div>
+</div>

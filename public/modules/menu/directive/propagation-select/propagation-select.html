@@ -1,0 +1,204 @@
+<div id="merchant-select-modal" class="modal fade promo-merchant-select-modal" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" ng-show="propationOptions == 1">These changes belong to</h4>
+                <h4 class="modal-title" ng-show="propationOptions != 1">Merchant Select</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12 m-b-20" ng-show="propationOptions == 1">
+                        <div class="form-group">
+                            <label class="col-md-3 col-lg-3 control-label">Apply To</label>
+                            <div class="col-md-9 col-lg-9">
+                                <select name="propagate_option_select" class="form-control input-large margin-top-five" ng-required="true"
+                                        ng-model="merchant_search_service.propagate_type" ng-fade
+                                        ng-options="option.code as option.desc for option in propagate_options"
+                                        ng-change="error = false; propertyName = null; reverse = false;"
+                                >
+                                    <option class="placeholder-color" value="" selected disabled>Brand</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12" ng-show="merchant_search_service.propagate_type == 'subset'">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <input type="text" class="input-med form-control" name="merchants_filter" ng-enter="error = false; merchant_search_service.merchantSearch();"
+                                       ng-model="merchant_search_service.search_text" ng-fade placeholder="Filter">
+
+                                <div class="col-md-12 button-select" ng-show="merchant_search_service.processing">
+                                    <div class="filter-loader-contain">
+                                        <div class="filter-loader"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div ng-show="!merchant_search_service.processing" class="col-md-6 m-t-15" ng-class="selectMerchantOpacityFifty()">
+                            <div class="form-group">
+                                <label class="col-md-12 control-label">Merchant Results</label>
+                                <div class="col-md-12" ng-class="selectMerchantOpacityFifty()">
+                                    <div class="m-t-20" ng-show="merchant_search_service.selectable_merchants.length > 0">
+                                        <table class="table table-hover" style="margin-bottom: -1px">
+                                            <thead>
+                                            <tr>
+                                                <th style="width: 85px" ng-click="sortBy('merchant_id')">
+                                                    ID <span class="sort-order" ng-show="propertyName === 'merchant_id'" ng-class="{reverse: reverse}"></span>
+                                                </th>
+                                                <th ng-click="sortBy('name')">
+                                                    Name
+                                                    <span class="sort-order" ng-show="propertyName === 'name'" ng-class="{reverse: reverse}"></span>
+                                                </th>
+                                                <th ng-click="sortBy('address1')">
+                                                    Address
+                                                    <span class="sort-order" ng-show="propertyName === 'address1'" ng-class="{reverse: reverse}"></span>
+                                                </th>
+                                            </tr>
+                                            </thead>
+                                        </table>
+                                        <div class="table-fixed-with-scroll">
+                                            <table class="table table-hover">
+                                                <tbody>
+                                                <tr ng-repeat="merchant in merchant_search_service.selectable_merchants | orderBy:propertyName:reverse" ng-click="merchant_search_service.addMerchant(merchant)">
+                                                    <td>
+                                                        <i class="fa fa-plus-circle" aria-hidden="true"></i>
+                                                    </td>
+                                                    <td>{{merchant.merchant_id}}</td>
+                                                    <td>{{merchant.name}}</td>
+                                                    <td>
+                                                        {{merchant.address1}}<BR>
+                                                        {{merchant.city}}, {{merchant.state}} {{merchant.zip}}
+                                                    </td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 m-t-15" ng-class="selectMerchantOpacityFifty()" ng-show="!merchant_search_service.processing">
+                            <div class="form-group col-md-12">
+                                <label class="col-md- control-label">Selected Merchants:</label>
+
+                                <div class="m-t-20" ng-show="merchant_search_service.selected_merchants.length > 0">
+                                    <table class="table table-hover" style="margin-bottom: -1px">
+                                        <thead>
+                                        <tr>
+                                            <th style="width: 85px" ng-click="sortBy('merchant_id')">
+                                                ID <span class="sort-order" ng-show="propertyName === 'merchant_id'" ng-class="{reverse: reverse}"></span>
+                                            </th>
+                                            <th ng-click="sortBy('name')">
+                                                Name
+                                                <span class="sort-order" ng-show="propertyName === 'name'" ng-class="{reverse: reverse}"></span>
+                                            </th>
+                                            <th ng-click="sortBy('address1')">
+                                                Address
+                                                <span class="sort-order" ng-show="propertyName === 'address1'" ng-class="{reverse: reverse}"></span>
+                                            </th>
+                                        </tr>
+                                        </thead>
+                                    </table>
+                                    <div class="table-fixed-with-scroll">
+                                        <table class="table table-hover">
+                                            <tbody>
+                                            <tr ng-repeat="merchant in merchant_search_service.selected_merchants | orderBy:propertyName:reverse" ng-click="merchant_search_service.removeMerchant(merchant)">
+                                                <td>
+                                                    <i class="fa fa-minus-circle" aria-hidden="true"></i>
+                                                </td>
+                                                <td>{{merchant.merchant_id}}</td>
+                                                <td>{{merchant.name}}</td>
+                                                <td>
+                                                    {{merchant.address1}}<BR>
+                                                    {{merchant.city}}, {{merchant.state}} {{merchant.zip}}
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12" ng-show="merchant_search_service.propagate_type == 'group'">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <input type="text" class="input-med form-control" name="merchants_filter" ng-enter="error = false; group_select_service.merchantGroupSearch();"
+                                       ng-model="group_select_service.search_text" ng-fade placeholder="Filter">
+
+                                <div class="col-md-12 button-select" ng-show="group_select_service.processing">
+                                    <div class="filter-loader-contain">
+                                        <div class="filter-loader"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div ng-show="!group_select_service.processing" class="col-md-6 m-t-15">
+                            <div class="form-group">
+                                <label class="col-md-12 control-label">Merchant Group Results</label>
+                                <div class="col-md-12">
+                                    <div class="m-t-20" ng-show="group_select_service.selectable_merchant_groups.length > 0">
+                                        <table class="table table-hover" style="margin-bottom: -1px">
+                                            <thead>
+                                            <tr>
+                                                <th style="width: 85px" ng-click="sortBy('id')">
+                                                    ID <span class="sort-order" ng-show="propertyName === 'id'" ng-class="{reverse: reverse}"></span>
+                                                </th>
+                                                <th ng-click="sortBy('name')">
+                                                    Name
+                                                    <span class="sort-order" ng-show="propertyName === 'name'" ng-class="{reverse: reverse}"></span>
+                                                </th>
+                                            </tr>
+                                            </thead>
+                                        </table>
+                                        <div class="table-fixed-with-scroll">
+                                            <table class="table table-hover">
+                                                <tbody>
+                                                <tr ng-repeat="group in group_select_service.selectable_merchant_groups | orderBy:propertyName:reverse" ng-click="group_select_service.selected_merchant_group = group">
+                                                    <td>
+                                                        <i class="fa fa-plus-circle" aria-hidden="true"></i>
+                                                    </td>
+                                                    <td>{{group.id}}</td>
+                                                    <td>{{group.name}}</td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 m-t-15" ng-show="!group_select_service.processing">
+                            <div class="form-group col-md-12">
+                                <label class="col-md-12 control-label">Selected Group</label>
+                            </div>
+                            <div class="col-md-6">
+                                <h2 ng-show="group_select_service.selected_merchant_group.name.length > 0">{{group_select_service.selected_merchant_group.id}} - {{group_select_service.selected_merchant_group.name}}</h2>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="alert-danger"
+                     ng-if="error"
+                     role="alert">
+                    Please Select a Merchant or Merchant Group to continue.
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" ng-disabled class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button id="submit-propagate-options" class="btn btn-success" ng-disabled data-dismiss="modal" ng-click="closeMerchantSelectValidator($event)">Submit</button>
+            </div>
+        </div>
+    </div>
+</div>

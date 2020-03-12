@@ -1,0 +1,57 @@
+<div id="menu-select-bogo-sections" class="modal fade" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Select Sections</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="col-md-4 col-lg-4 control-label">Unselected Sections</label>
+                                <div class="col-md-8 col-lg-8 m-t-10">
+                                    <div class="col-md-12 button-select">
+                                        <table class="table table-hover m-t-10">
+                                            <tr ng-repeat="section in menu.unselected_menu_types" ng-click="addBogoSection(section, $index)">
+                                                <td><i class="fa fa-plus-circle" aria-hidden="true"></i></td>
+                                                <td>{{section.menu_type_id}}</td>
+                                                <td>{{section.menu_type_name}}</td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group col-md-12">
+                                <label class="col-md-4 control-label">Selected Sections:</label>
+                                <div class="col-md-8 m-t-10">
+                                    <div class="inline">
+                                        <table class="table table-hover m-t-10">
+                                            <tr ng-repeat="section in menu.selected_menu_types" ng-click="removeBogoSection(section, $index)">
+                                                <td><i class="fa fa-minus-circle" aria-hidden="true"></i></td>
+                                                <td>{{section.menu_type_id}}</td>
+                                                <td>{{section.menu_type_name}}</td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" ng-disabled class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button class="btn btn-info" ng-click="closeMenuObjectSelect()">Submit</button>
+            </div>
+        </div>
+    </div>
+</div>

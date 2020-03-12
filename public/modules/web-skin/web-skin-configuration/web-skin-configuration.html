@@ -1,0 +1,491 @@
+<div class="row">
+    <div class="col-sm-12">
+        <div class="page-header-title creative-bg">
+            <h4 class="page-title">Creative</h4>
+            <div>
+                <div class="breadcrumb-container">
+                    <ol class="breadcrumb breadcrumb-margin">
+                        <li><a href="#/web_skin/create">Creative</a></li>
+                        <li><a href="#/web_skin/configuration">{{skin_config.configs.name}} Config</a>
+                        </li>
+                    </ol>
+                </div>
+                <div class="buttons-container">
+                    <button type="button" ng-show="!skin_config.processing_create_skin"
+                            ng-click="skin_config.pushWebskinConfirmation()"
+                            class="btn btn-success">Preview Webskin
+                    </button>
+                    <button type="button" ng-show="skin_config.ready_for_production"
+                            ng-click="skin_config.pushWebskinProductionConfirmation()"
+                            class="btn btn-danger m-l-5 push-webskin">Push Webskin to Production
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-3 style-guide-content">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">Site Style Guide</h3>
+            </div>
+            <div class="panel-body">
+                <div class="row" ng-repeat="(key, config_object) in skin_config.configs">
+                    <div class="col-md-12 list-config"
+                         ng-click="skin_config.modifyConfig(config_object)">
+                        <div class="config-icon"
+                             ng-style="{'background-color': skin_config.iconBg(config_object), 'border-color': skin_config.iconBorder(config_object)}">
+                            <div style="filter: invert(100%) contrast(300%) brightness(150%); mix-blend-mode: luminosity" ng-style="{'color': skin_config.iconBg(config_object)}">
+                                {{config_object.item_number}}
+                            </div>
+                        </div>
+                        <div class="config-label text-muted m-l-10">{{config_object.name}}</div>
+                    </div>
+                </div>
+
+                <button type="button" data-toggle="modal"
+                        data-target="#custom-css-modal"
+                        class="btn btn-danger m-t-10">Custom CSS (Advanced Feature)
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-9 skin-config">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">Site Versions</h3>
+            </div>
+
+            <div class="panel-body">
+                <div class="row position-relative">
+<!--                    <div class="nav-bar-background absolute"
+                         data-ng-attr-style="{{'background: '+'rgba('+
+                         skin_config.hexToRgb(skin_config.configs.menu_nav_bg_color.value).r+','+
+                         skin_config.hexToRgb(skin_config.configs.menu_nav_bg_color.value).g+','+
+                         skin_config.hexToRgb(skin_config.configs.menu_nav_bg_color.value).b
+                         +',0.75) !important' || '' }}"
+                         ng-class="skin_config.configs.menu_nav_bg_color.value == '#ffffff' ? 'display-none' : '' "
+                    ></div>-->
+                    <div class="hero-background"
+                         ng-style="{'background-image': 'url(' + skin_config.configs.hero_image_url.value + ')'}">
+                        <div class="banner-container m-t-10">
+                            <div class="pointer child-column z-ten"
+                                 ng-click="skin_config.modifyConfig(skin_config.configs.primary_logo_url)">
+                                <div class="absolute z-ten">
+                                    <div class="list-config">
+                                        <div class="config-icon">1</div>
+                                    </div>
+                                </div>
+                                <div class="logo-img-contain">
+                                    <img class="config-img"
+                                         ng-src="{{skin_config.configs.primary_logo_url.value}}">
+                                </div>
+                            </div>
+
+                            <div class="pointer child-column z-ten" style="flex: 2;">
+                                <div class="flex-init flex-direction-column flex-justify-content-center child-row">
+<!--                                <div class="flex-init flex-direction-column flex-justify-content-space-between child-row">
+                                                                    <div class="list-config m-t-5"
+                                                                         ng-click="skin_config.modifyConfig(skin_config.configs.menu_nav_bg_color)">
+                                                                        <div class="config-icon">11</div>
+                                                                    </div>-->
+                                    <div class="list-config flex-align-self-center"
+                                         ng-click="skin_config.modifyConfig(skin_config.configs.hero_image_url)">
+                                        <div class="config-icon">2</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="absolute m-t-100 z-twenty pointer" ng-click="skin_config.modifyConfig(skin_config.configs.address_block_text_color)">
+                                <div class="col-md-12"
+                                     data-ng-attr-style="{{ 'color: '+skin_config.configs.address_block_text_color.value+'!important' || '' }}">
+                                    <h4>
+                                        842 Congress Street, <BR>
+                                        Boulder CO, 93230 <BR>
+                                        (555) 555 - 5555
+                                    </h4>
+                                    <div class="list-config">
+                                        <div class="config-icon">11</div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="pointer child-column z-ten">
+                                <div class="flex-init flex-justify-content-end">
+                                    <div class="absolute m-t-30"
+                                         ng-click="skin_config.modifyConfig(skin_config.configs.menu_nav_primary_item_text_color)">
+                                        <div class="list-config">
+                                            <div class="config-icon">10</div>
+                                        </div>
+                                    </div>
+                                    <a class="menu-text" data-ng-attr-style="{{ 'color: '+skin_config.configs.menu_nav_primary_item_text_color.value+'!important' || '' }}">My Order</a>
+                                    <a class="menu-text" data-ng-attr-style="{{ 'color: '+skin_config.configs.menu_nav_primary_item_text_color.value+'!important' || '' }}">Sign up</a>
+                                    <a class="menu-text" data-ng-attr-style="{{ 'color: '+skin_config.configs.menu_nav_primary_item_text_color.value+'!important' || '' }}">Sign in</a>
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row m-t-15"
+                     ng-style="{'background-color': skin_config.configs.primary_bg_color.value}">
+                    <div class="col-md-12 main-bg-webskin-select">
+                        <div class="row m-t-15 pointer"
+                             ng-click="skin_config.modifyConfig(skin_config.configs.primary_bg_color)">
+                            <div class="col-md-2 list-config">
+                                <div class="config-icon">3</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-7 merchant-box">
+                        <div class="col-md-12 skin-location-list"
+                             ng-style="{'border-top-color': skin_config.configs.card_border_color.value}">
+                            <div class="col-md-6 m-t-5 pointer merchant-labels"
+                                 ng-click="skin_config.modifyConfig(skin_config.configs.dark_text_color)">
+                                <div class="absolute z-ten">
+                                    <div class="dark-text-skin">
+                                        <div class="list-config">
+                                            <div class="config-icon">9</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <h4 class="col-md-12"
+                                    data-ng-attr-style="{{ 'color: '+skin_config.configs.dark_text_color.value+'!important' || '' }}">
+                                    1. Boulder North
+                                </h4>
+                                <div class="col-md-12"
+                                     data-ng-attr-style="{{ 'color: '+skin_config.configs.address_block_text_color.value+'!important' || '' }}">
+                                    123 Fake Street, Boulder CO, 93232
+                                </div>
+                            </div>
+                            <div class="col-md-6 m-t-5 merchant-buttons">
+                                <div class="col-md-12 m-t-10 pointer"
+                                     ng-click="skin_config.modifyConfig(skin_config.configs.primary_button_color)">
+                                    <div class="absolute z-ten">
+                                        <div class="primary-button-skin">
+                                            <div class="list-config">
+                                                <div class="config-icon">5</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <button class='inline btn-default btn'
+                                            ng-style="{'background-color': skin_config.configs.primary_button_color.value,
+                                                                                        'color': skin_config.configs.primary_button_text_color.value}">
+                                        Pick Up
+                                    </button>
+                                    <button class='inline m-l-5 btn-default btn'
+                                            ng-style="{'background-color': skin_config.configs.secondary_button_color.value}">
+                                        Delivery
+                                    </button>
+                                </div>
+                                <div class="col-md-12"
+                                     data-ng-attr-style="{{ 'color: '+skin_config.configs.light_text_color.value+'!important' || '' }}">
+                                    <div class="checkbox">
+                                        <label>
+                                            <input type="checkbox">
+                                            Group Order
+                                            <span></span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12 skin-location-list"
+                             ng-style="{'border-top-color': skin_config.configs.card_border_color.value}">
+                            <div class="col-md-6 m-t-5 pointer merchant-labels"
+                                 ng-click="skin_config.modifyConfig(skin_config.configs.medium_text_color)">
+                                <h4 class="col-md-12"
+                                    data-ng-attr-style="{{ 'color: '+skin_config.configs.dark_text_color.value+'!important' || '' }}">
+                                    2. CU Campus
+                                </h4>
+                                <div class="absolute z-ten">
+                                    <div class="medium-text-skin">
+                                        <div class="list-config">
+                                            <div class="config-icon">8</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12"
+                                     data-ng-attr-style="{{ 'color: '+skin_config.configs.medium_text_color.value+'!important' || '' }}">
+                                    (555) 555 - 5555
+                                </div>
+                            </div>
+                            <div class="col-md-6 m-t-5 merchant-buttons">
+                                <div class="col-md-12 m-t-10 pointer"
+                                     ng-click="skin_config.modifyConfig(skin_config.configs.secondary_button_color)">
+                                    <div class="absolute z-ten">
+                                        <div class="secondary-button-skin">
+                                            <div class="list-config">
+                                                <div class="config-icon">6</div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <button class='inline btn-default btn'
+                                            ng-style="{'background-color': skin_config.configs.primary_button_color.value,
+                                                     'color': skin_config.configs.primary_button_text_color.value}">
+                                        Pick Up
+                                    </button>
+
+                                    <button class='inline m-l-5 btn-default btn'
+                                            ng-style="{'background-color': skin_config.configs.secondary_button_color.value}">
+                                        Delivery
+                                    </button>
+                                    <div class="error-large alert alert-danger alert-reg-position"
+                                         role="alert">
+                                        (Delivery only displayed for merchants that turn on, and assign a Menu for, Delivery)
+                                    </div>
+                                </div>
+                                <div class="col-md-12 m-t-5"
+                                     data-ng-attr-style="{{ 'color: '+skin_config.configs.light_text_color.value+'!important' || '' }}">
+                                    <div class="checkbox">
+                                        <label>
+                                            <input type="checkbox">
+                                            Group Order
+                                            <span></span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12 skin-location-list m-t-5"
+                             ng-style="{'border-top-color': skin_config.configs.card_border_color.value}">
+                            <div class="col-md-6 m-t-5 pointer merchant-labels">
+                                <h4 class="col-md-12"
+                                    data-ng-attr-style="{{ 'color: '+skin_config.configs.dark_text_color.value+'!important' || '' }}">
+                                    3. Southwest
+                                </h4>
+
+                            </div>
+                            <div class="col-md-6 m-t-5 merchant-buttons">
+                                <div class="col-md-12 pointer m-t-10">
+                                    <button class='inline btn-default btn' ng-style="{'background-color': skin_config.configs.primary_button_color.value,
+                                                                                        'color': skin_config.configs.primary_button_text_color.value}">
+                                        Pick Up
+                                    </button>
+                                </div>
+                                <div class="col-md-12 pointer"
+                                     ng-click="skin_config.modifyConfig(skin_config.configs.light_text_color)"
+                                     data-ng-attr-style="{{ 'color: '+skin_config.configs.light_text_color.value+'!important' || '' }}">
+                                    <div class="checkbox">
+                                        <label>
+                                            <input type="checkbox">
+                                            <div class="absolute z-ten">
+                                                <div class="light-text-skin">
+                                                    <div class="list-config">
+                                                        <div class="config-icon">7</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            Group Order
+                                            <span></span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-5 map-section">
+                        <img class="skin-boulder-map" src="/img/map_boulder_skin_example.png">
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12 m-t-15 webskin-footer"
+                         ng-style="{'background-color': skin_config.configs.footer_bg_color.value}">
+                        <div class="row m-t-15 pointer"
+                             ng-click="skin_config.modifyConfig(skin_config.configs.footer_bg_color)">
+                            <div class="col-md-2 list-config">
+                                <div class="config-icon">4</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+
+<div id="image-modal" class="modal fade" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 ng-show="hero_upload_stage == 'file_select'" class="modal-title">Select Image File</h4>
+
+                <h4 ng-show="hero_upload_stage == 'crop'" class="modal-title">Crop Hero Image</h4>
+            </div>
+            <div class="modal-body">
+                <table ng-show="hero_upload_stage != 'processing'">
+                    <td ng-show="hero_upload_stage == 'crop'">
+                        <div class="cropArea">
+                            <ui-cropper image="myImage" area-type="rectangle"
+                                        aspect-ratio="4.47"
+                                        result-image="myCroppedImage"
+                                        result-image-quality="1.0"
+                                        result-image-size="{w: 1500, h: 335}"
+                                        cropject="cropper"
+                                        image-size='{{main_image_size}}'
+                                        live-view="blockingObject"></ui-cropper>
+                        </div>
+                    </td>
+                </table>
+
+                <div class="col-md-12" ng-show="image_stage == 'processing'">
+                    <div class="filter-loader-contain">
+                        <div class="filter-loader"></div>
+                    </div>
+                </div>
+
+
+                <form ng-show="hero_upload_stage == 'file_select'" name="image_form" class="skin-config-img">
+                    <div ngf-drop ngf-select ng-model="file" class="drop-box site-image-drop-box"
+                         ngf-max-size="5MB" ngf-drag-over-class="'dragover'" ngf-multiple="true"
+                         ngf-allow-dir="true" accept="image/*" ngf-pattern="'image/*'">
+                        Drop image file here or click to upload
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+
+                <button type="button" ng-disabled class="btn btn-default" data-dismiss="modal">
+                    Close
+                </button>
+
+                <button ng-show="hero_upload_stage == 'crop'" ng-click="uploadFile()" type="button"
+                        ng-disabled class="btn btn-primary">Crop
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div id="logo-image-modal" class="modal fade" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Select Logo Image File</h4>
+            </div>
+            <div class="modal-body">
+
+                <div class="col-md-12" ng-show="logo_upload_stage == 'processing'">
+                    <div class="filter-loader-contain">
+                        <div class="filter-loader"></div>
+                    </div>
+                </div>
+
+
+                <form ng-show="logo_upload_stage == 'file_select'" name="image_form" class="skin-config-img">
+                    <div ngf-drop ngf-select ng-model="logo_file" class="drop-box site-image-drop-box"
+                         ngf-max-size="5MB" ngf-drag-over-class="'dragover'" ngf-multiple="true"
+                         ngf-allow-dir="true" accept="image/*" ngf-pattern="'image/*'">
+                        Drop image file here or click to upload
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+
+                <button type="button" ng-disabled class="btn btn-default" data-dismiss="modal">
+                    Cancel
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div id="color-picker-modal" class="modal fade" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">{{skin_config.color_pick.name}} Color Select</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <color-picker ng-model="skin_config.color_pick.value">
+                    </color-picker>
+                    <div class="picker-value">
+                        <input class="form-control input-large"
+                               ng-keyup="skin_config.color_select_error = false"
+                               ng-model="skin_config.color_pick.value">
+                        <div class="color-picker-box"
+                             ng-style="{'background-color': skin_config.color_pick.value}"></div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="alert alert-danger alert-reg-position"
+                             ng-show="skin_config.color_select_error"
+                             role="alert">
+                            Color must be in valid HEX format.
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" ng-disabled class="btn btn-default" data-dismiss="modal">
+                    Cancel
+                </button>
+                <button class="btn btn-success" ng-click="skin_config.saveColor()">Submit</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="custom-css-modal" class="modal fade" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Custom CSS</h4>
+            </div>
+            <form name="skin_config.custom_css_form" class="form-horizontal" novalidate
+                  ng-submit="skin_config.saveCustomCSS()">
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <textarea class="form-control" ng-model="skin_config.configs.custom_css.value" rows="8"></textarea>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="alert alert-danger alert-reg-position"
+                             role="alert">
+                            Custom CSS is an advanced featured. We do not recommend adding custom CSS unless you have a strong background in CSS styling.
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" ng-disabled class="btn btn-default" data-dismiss="modal">
+                    Cancel
+                </button>
+                <button class="btn btn-success" ng-click="skin_config.saveCustomCSS()">Submit</button>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>

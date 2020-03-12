@@ -1,0 +1,88 @@
+<div id="group-by-modal" class="modal fade" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">Select Group By</h4>
+            </div>
+            <div class="modal-body">
+                <div class="container">
+                    <div class="col-md-6 m-t-15">
+                        <div class="form-group">
+                            <label class="control-label">Group By Options</label>
+                            <div>
+                                <div class="m-t-20">
+                                    <table class="table table-hover" style="margin-bottom: -1px">
+                                        <thead>
+                                        <tr>
+                                            <th style="width: 85px">
+
+                                            </th>
+                                            <th style="width: 85px">
+
+                                            </th>
+                                        </tr>
+                                        </thead>
+                                    </table>
+                                    <div class="table-fixed-with-scroll">
+                                        <table class="table table-hover">
+                                            <tbody>
+                                            <tr ng-repeat="group_by in groupBySelections.unselected_group_bys"
+                                                ng-click="groupBySelections.addGroupBy(group_by, $index)">
+                                                <td>
+                                                    <i class="fa fa-plus-circle" aria-hidden="true"></i>
+                                                </td>
+                                                <td>{{group_by.desc}}</td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 m-t-15" ng-class="selectMerchantOpacityFifty()"
+                         ng-show="!merchant_search_service.processing">
+                        <div class="form-group">
+                            <label class="control-label">Selected Group By:</label>
+
+                            <div class="m-t-20">
+                                <table class="table table-hover" style="margin-bottom: -1px">
+                                    <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th></th>
+                                    </tr>
+                                    </thead>
+                                </table>
+                                <div class="table-fixed-with-scroll">
+                                    <table class="table table-hover">
+                                        <tbody>
+                                        <tr ng-repeat="group_by in groupBySelections.selected_group_bys"
+                                            ng-click="groupBySelections.removeGroupBy(group_by, $index)">
+                                            <td>
+                                                <i class="fa fa-minus-circle" aria-hidden="true"></i>
+                                            </td>
+                                            <td>{{group_by.desc}}</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" ng-disabled class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button class="btn btn-success" ng-disabled data-dismiss="modal" ng-click="closeModal()">
+                    Submit
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

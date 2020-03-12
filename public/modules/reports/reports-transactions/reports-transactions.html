@@ -1,0 +1,101 @@
+<div class="row">
+    <div class="col-sm-12">
+        <div class="page-header-title menu-bg">
+            <h4 class="page-title">Reports</h4>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-primary">
+            <div class="panel-heading with-loader">
+                <h3 class="panel-title">Transactions Report</h3>
+                <div class="loader-container" ng-show="vm.processing">
+                    <div class="filter-loader"></div>
+                </div>
+                <div style="width: 140px"></div>
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <date-range-picker-custom
+                                on-period-changed="vm.onPeriodChanged(startDate, endDate)"></date-range-picker-custom>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-horizontal">
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">Group By</label>
+                                <div class="col-md-9">
+                                    <div class="select input-large">
+                                        <button type="button" class="btn btn-danger pull-right" data-toggle="modal"
+                                                ng-click="vm.openGroupBySelections()">
+                                            Select Group By
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div ng-show="(!vm.transactions || !vm.transactions.length) && !vm.processing"
+                     class="col-md-12 message-container">
+                    <h5 class="pre-load-text">No records were found.</h5>
+                </div>
+                <div class="table-container">
+                    <table ng-show="!!vm.transactions && !!vm.transactions.length"
+                           class="table report-table table-striped">
+                        <thead>
+                        <tr>
+                            <th class="no-padding" ng-repeat="s in vm.orderBy">
+                                <div class="sortable" ng-class="{'align-right': s.align=='right'}"
+                                     ng-click="vm.sortByColumn(s.key)">
+                                    <span class="header-title">{{s.title}}</span>
+                                    <span class="arrow-container">
+                                    <i ng-class="{'arrow-down-dir': s.sort=='-',
+                                    'arrow-up-dir': s.sort=='+',
+                                    'arrow-blank': !s.sort}" aria-hidden="true"></i>
+                                </span>
+                                </div>
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr dir-paginate="t in vm.transactions | itemsPerPage: vm.perPage"
+                            total-items="vm.totalTransactions" current-page="vm.page">
+                            <td class="right-text">{{ t.merchant_id }}</td>
+                            <td style="min-width: 60px">{{ t.store_name }}</td>
+                            <td class="right-text">{{ t.total_orders }}</td>
+                            <td class="right-text">{{ t.pickup_orders }}</td>
+                            <td class="right-text">{{ t.delivery_orders }}</td>
+                            <td class="right-text">{{ t.order_amount }}</td>
+                            <td class="right-text">{{ t.tip}}</td>
+                            <td class="right-text">{{ t.tax}}</td>
+                            <td class="right-text">{{ t.discount}}</td>
+                            <td class="right-text">{{ t.delivery_fee}}</td>
+                            <td class="right-text">{{ t.grand_total}}</td>
+                            <td class="right-text">{{ t.avg_order_value | number : 2}}</td>
+                            <td ng-if="!!vm.selectedGroupBy && vm.selectedGroupBy.key!='order_date'">
+                                {{t[vm.selectedGroupBy.key]}}
+                            <td ng-if="!!vm.selectedGroupBy && vm.selectedGroupBy.key=='order_date'">
+                                {{t[vm.selectedGroupBy.key] |toDate |date:'MM/dd/yyyy'}}
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="row-centered"
+                     ng-show="!vm.processing && !!vm.totalTransactions">
+                    <dir-pagination-controls max-size="10"
+                                             on-page-change="vm.onPageChanged(newPageNumber)">
+                    </dir-pagination-controls>
+                    <label class="control-label per-page-label">Per Page:</label>
+                    <div class="select per-page-select"><select class="form-control"
+                            ng-model="vm.perPage"
+                            ng-options="o as o for o in vm.perPageOptions">
+                    </select></div>
+                </div>
+            </div> <!--Panel Body-->
+        </div>
+    </div>
+</div>

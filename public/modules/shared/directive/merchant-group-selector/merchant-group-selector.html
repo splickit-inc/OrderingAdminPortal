@@ -1,0 +1,108 @@
+<div id="merchant-group-select-modal" class="modal fade promo-merchant-select-modal" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">Merchant Group Select</h4>
+            </div>
+            <div class="modal-body">
+                <div class="container">
+                    <div class="form-group">
+                        <input type="text" class="input-med form-control" name="merchants_filter"
+                               ng-enter="group_select_service.merchantGroupSearch()"
+                               ng-model="group_select_service.search_text" ng-fade placeholder="Filter">
+
+                        <div class="col-md-12 button-select" ng-show="group_select_service.processing">
+                            <div class="filter-loader-contain">
+                                <div class="filter-loader"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div ng-show="!group_select_service.processing" class="col-md-6 m-t-15">
+                        <div class="form-group">
+                            <label class="control-label">Merchant Group Results</label>
+                            <div class="m-t-20"
+                                 ng-show="group_select_service.selectable_merchant_groups.length > 0">
+                                <table class="table table-hover" style="margin-bottom: -1px">
+                                    <thead>
+                                    <tr>
+                                        <th style="width: 85px" ng-click="sortBy('id')">
+                                            ID <span class="sort-order" ng-show="propertyName === 'id'"
+                                                     ng-class="{reverse: reverse}"></span>
+                                        </th>
+                                        <th ng-click="sortBy('name')">
+                                            Name
+                                            <span class="sort-order" ng-show="propertyName === 'name'"
+                                                  ng-class="{reverse: reverse}"></span>
+                                        </th>
+                                    </tr>
+                                    </thead>
+                                </table>
+                                <div class="table-fixed-with-scroll">
+                                    <table class="table table-hover">
+                                        <tbody>
+                                        <tr ng-repeat="group in group_select_service.selectable_merchant_groups | orderBy:propertyName:reverse"
+                                            ng-click="group_select_service.addGroup(group)">
+                                            <td>
+                                                <i class="fa fa-plus-circle" aria-hidden="true"></i>
+                                            </td>
+                                            <td>{{group.id}}</td>
+                                            <td>{{group.name}}</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 m-t-15" ng-show="!group_select_service.processing">
+                        <div class="form-group">
+                            <label class="control-label">Selected Groups:</label>
+
+                            <div class="m-t-20" ng-show="group_select_service.selected_merchant_groups.length > 0">
+                                <table class="table table-hover" style="margin-bottom: -1px">
+                                    <thead>
+                                    <tr>
+                                        <th style="width: 85px" ng-click="sortBy('id')">
+                                            ID <span class="sort-order" ng-show="propertyName === 'id'" ng-class="{reverse: reverse}"></span>
+                                        </th>
+                                        <th ng-click="sortBy('name')">
+                                            Name
+                                            <span class="sort-order" ng-show="propertyName === 'name'" ng-class="{reverse: reverse}"></span>
+                                        </th>
+                                    </tr>
+                                    </thead>
+                                </table>
+                                <div class="table-fixed-with-scroll">
+                                    <table class="table table-hover">
+                                        <tbody>
+                                        <tr ng-repeat="group in group_select_service.selected_merchant_groups | orderBy:propertyName:reverse"
+                                            ng-click="group_select_service.removeGroup(group)">
+                                            <td>
+                                                <i class="fa fa-minus-circle" aria-hidden="true"></i>
+                                            </td>
+                                            <td>{{group.id}}</td>
+                                            <td>{{group.name}}</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" ng-disabled class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button class="btn btn-success" ng-disabled data-dismiss="modal" ng-click="closeMerchantGroupSelect()">
+                    Submit
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

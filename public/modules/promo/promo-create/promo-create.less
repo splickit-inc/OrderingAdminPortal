@@ -1,0 +1,121 @@
+@mobile-l-res: 500px;
+.create-promo-view {
+
+    .margin-top-five {
+        margin-top: 0px;
+    }
+
+    i {
+        font-style: normal;
+    }
+    .input-med {
+        float: none;
+    }
+    .padding-fix {
+        padding: 0px 10px;
+        @media (max-width: 359px) {
+            padding: 0px;
+        }
+    }
+    .alert-danger {
+        margin: 5px 0px;
+    }
+
+    .margin-top-10 {
+        margin-top: 10px;
+    }
+
+    .margin-button-10 {
+        margin-bottom: 10px;
+    }
+    .fix-margin {
+        margin-top: 3px;
+    }
+
+    .half-table-scroll {
+        height: 150px;
+        overflow-y: scroll;
+    }
+
+    .panel .panel-body .row-table {
+        padding: 6px 12px 3px 12px;
+    }
+    .fix-margin2 {
+        @media (min-width: 992px) {
+            margin-top: 4px;
+        }
+        @media (min-width: 992px) {
+            margin-top: 4px;
+        }
+        @media (min-width: 1055px) {
+            //1038 on some screens
+            margin-top: -3px;
+        }
+    }
+
+    .small-screen {
+        @media (max-width: @mobile-l-res) {
+            display: block;
+            margin-top: 10px;
+        }
+        @media (min-width: @mobile-l-res) {
+            display: none;
+        }
+    }
+
+    .big-screen {
+        @media (max-width: @mobile-l-res) {
+            display: none;
+        }
+    }
+
+    .name {
+        @media (max-width: @mobile-l-res) {
+            float: left;
+            width: 60%;
+        }
+        h5 {
+            @media (max-width: @mobile-l-res) {
+                line-height: 21px;
+                margin: 4px 0px;
+            }
+        }
+    }
+    .id {
+        @media (max-width: @mobile-l-res) {
+            float: right;
+            width: 40%;
+            text-align: right;
+        }
+        h5 {
+            @media (max-width: @mobile-l-res) {
+                margin: 7px 0px;
+            }
+        }
+    }
+
+    .fix-button-wrap-text {
+        white-space: normal;
+    }
+
+    .float-fix {
+        @media (min-width: 1200px) {
+            float: initial;
+        }
+        @media (min-width: 2519px) {
+            float: inherit;
+        }
+    }
+}
+
+.active_button {
+    background-color: transparent;
+    border: none;
+    cursor: initial;
+}
+
+.btn-success.active_button:hover {
+    background-color: transparent;
+    border: none;
+    cursor: initial;
+}

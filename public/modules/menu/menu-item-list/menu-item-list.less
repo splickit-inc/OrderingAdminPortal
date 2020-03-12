@@ -1,0 +1,23 @@
+.section-select {
+  cursor: pointer;
+  justify-content: space-between;
+  &:hover {
+    .panel-title:not(.sub-panel-title) {
+      text-decoration: underline;
+    }
+    .panel-title.sub-panel-title .title {
+      text-decoration: underline;
+    }
+  }
+  .edit-icon {
+    color: @text-color;
+    font-size: 30px;
+    margin-top: -5px;
+    margin-bottom: -8px;
+    margin-right: -5px;
+    &:hover {
+      color: darken(@text-color, 15%);
+      text-decoration: none;
+    }
+  }
+}

@@ -1,0 +1,33 @@
+label{
+  font-size: @font-size-base + 2;
+  color: @text-color;
+}
+
+.label{
+  color: @text-color;
+}
+
+.form-control{
+  padding: 6px 10px;
+  @media (max-width: @screen-sm){
+    font-size: @font-size-base - 1;
+    padding: 0px 7px;
+  }
+}
+
+input{
+  @media (max-width: @screen-sm) {
+    font-size: @font-size-base - 1;
+    padding: 0px 7px;
+    line-height: 2.7em;
+  }
+}
+
+input::-webkit-input-placeholder {
+  padding: 0;
+  font-size: @font-size-base - 1;
+}
+
+input[type="date"]{
+  padding: 7px;
+}

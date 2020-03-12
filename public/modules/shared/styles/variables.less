@@ -1,0 +1,109 @@
+//Side Bar threshold
+@sidebar-collapse-threshold-res: 570px;
+
+// Color variables
+@white: #ffffff;
+@black: #000000;
+@danger: #f62f37;
+@success: #71C671;
+@warning: #f8ca4e;
+@primary: #4d90fe;
+@lightdark5: #555555;
+@info: #fe634d;
+@purple: #7e57c2;
+@lightgray: #dddddd;
+@pink: #ec407a;
+@inverse: #212121;
+@light: #eeeeee;
+@lightdark3: #333333;
+@lightdark4: #444444;
+@light5: #f5f5f5;
+@light3: #f3f3f3;
+@light9: #f9f9f9;
+@light-alt: #fafafa;
+@lightdark7: #797979;
+@lightdark-alt: #cccccc;
+@dark: #2a323c;
+@muted: #898989;
+
+@lightbg: #e5e5e5;
+
+@font-primary: 'Roboto', sans-serif;
+@font-secondary: 'Prompt', sans-serif;
+
+
+
+//Splickit Design Changes
+@panel-primary: #8b8c8e;
+@button-primary: #f9a11f;
+@button-secondary: #0071BC;
+
+@light-brown: #c7b299;
+@aqua: #64aac5;
+@green: #3f986d;
+@blue-grey: #898daa;
+@yellow: #f9d268;
+@light-grey: #d4d4d4;
+
+@merchant: @light-brown;
+@customer-service: @aqua;
+@menu: @green;
+@creative: @blue-grey;
+@promos: @yellow;
+
+
+
+@dark-grey: #404043;
+
+  // Width variables
+@width: 100%;
+
+
+// Height variables
+@height: 100%;
+
+@screen-sm-600: 600px;
+@screen-md-850: 850px;
+@screen-lg-1477: 1477px;
+
+// xLarge screen / wide desktop
+@screen-xl:                  1300px;
+@screen-xl-min:              @screen-xl;
+//** Deprecated `@screen-lg-desktop` as of v3.0.1
+@screen-xl-desktop:          @screen-xl-min;
+
+// So media queries don't overlap when required, provide a maximum
+@screen-lg-max:              (@screen-xl-min - 1);
+
+//== Container sizes
+//
+//## Define the maximum width of `.container` for different screen sizes.
+// xLarge screen / wide desktop
+@container-xlarge-desktop:      (1240px + @grid-gutter-width);
+//** For `@screen-xl-min` and up.
+@container-xl:                 @container-xlarge-desktop;
+
+//== Panels
+//
+//##
+@panel-body-padding:          10px 20px;
+@panel-heading-padding:       10px 20px;
+
+//== Forms
+
+@input-height-base: 30px;
+
+@form-group-margin-bottom:       13px;
+
+.col-lg-1, .col-lg-10, .col-lg-11, .col-lg-12, .col-lg-2, .col-lg-3, .col-lg-4,
+.col-lg-5, .col-lg-6, .col-lg-7, .col-lg-8, .col-lg-9, .col-md-1, .col-md-10,
+.col-md-11, .col-md-12, .col-md-2, .col-md-3, .col-md-4, .col-md-5, .col-md-6,
+.col-md-7, .col-md-8, .col-md-9, .col-sm-1, .col-sm-10, .col-sm-11, .col-sm-12,
+.col-sm-2, .col-sm-3, .col-sm-4, .col-sm-5, .col-sm-6, .col-sm-7, .col-sm-8,
+.col-sm-9, .col-xs-1, .col-xs-10, .col-xs-11, .col-xs-12, .col-xs-2, .col-xs-3,
+.col-xs-4, .col-xs-5, .col-xs-6, .col-xs-7, .col-xs-8, .col-xs-9, .col-xl-2, .col-xl-3,
+.col-xl-4, .col-xl-5, .col-xl-6, .col-xl-7, .col-xl-8, .col-xl-9 {
+  padding-left: 10px;
+  padding-right: 10px;
+}
+

@@ -1,0 +1,40 @@
+<div id="{{!!vm.containerId ? vm.containerId : 'paginated-table'}}">
+    <div class="filter-loader-contain" ng-if="vm.processing">
+        <div class="filter-loader"></div>
+    </div>
+
+    <h5 class="pre-load-text text-center"
+        ng-if="!!vm.paginatedResult.data && vm.paginatedResult.data.length == 0 && !vm.processing">
+        No records</h5>
+
+    <div
+        ng-if="!vm.processing && !!vm.paginatedResult && !!vm.paginatedResult.data && vm.paginatedResult.data.length > 0">
+        <table class="table table-hover content-table">
+            <thead>
+            <tr>
+                <th ng-repeat="(key, value) in vm.fieldNames" class="{{value.class}} cursor-pointer"
+                    ng-click="vm.orderByChange(key)">
+                    {{value.columnName}} <span class="sort-order"
+                                               ng-class="[{activesort: vm.order_by === key},{reverse: vm.reverse}]"></span>
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="item in vm.paginatedResult.data">
+                <td ng-click="vm.clickItem(item)" ng-repeat="(key, value) in vm.fieldNames" class="{{value.class}}">
+                    {{item[key]}}
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <div class="content-responsive">
+            <div ng-repeat="item in vm.paginatedResult.data"
+                 ng-click="vm.viewItem(item)" ng-transclude="contentResponsive">
+            </div>
+        </div>
+    </div>
+    <paginator-buttons ng-show="!vm.processing && !!vm.paginatedResult && !!vm.paginatedResult.data && vm.paginatedResult.data.length > 0"
+                       paginated-result="vm.paginatedResult" processing="vm.processing"
+
+                       params="vm.params"></paginator-buttons>
+</div>

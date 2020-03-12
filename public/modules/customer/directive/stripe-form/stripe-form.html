@@ -1,0 +1,62 @@
+<div class="inline-flex-column-start">
+    <div class="payment-row">
+        <div class="inline-flex-column-start">
+            <div id="card-number" class="input-control input-full margin-4"></div>
+        </div>
+        <div class="inline-flex-row-start">
+            <div class="inline-flex-column-start">
+                <div id="card-expiry" class="input-control input-third margin-4"></div>
+
+            </div>
+            <div class="inline-flex-column-start">
+                <div id="card-cvc" class="input-control input-third margin-4"></div>
+            </div>
+        </div>
+    </div>
+    <div class="payment-errors">
+        <div class="flex-init flex-direction-column">
+            <div id="card-number-error" class="backgroundless-error" ng-show="vm.card_number.invalid"></div>
+            <div id="card-expiry-error" class="backgroundless-error" ng-show="vm.card_expiry.invalid"></div>
+            <div id="card-cvc-error" class="backgroundless-error" ng-show="vm.card_cvc.invalid"></div>
+        </div>
+    </div>
+    <div class="payment-row">
+        <div class="inline-flex-column-start">
+            <input type="text" class="input-control input-full margin-4 placeholder-fix"
+                   ng-disabled="vm.disable"
+                   ng-class="{'error-border': (vm.parent.form.credit_card_first_name.$invalid &&
+                                    (vm.parent.form.credit_card_first_name.$faded || vm.parent.customerPlan.submit))}"
+                   name="credit_card_first_name" placeholder="First Name"
+                   maxlength="100"
+                   ng-model="vm.customerPlan.credit_card_first_name"
+                   ng-required="true" ng-fade>
+            <div class="error-full margin-5"
+                 ng-show="vm.parent.form.credit_card_first_name.$error.required &&
+                                 (vm.parent.form.credit_card_first_name.$faded || vm.parent.customerPlan.submit)">
+                <div class="backgroundless-error"
+                     role="alert">
+                    First Name is Required
+                </div>
+            </div>
+        </div>
+        <div class="inline-flex-column-start">
+            <input type="text" class="input-control input-full margin-4 placeholder-fix"
+                   ng-disabled="vm.disable"
+                   ng-class="{'error-border': (vm.parent.form.credit_card_last_name.$invalid &&
+                                    (vm.parent.form.credit_card_last_name.$faded || vm.parent.customerPlan.submit))}"
+                   name="credit_card_last_name" placeholder="Last Name"
+                   maxlength="100"
+                   ng-model="vm.customerPlan.credit_card_last_name"
+                   ng-required="true" ng-fade>
+            <div class="error-full margin-5"
+                 ng-show="vm.parent.form.credit_card_last_name.$error.required &&
+                                 (vm.parent.form.credit_card_last_name.$faded || vm.parent.customerPlan.submit)">
+                <div class="backgroundless-error"
+                     role="alert">
+                    Last Name is Required
+                </div>
+            </div>
+        </div>
+    </div>
+    <button class='btn-submit btn submit-margins' ng-disabled="vm.disable">Submit</button>
+</div>

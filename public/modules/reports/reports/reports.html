@@ -1,0 +1,328 @@
+<div class="row">
+    <div class="col-sm-12">
+        <div class="page-header-title menu-bg">
+            <h4 class="page-title">Reports</h4>
+        </div>
+    </div>
+</div>
+
+
+<overview-component brands="rpt.brands"></overview-component>
+
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-primary">
+            <div class="panel-heading-with-tooltip">
+                <div class="panel-heading ">
+                    <h3 class="panel-title">Reports</h3>
+                </div>
+                <div class="panel-heading-tooltip-right">
+                    <h4>
+                        <i class="fa fa-question-circle tooltip-help" aria-hidden="true">
+                            <span
+                                class="tool-tip-text-responsive">{{ 'MENU.TOOLTIP.REPORTS.REPORTS' | translate }}</span>
+                        </i>
+                    </h4>
+                </div>
+
+                <div class="panel-heading with-loader">
+                    <div class="loader-container inline-flex-row-start flex-align-items-center"
+                         ng-show="rpt.processing">
+                        <div class="filter-loader"></div>
+                        <label style="margin-left: 5px; margin-bottom: 0;">Loading Report...</label>
+                    </div>
+                    <div class="loader-container inline-flex-row-start flex-align-items-center"
+                         ng-show="rpt.exporting">
+                        <div class="filter-loader"></div>
+                        <label style="margin-left: 5px; margin-bottom: 0;">Exporting Report...</label>
+                    </div>
+                    <div style="width: 140px"></div>
+                </div>
+            </div>
+
+
+            <div class="panel-body">
+                <div class="m-t-15">
+                    <div class="col-md-6 col-lg-4">
+                        <div class="form-horizontal">
+                            <div class="form-group">
+                                <label class="col-md-4 control-label">Report Type</label>
+                                <div class="col-md-8">
+                                    <div class="input-large">
+                                        <select class="form-control"
+                                                                     ng-change="rpt.onReportTypeChanged()"
+                                                                     ng-model="rpt.selectedReportType"
+                                                                     ng-options="type.desc for type in rpt.reportTypes track by type.key">
+                                        <option class="placeholder-color" value="" selected
+                                                disabled>
+                                            Select a Report Type
+                                        </option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div ng-show="rpt.user.hasPermission('brands_filter') || rpt.user.hasPermission('multi_merchs_filter')">
+                        <div class="col-md-6 col-lg-4"
+                             ng-show="rpt.user.hasPermission('brands_filter') && rpt.user.hasPermission('multi_merchs_filter')">
+                            <div class="form-horizontal">
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label">Filter Type</label>
+                                    <div class="col-md-8">
+                                        <div class="btn-group m-l-5 m-r-5">
+                                            <button type="button" class="btn waves-effect btn-sm"
+                                                    ng-class="rpt.filterTypeClass('brand',rpt.custom_reports_filter_type)"
+                                                    ng-click="rpt.custom_reports_filter_type = 'brand'">Brand
+                                            </button>
+                                            <button type="button" class="btn waves-effect btn-sm"
+                                                    ng-class="rpt.filterTypeClass('merchant',rpt.custom_reports_filter_type)"
+                                                    ng-click="rpt.custom_reports_filter_type = 'merchant'">Merchant(s)
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12 col-lg-4">
+                            <div class="form-horizontal">
+                                <div class="form-group"
+                                     ng-show="rpt.custom_reports_filter_type == 'brand' && rpt.user.hasPermission('brands_filter')">
+                                    <label class="col-md-2 control-label">Brand</label>
+                                    <div class="col-md-10">
+                                        <div class="input-large">
+                                            <select name="brand" class="form-control"
+                                                    ng-model="rpt.custom_brand_filter"
+                                                    ng-options="brand.brand_id as brand.brand_name for brand in rpt.brands">
+                                                <option class="placeholder-color" value="" selected disabled>Brands
+                                                </option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div
+                                     ng-show="!rpt.user.hasPermission('brands_filter') && rpt.user.hasPermission('multi_merchs_filter') && !rpt.user.hasPermission('op_merch_select')">
+                                    <div class="col-md-offset-2 col-lg-offset-0">
+                                        <label>
+                                            <input type="checkbox" ng-model="rpt.merchant_custom_subset"
+                                                   ng-change="rpt.merchantCustomSubsetChange()"> Select Merchant Subset
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="form-group" ng-show="rpt.custom_reports_filter_type == 'merchant'">
+                                    <label class="col-md-2 col-lg-3 control-label">Merchants</label>
+                                    <div class="col-md-10 col-lg-9">
+                                        <button type="button" class="btn btn-info btn-sm"
+                                                data-toggle="modal"
+                                                ng-click="rpt.merchant_open_source = 'custom_reports'"
+                                                data-target="#merchant-select-modal">
+                                            Select Merchants
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="clear">
+                    <report-selector-component selected-report-type="rpt.selectedReportType"
+                                               custom-brand-filter="rpt.custom_brand_filter"
+                                               custom-reports-filter-type="rpt.custom_reports_filter_type"
+                                               merchant-search="rpt.merchant_search"
+                                               processing="rpt.processing"
+                                               exporting="rpt.exporting">
+                    </report-selector-component>
+                </div>
+            </div> <!--Panel Body-->
+        </div>
+    </div>
+</div>
+
+
+<div id="merchant-select-modal" class="modal fade" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <button class="btn btn-success"
+                        ng-click="rpt.enableMerchantGroups = false;"
+                        ng-class="{active_button: !rpt.enableMerchantGroups}"
+                        ng-disabled="!rpt.enableMerchantGroups">
+                    Select Merchants
+                </button>
+                |
+                <button class="btn btn-success"
+                        ng-click="rpt.switchToMerchantGroups()"
+                        ng-class="{active_button: rpt.enableMerchantGroups}"
+                        ng-disabled="rpt.enableMerchantGroups">
+                    Select Merchant Groups
+                </button>
+
+                <button class="btn btn-default"
+                        ng-click="rpt.merchant_search.clearAll();">
+                    Clear Selection
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-6" ng-if="!rpt.enableMerchantGroups">
+                        <div class="form-group">
+                            <label class="col-md-3 control-label">User Merchants</label>
+                            <div class="col-md-12 m-t-10">
+                                <input type="text" class="input-med form-control inline-block margin-4" name="merchants_filter"
+                                       ng-enter="rpt.merchant_search.merchantSearchGlobal()"
+                                       ng-model="rpt.merchant_search.search_text" ng-fade placeholder="Filter">
+                                <button ng-click="rpt.merchant_search.merchantSearchGlobal()" class='btn-default btn'>Search</button>
+
+                                <div class="col-md-12 button-select" ng-show="rpt.merchant_search.processing">
+                                    <div class="filter-loader-contain">
+                                        <div class="filter-loader"></div>
+                                    </div>
+                                </div>
+                                <div class="table-fixed-with-scroll m-t-10"
+                                     ng-show="!rpt.merchant_search.processing && rpt.merchant_search.selectable_merchants.length > 0">
+                                    <table class="table table-hover">
+                                        <thead>
+                                        <tr>
+                                            <th colspan="2" ng-click="rpt.sortBy('merchant_id')">
+                                                ID <span class="sort-order" ng-show="rpt.propertyName === 'merchant_id'"
+                                                         ng-class="{reverse: rpt.reverse}"></span>
+                                            </th>
+                                            <th ng-click="rpt.sortBy('name')">
+                                                Name
+                                                <span class="sort-order" ng-show="rpt.propertyName === 'name'"
+                                                      ng-class="{reverse: rpt.reverse}"></span>
+                                            </th>
+                                            <th ng-click="rpt.sortBy('address1')">
+                                                Address
+                                                <span class="sort-order" ng-show="rpt.propertyName === 'address1'"
+                                                      ng-class="{reverse: rpt.reverse}"></span>
+                                            </th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr ng-repeat="merchant in rpt.merchant_search.selectable_merchants  | orderBy:rpt.propertyName:rpt.reverse"
+                                            ng-click="rpt.merchant_search.addMerchant(merchant)">
+                                            <td><i class="fa fa-plus-circle" aria-hidden="true"></i>
+                                            </td>
+                                            <td>{{merchant.merchant_id}}</td>
+                                            <td>{{merchant.name}}</td>
+                                            <td>
+                                                {{merchant.address1}}<BR>
+                                                {{merchant.city}}, {{merchant.state}} {{merchant.zip}}
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6" ng-if="rpt.enableMerchantGroups">
+                        <div class="form-group">
+                            <label class="col-md-3 control-label">Merchant Groups</label>
+                            <div class="col-md-12 m-t-10">
+                                <input type="text" class="input-med form-control inline-block margin-4" name="merchants_filter"
+                                       ng-enter="rpt.merchant_search.merchantGroupSearch()"
+                                       ng-model="rpt.merchant_search.search_text" ng-fade placeholder="Filter">
+                                <button ng-click="rpt.merchant_search.merchantGroupSearch()" class='btn-default btn'>Search</button>
+
+                                <div class="col-md-12 button-select" ng-show="rpt.merchant_search.processing">
+                                    <div class="filter-loader-contain">
+                                        <div class="filter-loader"></div>
+                                    </div>
+                                </div>
+                                <div class="table-fixed-with-scroll m-t-10"
+                                     ng-show="!rpt.merchant_search.processing && rpt.merchant_search.selectable_merchant_groups.length > 0">
+                                    <table class="table table-hover">
+                                        <thead>
+                                        <tr>
+                                            <th colspan="2" ng-click="rpt.sortBy('id')">
+                                                ID <span class="sort-order" ng-show="rpt.propertyName === 'id'"
+                                                         ng-class="{reverse: rpt.reverse}"></span>
+                                            </th>
+                                            <th ng-click="rpt.sortBy('name')">
+                                                Name
+                                                <span class="sort-order" ng-show="rpt.propertyName === 'name'"
+                                                      ng-class="{reverse: rpt.reverse}"></span>
+                                            </th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr id="promo-add-merchant"
+                                            ng-repeat="group in rpt.merchant_search.selectable_merchant_groups | orderBy:rpt.propertyName:rpt.reverse"
+                                            ng-click="rpt.merchant_search.addMerchantGroupAsMerchants(group);">
+                                            <td>
+                                                <i class="fa fa-plus-circle" aria-hidden="true"></i>
+                                            </td>
+                                            <td>{{group.id}}</td>
+                                            <td>{{group.name}}</td>
+                                            <td>{{group.group_type}}</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="control-label">Selected Merchants
+                            ({{rpt.merchant_search.selected_merchants.length}}):</label>
+                        <div class="table-fixed-with-scroll m-t-10"
+                             ng-show="rpt.merchant_search.selected_merchants.length > 0">
+                            <table class="table table-hover">
+                                <thead>
+                                <tr>
+                                    <th colspan="2" ng-click="rpt.sortBy('merchant_id')">
+                                        ID <span class="sort-order" ng-show="rpt.propertyName === 'merchant_id'"
+                                                 ng-class="{reverse: rpt.reverse}"></span>
+                                    </th>
+                                    <th ng-click="rpt.sortBy('name')">
+                                        Name
+                                        <span class="sort-order" ng-show="rpt.propertyName === 'name'"
+                                              ng-class="{reverse: rpt.reverse}"></span>
+                                    </th>
+                                    <th ng-click="rpt.sortBy('address1')">
+                                        Address
+                                        <span class="sort-order" ng-show="rpt.propertyName === 'address1'"
+                                              ng-class="{reverse: rpt.reverse}"></span>
+                                    </th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr ng-repeat="merchant in rpt.merchant_search.selected_merchants | orderBy:rpt.propertyName:rpt.reverse"
+                                    ng-click="rpt.merchant_search.removeMerchant(merchant)">
+                                    <td>
+                                        <i class="fa fa-minus-circle" aria-hidden="true"></i>
+                                    </td>
+                                    <td>{{merchant.merchant_id}}</td>
+                                    <td>{{merchant.name}}</td>
+                                    <td>
+                                        {{merchant.address1}}<BR>
+                                        {{merchant.city}}, {{merchant.state}} {{merchant.zip}}
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" ng-disabled class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button class="btn btn-success" ng-disabled data-dismiss="modal">Submit</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<manage-reports></manage-reports>
+<reports-group-by></reports-group-by>

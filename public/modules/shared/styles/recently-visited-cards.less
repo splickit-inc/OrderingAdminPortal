@@ -1,0 +1,55 @@
+@import "flex.less";
+@min-desktop-screen-for-panel-collapse: 992px;
+
+.recently-visited-container {
+  .flex-init;
+  flex-flow: wrap;
+  .flex-justify-content-space-between;
+  .fake-div {
+    margin: 0px 5px;
+    @media (max-width: 991px) and (min-width: 919px) {
+      display: none;
+    }
+    @media (max-width: 768px) and (min-width: 719px) {
+      display: none;
+    }
+  }
+
+  .fix-div-1 {
+    display: none;
+    @media (max-width: 991px) and (min-width: 919px) {
+      display: block;
+    }
+    @media (max-width: 768px) and (min-width: 719px) {
+      display: block;
+    }
+  }
+  h5 {
+    margin: 3px 0px;
+  }
+}
+
+.recently-visited-container > div {
+  text-align: left;
+  width: 140px;
+  margin: 5px;
+  flex-grow: 1;
+}
+
+.hide-recently-visited-panel
+{
+    display: none;
+    @media (min-width: @min-desktop-screen-for-panel-collapse) {
+        display: block;
+    }
+}
+
+.search-fields
+{
+    .flex-init;
+    flex-direction: row;
+    align-items: flex-start;
+    .btn-primary{
+           padding:  3px 11px;
+    }
+}

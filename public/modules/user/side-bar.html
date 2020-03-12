@@ -1,0 +1,27 @@
+<div class="left side-menu">
+    <div class="sidebar-inner slimscrollleft">
+        <!-- Divider -->
+        <div id="sidebar-menu" ng-controller="SideNavUserController">
+            <div class="user-details hidden-xs" ng-cloak>
+                <div class="user-info">
+                    User Management
+                </div>
+            </div>
+            <ul>
+                <li>
+                    <a href="#/users/manage" class="waves-effect" ng-click="set_hover('user_manage')" ng-class="{'active': active.user_manage}">
+                        <i class="fa fa-address-card" aria-hidden="true"></i>
+                        <span>Manage Users</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#/user/create" class="waves-effect" ng-click="set_hover('user_create')" ng-class="{'active': active.user_create}">
+                        <i class="fa fa-user-o" aria-hidden="true"></i>
+                        <span> Create User </span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <div class="clearfix"></div>
+    </div> <!-- end sidebarinner -->
+</div>

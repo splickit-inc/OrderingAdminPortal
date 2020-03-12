@@ -1,0 +1,349 @@
+<div id="statements-component">
+    <div class="col-md-6 col-lg-4">
+        <div class="form-horizontal">
+            <div class="form-group">
+                <label class="col-md-4" style="text-align: end;"><i class="fa fa-calendar" style="margin-top: 8px"></i></label>
+                <div class="col-md-8">
+                    <input date-range-picker class="form-control input-large date-picker" type="text"
+                           ng-model="vm.datePicker.date" options="vm.datePicker.options"/>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="statements-report-page" class="statements-report-page col-md-12">
+        <div class="row">
+            <div class="form-group pull-right">
+                <button type="button" class="btn-success btn btn-report"
+                        data-toggle="modal"
+                        ng-disabled="!vm.isValidToBeShown()"
+                        ng-click="vm.getStatements()">
+                    Run Reports
+                </button>
+
+                <button class="btn-default btn btn-report" ng-click="vm.exportRecords()" ng-disabled="!vm.paginatedStatements || (!!vm.paginatedStatements && !vm.paginatedStatements.data)">Export Report</button>
+            </div>
+        </div>
+        <div class="row">
+            <paginated-table container-id="'statements-results-report-table'"
+                             paginated-result="vm.paginatedStatements"
+                             field-names="vm.fieldNames" params="vm.searchParams"
+                             click-event="vm.showPrintableStatement" endpoint-string="'/reports/statements'">
+                <content-responsive>
+                    <div class="panel panel-body row-table"
+                         ng-click="vm.showPrintableStatement($parent.item)">
+                        <div class="name">
+                            <h5 class="dark-grey"><b>{{$parent.item.invoice}}</b></h5>
+                        </div>
+
+                        <div class="id">
+                            <h5 class="dark-grey id-title">Net Proceeds
+                                <span
+                                    class="id-number">{{$parent.item.net_proceeds}}</span>
+                            </h5>
+                        </div>
+                        <div class="description">
+                            <div class="clear">
+                                <b>Date Range:</b>
+                                {{$parent.item.period}}
+                            </div>
+                            <div class="clear">
+                                <b>Previous Balance:</b>
+                                {{$parent.item.previous_balance}}
+                            </div>
+                            <div>
+                                <b>Balance:</b>
+                                {{$parent.item.balance}}
+                            </div>
+                        </div>
+                    </div>
+                </content-responsive>
+            </paginated-table>
+        </div>
+    </div>
+
+    <!-- Details Modal -->
+    <div id="detailsModal" class="modal fade" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header hide-on-print">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title">Details</h4>
+                </div>
+                <div class="modal-body" role="document">
+                    <div class="panel print-content">
+
+                        <div class="flex-init flex-justify-content-space-between show-on-print m-b-10"
+                             style="display: none">
+                            <!--This is the title for the print page-->
+                            <div width="200px">
+                                <img src="http://splickit.com.s3.amazonaws.com/email/images/spl-reg-black.png"
+                                     width="200px"/>
+                            </div>
+                            <div>
+                                <h2 style="color:#111;font-family:Arial, Helvetica, sans-serif;margin:0px;">Merchant
+                                    Statement</h2>
+                            </div>
+                        </div>
+
+                        <div class="panel-heading flex-init flex-justify-content-space-between mdi-border-bottom">
+                            <h4 class="modal-title">{{vm.currentStatement.name}}</h4>
+                            <h4 class="modal-title">{{vm.currentStatement.generation}}</h4>
+                        </div>
+                        <div class="panel-body"
+                             style="padding: 0; background-color:#fff; color: #0f0f0f;">
+                            <div class="flex-init" style="margin: 10px 20px">
+                                <div style="flex-grow: 1" class="element-row">
+                                    <p style="margin: 3px 0;">{{vm.currentStatement.merchant_external_id}}</p>
+                                    <h4 style="margin: 3px 0;">{{vm.currentStatement.address1}}<br>{{vm.currentStatement.city}},
+                                        {{vm.currentStatement.state}} {{vm.currentStatement.zip}}</h4>
+                                    <p style="margin: 3px 0;"><a href="#">{{vm.currentStatement.desination_emails}}</a></p>
+                                </div>
+                                <div class="element-row" style="flex-grow: 1;">
+                                    <div class="flex-init flex-direction-column">
+                                        <div
+                                            style="margin: 0 0 5px 0;font-size:12px; display: flex; justify-content: space-between">
+                                            <div><strong>Invoice:</strong></div>
+                                            <div>{{vm.currentStatement.invoice}}</div>
+                                        </div>
+                                        <div
+                                            style="margin: 0 0 5px 0;font-size:12px; display: flex; justify-content: space-between">
+                                            <div><strong>Period:</strong></div>
+                                            <div>{{vm.currentStatement.period}}</div>
+                                        </div>
+                                        <div
+                                            style="margin: 0 0 5px 0;font-size:12px; display: flex; justify-content: space-between">
+                                            <div><strong>Created:</strong></div>
+                                            <div>{{vm.currentStatement.generation}}</div>
+                                        </div>
+                                        <div
+                                            style="margin: 0 0 5px 0;font-size:12px; display: flex; justify-content: space-between">
+                                            <div><strong>Account:</strong></div>
+                                            <div>{{vm.currentStatement.merchant_id}}</div>
+                                        </div>
+                                        <div
+                                            style="margin: 0 0 5px 0;font-size:12px; display: flex; justify-content: space-between">
+                                            <div><strong>Brand Store ID:</strong></div>
+                                            <div>{{vm.currentStatement.merchant_external_id}}</div>
+                                        </div>
+                                        <div
+                                            style="margin: 0 0 5px 0;font-size:12px; display: flex; justify-content: space-between">
+                                            <div><strong>Order Count:</strong></div>
+                                            <div>{{vm.currentStatement.order_cnt}}</div>
+                                        </div>
+                                        <div
+                                            style="margin: 0 0 5px 0;font-size:12px; display: flex; justify-content: space-between">
+                                            <div><strong>Payment Method:</strong></div>
+                                            <div>Prepaid: {{vm.currentStatement.order_cnt -
+                                                vm.currentStatement.instore_payment_cnt}} Instore:
+                                                {{vm.currentStatement.instore_payment_cnt}}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex-init flex-justify-content-space-between m-t-10"
+                                 style="background-color: gray !important; padding: 3px 10px; -webkit-print-color-adjust: exact;">
+                                <div><b>Sales</b></div>
+                                <div><b>Amount</b></div>
+                            </div>
+
+                            <div class="flex-init flex-direction-column" style="margin: 10px 20px">
+                                <div class="flex-init flex-justify-content-space-between border-bottom">
+                                    <div><b>Order Amount:</b></div>
+                                    <div>${{vm.currentStatement.order_amt}}</div>
+                                </div>
+                                <div class="flex-init flex-justify-content-space-between border-bottom">
+                                    <div><b>Total Taxes:</b></div>
+                                    <div>${{vm.currentStatement.total_tax_amt}}</div>
+                                </div>
+                                <div class="flex-init flex-justify-content-space-between border-bottom">
+                                    <div><b>Delivery Fee:</b></div>
+                                    <div>${{vm.currentStatement.delivery_amt}}</div>
+                                </div>
+                                <div class="flex-init flex-justify-content-space-between border-bottom">
+                                    <div><b>Tips:</b></div>
+                                    <div>${{vm.currentStatement.tip_amt}}</div>
+                                </div>
+                                <div class="flex-init flex-justify-content-space-between border-bottom"
+                                     ng-if="vm.currentStatement.trans_fee_amt != 0">
+                                    <div><b>Splick-it Customer Fee:</b></div>
+                                    <div>${{vm.currentStatement.trans_fee_amt}}</div>
+                                </div>
+                                <div class="flex-init flex-justify-content-space-between border-bottom"
+                                     ng-if="vm.currentStatement.sf_surcharge_fee != 0">
+                                    <div><b>SF Surcharge:</b></div>
+                                    <div>${{vm.currentStatement.sf_surcharge_fee}}</div>
+                                </div>
+                                <div class="flex-init flex-justify-content-space-between border-bottom"
+                                     ng-if="vm.currentStatement.promo_amt != 0 && !!vm.currentStatement.promo_amt">
+                                    <div><b>Franchisee Paid Promotion:</b></div>
+                                    <div>${{vm.currentStatement.promo_amt}}</div>
+                                </div>
+                                <div
+                                    ng-if="!!vm.currentStatement.promo_splickit_amt_withheld && vm.currentStatement.promo_splickit_amt_withheld != 0">
+                                    <div class="flex-init flex-justify-content-space-between border-bottom">
+                                        <div><b>Splickit Paid Promotion:</b></div>
+                                        <div>${{vm.currentStatement.promo_splickit_amt_withheld}}</div>
+                                    </div>
+                                    <p style="border: 1px dotted #e5e5e5; padding: 5px; text-align: center;">Splickit Promos
+                                        are paid to the merchant at the beginning of the
+                                        following month. A sale transaction will be processed on your Merchant Account for
+                                        the
+                                        total of promotion withheld in the preceeding month. A separate statement will be
+                                        issued
+                                        when they payment is made.</p>
+                                </div>
+                                <div
+                                    ng-if="!!vm.currentStatement.customer_donation_amt_withheld && vm.currentStatement.customer_donation_amt_withheld != 0">
+                                    <div class="flex-init flex-justify-content-space-between border-bottom">
+                                        <div><b>Customer Donations Withheld:</b></div>
+                                        <div>${{vm.currentStatement.customer_donation_amt_withheld}}</div>
+                                    </div>
+                                    <p style="border: 1px dotted #e5e5e5; padding: 5px; text-align: center;">Consumer
+                                        Donations Withheld from Merchant are funds donated by the consumer for the charity
+                                        that your franchise is collecting funds for.</p>
+                                </div>
+                                <div
+                                    ng-if="vm.currentStatement.customer_donation_amt_paidout != 0 && !!vm.currentStatement.customer_donation_amt_paidout">
+                                    <div class="flex-init flex-justify-content-space-between border-bottom">
+                                        <div><b>Customer Donations Paid to Merchant:</b></div>
+                                        <div>${{vm.currentStatement.customer_donation_amt_paidout}}</div>
+                                    </div>
+                                    <p style="border: 1px dotted #e5e5e5; padding: 5px; text-align: center;">Consumer
+                                        Donations Paid to Merchant are funds donated by the consumer for the charity that
+                                        your franchise is collecting funds for. Please forward these proceeds as directed by
+                                        your Franchisor instructions.</p>
+                                </div>
+                                <div class="flex-init flex-justify-content-space-between border-bottom"
+                                     ng-if="!!vm.currentStatement.grand_total_less_contribution">
+                                    <div><b>Total:</b></div>
+                                    <div>${{vm.currentStatement.grand_total_less_contribution}}</div>
+                                </div>
+                            </div>
+
+                            <div class="flex-init flex-justify-content-space-between m-t-10"
+                                 style="background-color: gray !important; padding: 3px 10px; -webkit-print-color-adjust: exact;">
+                                <div><b>Expenses</b></div>
+                                <div><b>Amount</b></div>
+                            </div>
+
+                            <div class="flex-init flex-direction-column" style="margin: 10px 20px">
+                                <div class="flex-init flex-justify-content-space-between border-bottom"
+                                     ng-if="!!vm.currentStatement.bill_comm_fee && vm.currentStatement.bill_comm_fee != 0">
+                                    <div><b>Transaction Commission Fee:</b></div>
+                                    <div>${{vm.currentStatement.bill_comm_fee}}</div>
+                                </div>
+                                <div class="flex-init flex-justify-content-space-between border-bottom"
+                                     ng-if="!!vm.currentStatement.goodwill && vm.currentStatement.goodwill != 0">
+                                    <div><b>Cancellations And Refunds:</b></div>
+                                    <div>${{vm.currentStatement.goodwill}}</div>
+                                </div>
+                                <div class="flex-init flex-justify-content-space-between border-bottom"
+                                     ng-if="!!vm.currentStatement.pymt_fee && vm.currentStatement.pymt_fee != 0">
+                                    <div><b>Payment Fee:</b></div>
+                                    <div>${{vm.currentStatement.pymt_fee}}</div>
+                                </div>
+                                <div class="flex-init flex-justify-content-space-between border-bottom"
+                                     ng-if="!!vm.currentStatement.trans_fee_amt && vm.currentStatement.trans_fee_amt != 0">
+                                    <div><b>Splick-it Customer Fee:</b></div>
+                                    <div>${{vm.currentStatement.trans_fee_amt}}</div>
+                                </div>
+                                <div class="flex-init flex-justify-content-space-between border-bottom"
+                                     ng-if="!!vm.currentStatement.cc_fee_amt && vm.currentStatement.cc_fee_amt != 0">
+                                    <div><b>Credit Card Trans Fees:</b></div>
+                                    <div>${{vm.currentStatement.cc_fee_amt}}</div>
+                                </div>
+                                <div class="flex-init flex-justify-content-space-between border-bottom">
+                                    <div><b>Total:</b></div>
+                                    <div>${{vm.currentStatement.total_fees}}</div>
+                                </div>
+                            </div>
+
+                            <div class="flex-init flex-justify-content-space-between m-t-10"
+                                 style="background-color: gray !important; padding: 3px 10px; -webkit-print-color-adjust: exact;">
+                                <div><b>Net Payment</b></div>
+                                <div><b>Amount</b></div>
+                            </div>
+
+                            <div class="flex-init flex-direction-column" style="margin: 10px 20px">
+                                <div class="flex-init flex-justify-content-space-between border-bottom">
+                                    <div><b>Net Revenue:</b></div>
+                                    <div>${{vm.currentStatement.net_proceeds}}</div>
+                                </div>
+                                <div class="flex-init flex-justify-content-space-between border-bottom">
+                                    <div><b>Previous Balance:</b></div>
+                                    <div>${{vm.currentStatement.previous_balance}}</div>
+                                </div>
+                                <div class="flex-init flex-justify-content-space-between border-bottom"
+                                     ng-if="!!vm.currentStatement.grand_total && vm.currentStatement.grand_total != 0">
+                                    <div><b>Payment collected in store:</b></div>
+                                    <div>${{vm.currentStatement.grand_total}}</div>
+                                </div>
+                                <div class="flex-init flex-justify-content-space-between border-bottom">
+                                    <div><b>Payment:</b></div>
+                                    <div>${{vm.currentStatement.payment}}</div>
+                                </div>
+                                <div class="flex-init flex-justify-content-space-between border-bottom">
+                                    <div><b>Balance:</b></div>
+                                    <div>${{vm.currentStatement.balance}}</div>
+                                </div>
+                            </div>
+
+                            <div ng-if="!!vm.currentStatement.weekly">
+                                <div class="flex-init flex-justify-content-space-between m-t-10"
+                                     style="background-color: gray !important; padding: 3px 10px; -webkit-print-color-adjust: exact;">
+                                    <div><b>Weekly Summary</b></div>
+                                </div>
+
+                                <div class="flex-init flex-direction-column" style="margin: 0">
+                                    <table class="table" style="background-color: whitesmoke;">
+                                        <thead>
+                                        <tr>
+                                            <th>Date</th>
+                                            <th>Orders</th>
+                                            <th>Order Amt</th>
+                                            <th>Tax</th>
+                                            <th>Tip</th>
+                                            <th>Promo Amt</th>
+                                            <th>Delivery</th>
+                                            <th>CC Fees</th>
+                                            <th ng-if="vm.showExtraColumn">SF Sur</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr ng-repeat="day in vm.currentStatement.weekly">
+                                            <td ng-repeat="column in day track by $index">{{column}}</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <div class="flex-init flex-justify-content-space-between m-t-10"
+                                 style="background-color: gray !important; padding: 3px 10px; -webkit-print-color-adjust: exact;">
+                                <div><b>Cancellations and Refunds Details</b></div>
+                            </div>
+
+                            <div class="flex-init flex-direction-column" style="margin: 10px 20px">
+                                <div class="flex-init flex-justify-content-space-between">
+                                    <div>${{vm.currentStatement.reversal_note}}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer hide-on-print">
+                    <button type="button" class="btn btn-default" ng-click="vm.printStatementDetails()">
+                        print
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>

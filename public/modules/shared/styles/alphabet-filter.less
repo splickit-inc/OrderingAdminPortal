@@ -1,0 +1,24 @@
+.alphabet {
+  .flex-init;
+  .flex-direction-row;
+  .flex-wrap;
+  span {
+    display: inline-block;
+    font-size: 18px;
+    cursor: pointer;
+    width: 25px;
+    text-align: center;
+    &:hover {
+      background-color: @body-bg;
+    }
+    &:active {
+      color: @brand-primary;
+      background-color: @body-bg;
+    }
+  }
+}
+
+.alphabet-active {
+  color: @brand-primary;
+  background-color: @body-bg;
+}

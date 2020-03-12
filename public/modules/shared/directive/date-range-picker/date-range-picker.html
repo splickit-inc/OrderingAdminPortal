@@ -1,0 +1,36 @@
+<div class="form-horizontal">
+    <div class="form-group">
+        <label class="col-md-4 control-label" style="padding-top: 5px;">Date Range</label>
+        <div class="col-md-6">
+            <select name="brand" class="form-control input-large"
+                    ng-model="selectedPeriod"
+                    ng-change="onPeriodChange()"
+                    ng-options="timePeriod.desc for timePeriod in timePeriods track by timePeriod.key">
+            </select>
+        </div>
+    </div>
+    <div ng-show="!!selectedPeriod && selectedPeriod.key=='custom'">
+        <div class="form-group">
+            <label class="col-md-4 control-label">From</label>
+            <div class="col-md-6">
+                <div class='input-group input-large date' id='from_date'>
+                    <input type='text' class="form-control"/>
+                    <span class="input-group-addon">
+                                        <span class="fa fa-calendar"></span>
+                                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-4 control-label">To</label>
+            <div class="col-md-6">
+                <div class='input-group input-large date' id='to_date'>
+                    <input type='text' class="form-control"/>
+                    <span class="input-group-addon">
+                        <span class="fa fa-calendar"></span>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

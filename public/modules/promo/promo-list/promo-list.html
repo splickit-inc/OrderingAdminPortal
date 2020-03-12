@@ -1,0 +1,126 @@
+<div class="row">
+    <div class="col-sm-12">
+        <div class="page-header-title marketing-bg">
+            <h4 class="page-title">Promos</h4>
+            <button id="open-create-promo-button"
+                    class="btn btn-primary" ng-disabled
+                    ng-click="promo.createNewPromo()">Create New Promo
+            </button>
+        </div>
+    </div>
+</div>
+
+<div class="row" ng-show="promo.user_service.hasPermission('edit_promo')">
+    <div class="col-md-6">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">Search Promos</h3>
+            </div>
+            <div class="panel-body">
+                <form name="promo.search_form" novalidate ng-submit="promo.promoSearch()">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <div class="flex-init flex-align-items-center">
+                                <div class="search-box">
+                                    <input type="text" class="form-control" name="search_text"
+                                           placeholder="YYYY-MM-DD for Start & End Date Filtering"
+                                           ng-model="promo.search.text">
+                                </div>
+                            </div>
+                            <div class="alert alert-danger ng-hide alert-reg-position"
+                                 ng-show="(promo.search_form.search_text.$error.required && promo.search_form.search_text.$touched) ||
+                                 (promo.search_form.search_text.$error.required && promo.search_form.$submitted)"
+                                 role="alert">
+                                You must type at least one letter on search field.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <div class="flex-init flex-align-items-center">
+                                <label class="m-l-2">Promo Type</label>
+                                <select name="search_promo_type" class="form-control input-med" ng-required="true"
+                                        ng-model="promo.search.promo_type" ng-fade
+                                        ng-options="promo_type.code as promo_type.value for promo_type in promo.promo_type_options">
+                                    <option class="placeholder-color" value="" selected disabled>Select</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="m-l-2 m-t-5"><input class='m-r-5' type="checkbox" name="active_search"
+                                                              ng-model="promo.search.active_only"> Active Only</label>
+                            <button type="submit" class='btn-default btn right-align'>Search</button>
+
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6" ng-class="promo.hasSearchResult()">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">Recently Visited</h3>
+            </div>
+            <div class="panel-body flexBox recently-visited-container">
+                <div class="panel panel-body row-table"
+                     ng-repeat="recent_promo in promo.recent_promos"
+                     ng-click="promo.viewPromo(recent_promo)">
+                    <div>
+                        <h5 class="bold">{{recent_promo.promo_id}}</h5>
+                    </div>
+                    <div>
+                        {{recent_promo.description}}
+                    </div>
+                </div>
+                <div ng-show="promo.recent_promos.length %2 == 1" class="fake-div"></div>
+                <div ng-show="promo.recent_promos.length == 1" class="fix-div-1"></div>
+                <div ng-show="promo.recent_promos.length >= 4" class="fake-div"></div>
+                <div ng-show="promo.recent_promos.length >= 4" class="fake-div"></div>
+                <div ng-show="promo.recent_promos.length == 5"></div>
+                <div ng-show="promo.recent_promos.length == 5"></div>
+                <div ng-show="promo.recent_promos.length == 5"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row promo-list-view promo-views">
+    <div class="col-md-12">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">Search Results</h3>
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <paginated-table field-names="promo.fieldNames" params="promo.searchParams"
+                                         click-event="promo.viewPromo" endpoint-string="'/promo_search'">
+                            <content-responsive>
+                                <div ng-click="promo.viewPromo($parent.item)">
+                                    <div class="panel panel-body row-table">
+                                        <div class="name">
+                                            <h5 class="dark-grey"><b>ID: {{$parent.item.promo_id}}</b>
+                                            </h5>
+                                        </div>
+                                        <div class="id">
+                                            <h5 class="dark-grey id-title">Type: <span
+                                                class="id-number">{{$parent.item.promo_type}}</span>
+                                            </h5>
+                                        </div>
+                                        <div class="description">
+                                            {{$parent.item.description}}
+                                        </div>
+                                    </div>
+                                </div>
+                            </content-responsive>
+                        </paginated-table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

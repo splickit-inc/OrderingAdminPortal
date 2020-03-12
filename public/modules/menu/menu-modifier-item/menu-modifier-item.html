@@ -1,0 +1,263 @@
+<div class="row">
+    <div class="col-sm-12">
+        <div class="page-header-title menu-bg">
+            <h4 class="page-title">Edit Modifier Item {{mi.current_mod_item.modifier_item_name}}</h4>
+            <ol class="breadcrumb">
+                <li><a href="#/menus">Menus</a></li>
+                <li><a href="#/menu/items">Items & Modifiers</a></li>
+                <li><a href="javascript:void(0);">Edit Modifier Item {{mi.current_mod_item.modifier_item_name}}</a></li>
+            </ol>
+        </div>
+    </div>
+</div>
+
+
+<form name="mi.modifier_item_form" class="form-horizontal" novalidate ng-submit="mi.selectMerchantsToPropagate()">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="panel panel-primary">
+                <div class="panel-heading ">
+                    <h3 class="panel-title" ng-show="mi.new">Create Modifier Item</h3>
+                    <h3 class="panel-title" ng-show="!mi.new">Edit Modifier Item</h3>
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="panel-body">
+                            <!--Item Menu Type START-->
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">Modifier Group</label>
+                                <div class="col-md-9 m-t-10">
+                                    <div class="select input-med"><select name="modifier_group" class="form-control" ng-required="true"
+                                                                          ng-model="mi.current_mod_item.modifier_group_id" ng-fade
+                                                                          ng-options="mod_group.modifier_group_id as mod_group.modifier_group_name for mod_group in mi.modifier_groups">
+                                        <option class="placeholder-color" value="" selected disabled>Modifier Group</option>
+                                    </select></div>
+                                </div>
+                                <div class="col-md-9">
+                                    <div class="alert alert-danger ng-hide alert-reg-position"
+                                         ng-show="mi.modifier_item_form.modifier_group.$error.required
+                                         && (mi.modifier_item_form.modifier_group.$faded || mi.current_mod_item.submit)"
+                                         role="alert">
+                                        Modifier Group is required.
+                                    </div>
+                                </div>
+                            </div>
+                            <!--Item Menu Type END-->
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">Modifier Item Name</label>
+                                <div class="col-md-9 m-t-10">
+                                    <input id="edit-modifier-item-name" type="text" class="input-med form-control" name="modifier_item_name" ng-required="true"
+                                           ng-model="mi.current_mod_item.modifier_item_name" ng-blur="mi.setPrintNameIfBlank()" ng-fade>
+                                </div>
+                                <div class="col-md-9">
+                                    <div class="alert alert-danger ng-hide alert-reg-position"
+                                         ng-show="mi.modifier_item_form.modifier_item_name.$error.required
+                                         && (mi.modifier_item_form.modifier_item_name.$faded || mi.current_mod_item.submit)"
+
+                                         role="alert">
+                                        Modifier Name is required.
+                                    </div>
+                                </div>
+                            </div>
+                            <!--Item Menu Type END-->
+
+                            <!--Item Menu Type END-->
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">How Many Per Item</label>
+                                <div class="col-md-9 m-t-10">
+                                    <input type="number" class="input-med form-control" name="modifier_item_max" ng-required="true"
+                                           min="0" ng-min="0"
+                                           ng-model="mi.current_mod_item.modifier_item_max" ng-fade>
+                                </div>
+                                <div class="col-md-9">
+                                    <div class="alert alert-danger ng-hide alert-reg-position"
+                                         ng-show="mi.modifier_item_form.modifier_item_max.$error.required
+                                         && (mi.modifier_item_form.modifier_item_max.$faded || mi.current_mod_item.submit)"
+                                         role="alert">
+                                        Max per Item is required.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">Print Name</label>
+                                <div class="col-md-9 m-t-10">
+                                    <input type="text" class="input-med form-control" name="modifier_item_print_name"
+                                           ng-model="mi.current_mod_item.modifier_item_print_name" ng-fade>
+                                </div>
+                                <div class="col-md-9">
+                                    <div class="alert alert-danger ng-hide alert-reg-position"
+                                         ng-show="mi.modifier_item_form.modifier_item_print_name.$error.required
+                                         && (mi.modifier_item_form.modifier_item_print_name.$faded || mi.current_mod_item.submit)"
+                                         role="alert">
+                                        Print Name is required.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">External ID</label>
+                                <div class="col-md-9 m-t-10">
+                                    <input type="text" class="input-med form-control" name="external_modifier_item_id"
+                                           ng-model="mi.current_mod_item.external_modifier_item_id" ng-fade>
+                                </div>
+                            </div>
+
+                            <!--Item Menu Type END-->
+                            <div class="form-group">
+                                <!--<label class="col-md-3 control-label">Priority</label>-->
+                                <!--<div class="col-md-9 m-t-10">-->
+                                <!--<input type="number" class="input-small form-control" name="modifier_item_priority" ng-required="true"-->
+                                <!--ng-model="mi.current_mod_item.priority" ng-fade>-->
+                                <!--</div>-->
+                                <div class="col-md-9">
+                                    <div class="alert alert-danger ng-hide alert-reg-position"
+                                         ng-show="mi.modifier_item_form.modifier_item_priority.$error.required
+                                         && (mi.modifier_item_name.modifier_item_priority.$faded || mi.current_mod_item.submit)"
+                                         role="alert">
+                                        Priority is required.
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <div class="panel panel-primary">
+                <div class="panel-heading ">
+                    <h3 class="panel-title">
+                        Additional Modifier Prices by Size
+                    </h3>
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="panel-body">
+                            <!--<h4 class="dark-header">Default Size Modifier Price</h4>-->
+                            <!--<div class="col-md-12">-->
+                                <!--<div class="form-group">-->
+                                    <!--<label class="col-md-3 control-label">Price $</label>-->
+                                    <!--<div class="col-md-9 m-t-10">-->
+                                        <!--<input type="text" class="input-med form-control" name="modifier_price" ng-required="true"-->
+                                               <!--currency-format amount="mi.current_mod_item.default_modifier_price.price"-->
+                                               <!--ng-model="mi.current_mod_item.default_modifier_price.price" ng-fade>-->
+                                    <!--</div>-->
+                                    <!--<div class="col-md-12">-->
+                                        <!--<div class="alert alert-danger ng-hide alert-reg-position"-->
+                                             <!--ng-show="mi.modifier_item_form.modifier_price.$error.required-->
+                                         <!--&& (mi.modifier_item_form.modifier_price.$faded || mi.current_mod_item.submit)"-->
+                                             <!--role="alert">-->
+                                            <!--Default Modifier Price required.-->
+                                        <!--</div>-->
+                                    <!--</div>-->
+                                <!--</div>-->
+                                <!--<div class="form-group">-->
+                                    <!--<label class="col-md-3 control-label">External ID</label>-->
+                                    <!--<div class="col-md-9 m-t-10">-->
+                                        <!--<input type="text" class="input-med form-control" name="default_external_id"-->
+
+                                               <!--ng-model="mi.current_mod_item.default_modifier_price.external_id" ng-fade>-->
+                                    <!--</div>-->
+                                <!--</div>-->
+                                <!--<div class="form-group">-->
+                                    <!--<label class="col-md-3 control-label">Active</label>-->
+                                    <!--<div class="col-md-9 m-t-10">-->
+                                        <!--<toggle-switch name="default_active"-->
+                                                       <!--on-label="Active" off-label="Inactive"-->
+                                                       <!--ng-model="mi.current_mod_item.default_modifier_price.active">-->
+                                        <!--</toggle-switch>-->
+
+                                    <!--</div>-->
+                                <!--</div>-->
+                            <!--</div>-->
+
+
+                            <h4 class="dark-header">Price Overrides</h4>
+                            <div class="col-md-12">
+                                <div class="form-group hide-toggle flex-init flex-align-items-center pull-right">
+                                    <label class="inline m-t-10 m-r-10">Hide Inactive Menu Elements</label>
+                                    <toggle-switch class="hide-toggle" name="filter_hide_inactive"
+                                                   ng-model="mi.show_active_price_only"></toggle-switch>
+                                </div>
+
+                                <table class="table">
+                                    <thead>
+                                    <tr>
+                                        <th>Section</th>
+                                        <th>Item Size</th>
+                                        <th>Active/Inactive</th>
+                                        <th>Price</th>
+                                        <th>External ID</th>
+                                    </tr>
+                                    </thead>
+                                    <tr>
+                                        <td class="bold">Default</td>
+                                        <td class="bold">Default</td>
+                                        <td>
+                                            <toggle-switch name="default_active"
+                                                               on-label="Active" off-label="Inactive"
+                                                               ng-model="mi.current_mod_item.default_modifier_price.active">
+                                            </toggle-switch>
+                                        </td>
+                                        <td>
+                                            <input type="text" class="input-med form-control" name="modifier_price" ng-required="true"
+                                                   currency-format amount="mi.current_mod_item.default_modifier_price.price"
+                                                   ng-model="mi.current_mod_item.default_modifier_price.price" ng-fade>
+                                        </td>
+                                        <td>
+                                            <input type="text" class="input-med form-control" name="default_external_id"
+                                                   ng-model="mi.current_mod_item.default_modifier_price.external_id" ng-fade>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <div class="alert alert-danger ng-hide alert-reg-position"
+                                             ng-show="mi.modifier_item_form.modifier_price.$error.required
+                                         && (mi.modifier_item_form.modifier_price.$faded || mi.current_mod_item.submit)"
+                                             role="alert">
+                                            Default Modifier Price required.
+                                        </div>
+                                    </tr>
+                                    <tr ng-repeat="size in mi.current_mod_item.all_sizes | filter: mi.filterInactive">
+                                        <td>{{size.menu_type_name}}</td>
+                                        <td>{{size.size_name}}</td>
+                                        <td>
+                                            <toggle-switch name="active"
+                                                           on-label="Active" off-label="Inactive"
+                                                           ng-model="size.active">
+                                            </toggle-switch>
+                                        </td>
+                                        <td>
+                                            <input type="text" class="input-med form-control" name="modifier_size_price"
+                                                   ng-show="size.active"
+                                                   currency-format amount="size.modifier_price"
+                                                   ng-model="size.modifier_price" ng-fade>
+                                        </td>
+                                        <td>
+                                            <input type="text" class="input-med form-control" name="modifier_external_size_id"
+                                                   ng-show="size.active"
+
+                                                   ng-model="size.external_id" ng-fade>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div ng-show="mi.current_mod_item.processing" class="form-loader">
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+    </div>
+
+    <button id="modifier-item-update-submit" ng-show="!mi.new" class="btn btn-success btn-lg pull-right m-l-5">Update Modifier Item</button>
+    <button ng-show="mi.new" class="btn btn-success btn-lg pull-right m-l-5">Create Modifier Item</button>
+    <button ng-disabled type="button" class="btn btn-default btn-lg pull-right m-l-5" ng-click="mi.backToItemsModifiers()">Cancel</button>
+</form>
+
+<propagation-select close-merchant-select="mi.setMerchants()" all-option="1" master-only="1" propation-options="1" auto-search="true"></propagation-select>

@@ -1,0 +1,95 @@
+@import "../../shared/styles/flex.less";
+@import "../../shared/styles/rows-as-card-items.less";
+
+#user-panel .panel-body{
+    padding-bottom: 7px;
+}
+
+#edit-user-modal{
+    .form-loader{
+        position: absolute;
+        top: 39%;
+        left: 45%;
+    }
+}
+.customer-service-user {
+    @max-medium-cards: 899px; //resolution override
+    @min-table-screen: 900px;
+
+    .content-table {
+        .content-table(@min-table-screen);
+    }
+    .content-responsive {
+        .content-responsive(@max-small-cards, @min-medium-cards, @max-medium-cards);
+    }
+    .row-container {
+        .flex-init;
+        .flex-direction-row;
+        .flex-justify-content-space-between;
+        .flex-align-items-baseline;
+        margin-bottom: 10px;
+    }
+    .clear{
+        clear:both;
+    }
+    a.margin{
+        margin-bottom: 10px;
+    }
+    label {
+        margin: 0px;
+    }
+
+    .align-text-right{
+        text-align: right;
+    }
+}
+
+.customer-service-user-order-history{
+    @max-small-cards: 474px;
+    @min-medium-cards: 475px;
+    @max-medium-cards: 899px; //resolution override
+    @min-table-screen: 900px;
+    .content-table {
+        .content-table(@min-table-screen);
+    }
+    .content-responsive {
+        .content-responsive(@max-small-cards, @min-medium-cards, @max-medium-cards);
+    }
+}
+
+.customer-service-user-brand-loyalty_history{
+    @max-small-cards: 444px;
+    @min-medium-cards: 445px;
+    .content-table {
+        .content-table;
+    }
+    .content-responsive {
+        .content-responsive(@max-small-cards, @min-medium-cards, @max-medium-cards);
+    }
+}
+
+.customer-service-user-refund-history{
+    @max-small-cards: 474px;
+    @min-medium-cards: 475px;
+    @max-medium-cards: 1063px; //resolution override
+    @min-table-screen: 1064px;
+    .content-table {
+        .content-table(@min-table-screen);
+    }
+    .content-responsive {
+        .content-responsive(@max-small-cards, @min-medium-cards, @max-medium-cards);
+    }
+}
+
+.customer-service-user-loyalty{
+    @max-small-cards: 379px;
+    @min-medium-cards: 380px;
+    @max-medium-cards: 779px; //resolution override
+    @min-table-screen: 780px;
+    .content-table {
+        .content-table(@min-table-screen);
+    }
+    .content-responsive {
+        .content-responsive(@max-small-cards, @min-medium-cards, @max-medium-cards);
+    }
+}

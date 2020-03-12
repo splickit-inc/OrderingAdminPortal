@@ -1,0 +1,384 @@
+<div class="row">
+    <div class="col-sm-12">
+        <div class="page-header-title menu-bg white-text">
+            <h4 class="page-title">Menu</h4>
+            <button id="create-menu-button" class="btn btn-info" ng-click="vm.createMenuBtnClickEvent()" ng-disabled>Create New Menu
+            </button>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">Search Menus</h3>
+            </div>
+            <div class="panel-body">
+                <form name="vm.search_form" novalidate ng-submit="vm.menuSearch()">
+                    <div class="form-group">
+                        <div class="flex-init flex-align-items-center">
+                        <div class="search-box">
+                            <input type="text" class="form-control"
+                                   id="search_text"
+                                   name="search_text" placeholder=""
+                                   ng-model="vm.search.text" ng-required="false">
+                        </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class='btn-default btn'>Search</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6" ng-class="vm.hasSearchResult()">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">Recently Visited</h3>
+            </div>
+            <div class="panel-body recently-visited-container">
+                <div class="panel panel-body row-table"
+                     ng-repeat="recent_menu in vm.recently_visited"
+                     ng-click="vm.viewMenu(recent_menu)"
+                     data-toggle="modal">
+                    <div>
+                        <h5 class="bold">{{recent_menu.menu_id}} - {{recent_menu.name}}</h5>
+                    </div>
+                    <div>
+                        {{recent_menu.description}}
+                    </div>
+                </div>
+                <div ng-show="vm.recently_visited.length %2 == 1" class="fake-div"></div>
+                <div ng-show="vm.recently_visited.length == 1" class="fix-div-1"></div>
+                <div ng-show="vm.recently_visited.length >= 4" class="fake-div"></div>
+                <div ng-show="vm.recently_visited.length >= 4" class="fake-div"></div>
+                <div ng-show="vm.recently_visited.length == 5"></div>
+                <div ng-show="vm.recently_visited.length == 5"></div>
+                <div ng-show="vm.recently_visited.length == 5"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="menu-list">
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title">Search Results</h3>
+        </div>
+        <div class="panel-body">
+            <!--<h5 class="pre-load-text" ng-show="!vm.search.initial_search">No Search-->
+                <!--Set</h5>-->
+            <div class="filter-loader-contain" ng-show="vm.search.processing">
+                <div class="filter-loader"></div>
+            </div>
+            <h5 class="pre-load-text" ng-show="vm.search.results.length === 0 && !vm.search.processing">No records</h5>
+            <table class="table table-hover content-table" ng-show="vm.search.results.length > 0 && !vm.search.processing">
+                <thead>
+                <tr>
+                    <th class="cursor-pointer" ng-click="vm.orderByChange('menu_id')">Menu ID</th>
+                    <th class="cursor-pointer" ng-click="vm.orderByChange('external_menu_id')">External ID</th>
+                    <th class="cursor-pointer" ng-click="vm.orderByChange('name')">Name</th>
+                    <th class="cursor-pointer" ng-click="vm.orderByChange('description')">Description</th>
+                    <th>Basic Edit</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="search_menu in vm.search.results | orderBy: vm.order_by" ng-click="vm.viewMenu(search_menu)">
+                    <td>{{search_menu.menu_id}}</td>
+                    <td class="text-wrap-word-break">{{search_menu.external_menu_id}}</td>
+                    <td class="text-wrap-word-break">{{search_menu.name}}</td>
+                    <td class="eight-em-text">{{search_menu.description}}</td>
+                    <td>
+                        <i class="edit-icon fa fa-pencil-square-o"
+                           aria-hidden="true"
+                           ng-click="vm.basicMenuEditOpen(search_menu, $event)" data-toggle="modal"></i>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <div class="content-responsive">
+                <div ng-repeat="search_menu in vm.search.results"
+                     ng-click="vm.viewMenu(search_menu)">
+                    <div class="panel panel-body row-table">
+                        <div class="name">
+                            <h5 class="dark-grey"><b>{{search_menu.name}}</b></h5>
+                        </div>
+                        <div class="id">
+                            <h5 class="dark-grey id-title">Menu ID <span
+                                    class="id-number">{{search_menu.menu_id}}</span>
+                            </h5>
+                        </div>
+                        <div class="description clear">
+                            <div ng-show="!!search_menu.external_menu_id">External ID:
+                                {{search_menu.external_menu_id}}
+                            </div>
+                            <div class="text-wrap-word-break">{{search_menu.description}}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="create-menu-modal" class="modal fade" tabindex="-1" role="dialog"
+     aria-labelledby="Create New Menu" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="filter-loader-contain" ng-show="vm.brandsProcessing">
+                <div class="filter-loader"></div>
+            </div>
+            <form name="vm.form" class="form-horizontal" novalidate
+                  ng-submit="vm.createMenu()" ng-show="!vm.brandsProcessing">
+                <div class="modal-header">
+                    <button type="button" class="close m-r-5" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Create New Menu</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Name</label>
+                        <div class="col-md-8">
+                            <input type="text" class="input-large form-control" name="name"
+                                   ng-model="vm.newMenu.name" ng-fade ng-required="true">
+                            <div class="alert alert-danger ng-hide alert-reg-position"
+                                 ng-show="vm.form.name.$error.required
+                                 && (vm.form.name.$faded || vm.newMenu.submit)"
+                                 role="alert">
+                                Name is required.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Description
+                            <i class="fa fa-question-circle tooltip-help" aria-hidden="true">
+                                <span class="tool-tip-text-responsive">{{ 'MENU.TOOLTIP.CREATE.DESCRIPTION' | translate }}</span>
+                            </i>
+                        </label>
+                        <div class="col-md-8">
+                            <textarea type="text" class="input-large form-control description-text-area" name="description"
+                                      ng-model="vm.newMenu.description" ng-fade>
+                            </textarea>
+                        </div>
+                    </div>
+                    <div class="form-group" ng-if="vm.can_select_brands">
+                        <label class="col-md-4 control-label">Brand</label>
+                        <div class="col-md-8">
+                            <select name="brand" class="input-large form-control"
+                                    ng-required="true"
+                                    ng-model="vm.newMenu.brand_id"
+                                    ng-change="vm.loadBrandMerchants(vm.newMenu.brand_id)"
+                                    ng-options="brand.brand_id as brand.brand_name for brand in vm.brands">
+                                <option class="placeholder-color" value="" selected disabled>Brand
+                                </option>
+                            </select>
+                            <div class="alert alert-danger ng-hide alert-reg-position"
+                                 ng-show="vm.form.brand.$error.required && vm.form.brand.$touched
+                                 || (vm.form.brand.$error.required && vm.form.$submitted)"
+                                 role="alert">
+                                Brand is required.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group" ng-show="vm.brandMerchants.length>0">
+                        <label class="col-md-4 control-label">Merchants
+                            <i class="fa fa-question-circle tooltip-help" aria-hidden="true">
+                                <span class="tool-tip-text-responsive">{{ 'MENU.TOOLTIP.CREATE.MERCHANT_FIELD1' | translate }}</span>
+                            </i>
+                        </label>
+                        <div class="col-md-8">
+                            <input type="text" class="input-large form-control" name="merchants"
+                                   ng-model="vm.merchantFilter" ng-fade placeholder="Filter">
+                            <div class="secondary-text m-t-5 input-large">
+                                Supports filtering by merchant id, name, city or zip.
+                            </div>
+                        </div>
+                    </div>
+                    <div ng-show="!vm.merchant_processing && !!!vm.newMenu.brand_id" class="m-l-15 m-r-15">
+                        <h5 class="pre-load-text m-t-30 m-b-30">Select a brand to show it merchants</h5>
+                    </div>
+                    <div class="filter-loader-contain" ng-show="vm.merchant_processing">
+                        <div class="filter-loader"></div>
+                    </div>
+                    <div class="m-b-20" ng-show="!!vm.newMenu.brand_id && !vm.merchant_processing">
+                        <div class="m-l-15 m-r-15 buttons-create-merchant">
+                            <label class="control-label">Merchants:
+                                <i class="fa fa-question-circle tooltip-help" aria-hidden="true">
+                                    <span class="tool-tip-text-responsive">{{ 'MENU.TOOLTIP.CREATE.MERCHANT_FIELD2' | translate }}</span>
+                                </i>
+                            </label>
+                            <div>
+                                <button class="btn btn-default"
+                                        ng-if="!!vm.brandMerchants && vm.brandMerchants.length>0"
+                                        ng-click="vm.addAllMerchants()"
+                                        ng-disabled="vm.merchantFilter.length>0">
+                                    Add All
+                                </button>
+                            </div>
+                        </div>
+                        <div class="m-l-15 m-t-10 m-r-15">
+                            <h6 ng-if="(!vm.brandMerchants || vm.brandMerchants.length==0) &&
+                                       (!vm.newMenu.merchants || vm.newMenu.merchants.length==0)"
+                                class="pre-load-text">No merchants found for this brand</h6>
+                            <h6 ng-if="(!vm.brandMerchants || vm.brandMerchants.length==0) &&
+                                       (!!vm.newMenu.merchants && vm.newMenu.merchants.length>0)"
+                                class="pre-load-text">All merchants have been selected</h6>
+                            <h6 ng-if="(!filteredMerchants || filteredMerchants==0) &&
+                            !(!vm.brandMerchants || vm.brandMerchants.length==0)"
+                                class="pre-load-text">No merchant matches the specified filter</h6>
+                            <div id="table-size" ng-show="vm.brandMerchants.length>0">
+                                <table class="table table-hover">
+                                    <tr
+                                            ng-repeat="merchant in vm.brandMerchants | filter:vm.filterMerchants as filteredMerchants"
+                                            class="merchant-row"
+                                            ng-click="vm.addMerchant(merchant)">
+                                        <td><i class="fa fa-plus-circle add-merchant"
+                                               aria-hidden="true"></i></td>
+                                        <td>{{merchant.merchant_id}}</td>
+                                        <td class="add-merchant-icon-menu">{{merchant.display_name}}</td>
+                                        <td>
+                                            {{merchant.address1}}<br>
+                                            {{merchant.city}}, {{merchant.state}} {{merchant.zip}}
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="m-l-15 m-t-20 m-r-15" ng-show="vm.brandMerchants.length > 0 || vm.newMenu.merchants.length > 0">
+                            <div class=" buttons-create-merchant">
+                                <label class="control-label">Selected Merchants:</label>
+                                <div>
+                                    <button class="btn btn-default"
+                                            ng-if="!!vm.newMenu.merchants && vm.newMenu.merchants.length>0"
+                                            ng-click="vm.removeAllMerchants()">
+                                        Remove All
+                                    </button>
+                                </div>
+                            </div>
+                            <h6 ng-if="!vm.newMenu.merchants || vm.newMenu.merchants.length==0"
+                                class="pre-load-text">No merchants selected</h6>
+                            <div class="table-fixed-with-scroll">
+                                <table class="table table-hover m-t-20" ng-show="vm.newMenu.merchants.length > 0">
+                                    <tr ng-repeat="merchant in vm.newMenu.merchants"
+                                        class="merchant-row"
+                                        ng-click="vm.removeMerchant(merchant)">
+                                        <td><i class="fa fa-minus-circle remove-merchant"
+                                               aria-hidden="true"></i></td>
+                                        <td>{{merchant.merchant_id}}</td>
+                                        <td>{{merchant.display_name}}</td>
+                                        <td>
+                                            {{merchant.address1}}
+                                            <br>
+                                            {{merchant.city}}, {{merchant.state}} {{merchant.zip}}
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="m-l-15 m-r-15">
+
+                        <!--<div class="alert alert-danger ng-hide alert-reg-position"-->
+                             <!--ng-show="(vm.form.$invalid || !vm.newMenu.merchants || vm.newMenu.merchants.length == 0)-->
+                         <!--&& vm.newMenu.submit"-->
+                             <!--role="alert">-->
+                            <!--Please, properly complete the form before submitting it.-->
+                        <!--</div>-->
+                        <div class="alert alert-danger ng-hide alert-reg-position"
+                             ng-show="!!vm.newMenu.error"
+                             role="alert">
+                            {{vm.newMenu.error}}
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <div class="buttons-create-merchant">
+                            <div>
+                                <div ng-show="vm.processing" class="form-loader">
+                                    <div class="line"></div>
+                                    <div class="line"></div>
+                                    <div class="line"></div>
+                                    <div class="line"></div>
+                                </div>
+                                <div class="alert alert-success alert-reg-position form-submit-success fade-effect"
+                                     ng-show="vm.invalidForm"
+                                     role="alert">
+                                    <i class="fa fa-check-circle" aria-hidden="true"></i>{{vm.error}}
+                                </div>
+                            </div>
+                            <div>
+                                <button  type="button" ng-disabled class="btn btn-default" data-dismiss="modal">Cancel</button>
+                                <button id="create-menu-submit" class="btn btn-success">Submit</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div id="edit-menu-modal" class="modal fade" tabindex="-1" role="dialog"
+     aria-labelledby="Create New Menu" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form name="vm.edit_menu_form" class="form-horizontal" novalidate
+                  ng-submit="vm.updateMenu()" >
+                <div class="modal-header">
+                    <button type="button" class="close m-r-5" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Edit Menu Menu</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Name</label>
+                        <div class="col-md-8">
+                            <input type="text" class="input-large form-control" name="name"
+                                   ng-model="vm.edit_menu.name" ng-fade ng-required="true">
+                            <div class="alert alert-danger ng-hide alert-reg-position"
+                                 ng-show="vm.edit_menu_form.name.$error.required
+                                 && (vm.edit_menu_form.name.$faded || vm.edit_menu.submit)"
+                                 role="alert">
+                                Name is required.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Description</label>
+                        <div class="col-md-8">
+                            <textarea type="text" class="input-large form-control description-text-area" name="description"
+                                      ng-model="vm.edit_menu.description" ng-fade>
+                            </textarea>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <div class="buttons-create-merchant">
+                            <div>
+                                <div ng-show="vm.processing" class="form-loader">
+                                    <div class="line"></div>
+                                    <div class="line"></div>
+                                    <div class="line"></div>
+                                    <div class="line"></div>
+                                </div>
+                                <div class="alert alert-success alert-reg-position form-submit-success fade-effect"
+                                     ng-show="vm.invalidForm"
+                                     role="alert">
+                                    <i class="fa fa-check-circle" aria-hidden="true"></i>{{vm.error}}
+                                </div>
+                            </div>
+                            <div>
+                                <button type="button" ng-disabled class="btn btn-default" data-dismiss="modal">Cancel</button>
+                                <button class="btn btn-success">Submit</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,73 @@
+<div class="topbar">
+    <!-- LOGO -->
+    <div class="topbar-left">
+        <div class="text-center">
+            <a href="#home" class="logo">
+                <div><!--Don't remove logo fills here--></div>
+            </a>
+            <a href="#home" class="logo-sm"><img src="img/splickit_small_logo.png" height="48"></a>
+        </div>
+    </div>
+    <!-- Button mobile view to collapse sidebar menu -->
+    <div class="navbar navbar-inverse" role="navigation">
+        <div class="container">
+            <div class="" ng-controller="TopBarController">
+                <!--<ng-include src="'modules/menu/menu-search/menu-search.html'">
+                </ng-include>-->
+                <ul class="nav navbar-nav navbar-right pull-right fix-nav-bar-menu-margin"
+                    ng-controller="SessionController"
+                    ng-show="isLoggedIn">
+                    <li class="dropdown">
+                        <a id="gear-icon-link" href="" class="dropdown-toggle profile waves-effect waves-light"
+                           data-toggle="dropdown" aria-expanded="false">
+                            <img src="/img/gear_icon.png" alt="user-img" class="img-circle">
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li ng-show="user_service.hasPermission('home_nav')">
+                                <a href="#/" ng-if="!isUserOperator()"> Home</a>
+                                <a href="#/operator/home" ng-if="isUserOperator()"> Home</a>
+                            </li>
+                            <li ng-show="user_service.hasPermission('reports_nav')"><a href="#/reports">Reporting</a></li>
+                            <li ng-show="user_service.hasPermission('reports_nav')"><a href="#/users/manage"> Manage Users</a></li>
+                            <li ng-show="user_service.hasPermission('mng_vars')"><a href="#/vars/manage">Value Added Resellers</a></li>
+                            <li class="divider"></li>
+                            <li><a href="" data-toggle="modal" data-target="#theme-preferences">
+                                Preferences</a></li>
+                            <li class="divider"></li>
+                            <li>
+                                <a id="logout-link" href ng-click="$event.preventDefault();logOut()">
+                                    Logout
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+                <ng-include src="'modules/merchant/merchant-nav-bar/merchant-nav-bar.html'">
+                </ng-include>
+            </div>
+            <!--/.nav-collapse -->
+        </div>
+    </div>
+</div>
+<div id="theme-preferences" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title">Theme Selection</h4>
+            </div>
+            <div class="modal-body form-horizontal" ng-controller="ThemePreferencesController">
+                <p>Use the selector to switch your page theme between our default templates.</p>
+                <div class="form-group flex-init flex-justify-content-center flex-align-items-baseline">
+                    <label class="m-r-10">Theme Selected: </label>
+                    <div>
+                        <select class="form-control" ng-model="selectedTheme" ng-change="changeTheme()" ng-options="layout.url as layout.name for layout in layouts">
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

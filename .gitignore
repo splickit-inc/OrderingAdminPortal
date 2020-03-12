@@ -1,0 +1,29 @@
+/node_modules/
+/bower_components/
+/dist/
+/public/storage
+/vendor
+/.idea
+/logs/
+Homestead.json
+Homestead.yaml
+.env
+logs/portal-access.log
+/public/img/item_tmp
+/public/img/web_skin
+sandbox
+package-lock.json
+
+# General
+*.DS_Store
+.AppleDouble
+.LSOverride
+
+# Thumbnails
+._*
+/public/node_modules/
+/supervisord.pid
+/supervisord.log
+
+
+go-pear.phar

@@ -1,0 +1,443 @@
+<div class="page-header-title merchant-bg white-text">
+    <h4 class="page-title">Payment Services</h4>
+    <ol class="breadcrumb">
+        <li><a href="#/merchants">{{ 'MESSAGE.SHARE.MERCHANT' | translate }}</a></li>
+        <li><a href="#/merchant/payment">Payment</a>
+        </li>
+    </ol>
+</div>
+
+<payment-services-daily-deposit-report></payment-services-daily-deposit-report>
+
+<div class="row">
+    <div class="col-md-12 col-lg-9">
+        <!--Location Panel-->
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <div class="col-md-6 col-lg-6">
+                    <h3 class="panel-title">Payment Services</h3>
+                </div>
+                <div class="col-md-6 col-lg-6">
+                    <h3 class="panel-title">Owner Info</h3>
+                </div>
+            </div>
+            <div class="panel-body">
+                <div class="filter-loader-contain" ng-if="vm.loadingBusinessInfo">
+                    <div class="filter-loader"></div>
+                </div>
+                <div class="col-md-6 col-lg-6">
+                    <form name="vm.business_form" ng-show="!vm.loadingBusinessInfo" novalidate
+                          ng-submit="vm.updateBusinessInformation()" class="form-horizontal">
+                        <div class="form-group">
+                            <label class="control-label col-md-4">
+                                Business Name
+                            </label>
+                            <div class="col-md-8">
+                                <input type="text" class="input-large form-control" name="business_name"
+                                       placeholder="Business Name"
+                                       ng-model="vm.business_info.business_name" ng-fade ng-required="true">
+                                <div class="alert alert-danger ng-hide alert-reg-position input-large"
+                                     ng-show="vm.business_form.business_name.$error.required && (vm.business_form.business_name.$touched || vm.business_form.$submitted)"
+                                     role="alert">
+                                    Business Name field is required.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label col-md-4">
+                                DBA Name
+                            </label>
+                            <div class="col-md-8">
+                                <input type="text" class="input-large form-control" name="dba_name"
+                                       placeholder="DBA Name"
+                                       ng-model="vm.business_info.dba" ng-fade ng-required="true">
+                                <div class="alert alert-danger ng-hide alert-reg-position input-large"
+                                     ng-show="vm.business_form.dba_name.$error.required && (vm.business_form.dba_name.$touched || vm.business_form.$submitted)"
+                                     role="alert">
+                                    DBA Name field is required.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label col-md-4">
+                                Federal Tax ID
+                            </label>
+                            <div class="col-md-8">
+                                <input type="text" class="input-large form-control" name="tax_id" placeholder="123456789"
+                                       ng-model="vm.business_info.fed_tax_id" ng-fade ng-required="true"
+                                       federal-tax-id-validator>
+                                <div class="alert alert-danger ng-hide alert-reg-position input-large"
+                                     ng-show="vm.business_form.tax_id.$error.required && (vm.business_form.tax_id.$touched || vm.business_form.$submitted)"
+                                     role="alert">
+                                    Tax ID field is required.
+                                </div>
+                            </div>
+                        </div>
+
+                        <!--<div class="form-group">-->
+                            <!--<label class="control-label col-md-4">Business URL</label>-->
+                            <!--<div class="col-md-8">-->
+                                <!--<input type="text" class="input-large form-control" name="business_url"-->
+                                       <!--ng-model="vm.business_info.business_url" ng-fade-->
+                                       <!--placeholder="https://www.yourbusiness.com">-->
+                            <!--</div>-->
+                        <!--</div>-->
+
+                        <div class="form-group">
+                            <label class="control-label col-md-4">Bank Routing #</label>
+                            <div class="col-md-8">
+                                <input type="text" class="input-large form-control" name="bank_routing"
+                                       placeholder="123456789" ng-model="vm.business_info.bank_routing_number" ng-fade
+                                       ng-required="true" bank-routing-validator>
+                                <div class="alert alert-danger ng-hide alert-reg-position input-large"
+                                     ng-show="vm.business_form.bank_routing.$error.required && (vm.business_form.bank_routing.$touched || vm.business_form.$submitted)"
+                                     role="alert">
+                                    The Bank Routing field is required.
+                                </div>
+
+                                <div class="alert alert-danger ng-hide alert-reg-position input-large"
+                                     ng-show="vm.business_form.bank_routing.$error.maxlength && (vm.business_form.bank_routing.$touched || vm.business_form.$submitted)"
+                                     role="alert">
+                                    The Bank Routing field must be 9 digits maximum.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label col-md-4">Bank Acct. #</label>
+                            <div class="col-md-8">
+                                <input type="text" class="input-large form-control" name="bank_account"
+                                       placeholder="5201112056688" ng-model="vm.business_info.bank_account_number" ng-fade
+                                       ng-required="true" bank-account-validator>
+                                <div class="alert alert-danger ng-hide alert-reg-position input-large"
+                                     ng-show="vm.business_form.bank_account.$error.required && (vm.business_form.bank_account.$touched || vm.business_form.$submitted)"
+                                     role="alert">
+                                    The Bank Account field is required.
+                                </div>
+                                <div class="alert alert-danger ng-hide alert-reg-position input-large"
+                                     ng-show="vm.business_form.bank_account.$error.maxlength && (vm.business_form.bank_account.$touched || vm.business_form.$submitted)"
+                                     role="alert">
+                                    The Bank Account field must be 9 digits maximum.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label col-md-4">Business or Personal Account</label>
+                            <div class="col-md-8">
+                                <select id="fix-small-screen-inline" name="bank_type_business_personal" class="form-control input-med"
+                                        ng-required="true"
+                                        ng-model="vm.business_info.bank_type_business_personal"
+                                        ng-options="account_type.code as account_type.desc for account_type in vm.account_type_personal_business">
+                                    <option class="placeholder-color" value="" selected disabled>Account Type</option>
+                                </select>
+
+                                <div class="alert alert-danger ng-hide alert-reg-position input-large"
+                                     ng-show="vm.business_form.bank_type_business_personal.$error.required && (vm.business_form.bank_type_business_personal.$touched || vm.business_form.$submitted)"
+                                     role="alert">
+                                    Business vs. Personal account type is required.
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                        <!--<div class="submit-contain flex-init flex-justify-content-space-between">-->
+                            <!--<div id="location-updated-success"-->
+                                 <!--class="flex-init flex-direction-column flex-justify-content-center">-->
+                                <!--<div class="alert-success alert-reg-position form-submit-success fade-effect"-->
+                                     <!--ng-if="vm.businessInformationUpdatedSuccesfully"-->
+                                     <!--role="alert">-->
+                                    <!--<i class="fa fa-check-circle" aria-hidden="true"></i> Business Information Updated.-->
+                                <!--</div>-->
+                            <!--</div>-->
+
+                            <!--<div class="flex-align-self-end">-->
+                                <!--<button class='btn-soft-blue btn pull-right' type="submit">{{-->
+                                    <!--'MESSAGE.SHARE.SUBMIT' | translate }}-->
+                                <!--</button>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                    </form>
+                </div>
+
+
+                <div class="col-md-6 col-lg-6">
+                    <form name="vm.owner_form" ng-if="!vm.loadingOwnerInfo" novalidate
+                          ng-submit="vm.updateOwnerInformation()" class="form-horizontal">
+
+                        <div class="form-group">
+                            <label class="control-label col-md-4">
+                                First Name
+                            </label>
+                            <div class="col-md-8">
+                                <input type="text" class="input-large form-control" name="first_name"
+                                       placeholder="John"
+                                       ng-model="vm.business_info.primary_owner_first_name" ng-fade>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label col-md-4">
+                                Last Name
+                            </label>
+                            <div class="col-md-8">
+                                <input type="text" class="input-large form-control" name="last_name"
+                                       placeholder="Smith"
+                                       ng-model="vm.business_info.primary_owner_last_name" ng-fade>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label col-md-4">Date Of Birth</label>
+                            <div class="col-md-8">
+                                <input type="date" class="form-control input-med flex-init"
+                                       placeholder="YYYY-MM-DD" name="owner_dob"
+                                       ng-required="true" ng-model="vm.business_info.primary_owner_dob">
+                                <div class="alert alert-danger ng-hide alert-reg-position input-large"
+                                     ng-show="vm.owner_form.owner_dob.$error.required && (vm.owner_form.owner_dob.$touched || vm.owner_form.$submitted)"
+                                     role="alert">
+                                    The Date Of Birth
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label col-md-4">Primary Owner SS#</label>
+                            <div class="col-md-8">
+                                <input type="text" class="input-large form-control" name="primary_owner_ss"
+                                       placeholder="123456789" ng-model="vm.business_info.primary_owner_ss" ng-fade
+                                       ng-required="true" owner-ss-validator>
+                                <div class="alert alert-danger ng-hide alert-reg-position input-large"
+                                     ng-show="vm.business_form.primary_owner_ss.$error.required && (vm.business_form.primary_owner_ss.$touched || vm.business_form.$submitted)"
+                                     role="alert">
+                                    Primary Owner SS field is required.
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="form-group">
+                            <label class="control-label col-md-4">Owner Phone</label>
+                            <div class="col-md-8">
+                                <input type="tel" class="input-large form-control" name="phone_number"
+                                       ng-model="vm.business_info.primary_owner_phone" ng-fade placeholder="513 000 1234"
+                                       ui-number-mask="0" ui-hide-group-sep ng-required="true">
+
+                                <div class="alert alert-danger ng-hide alert-reg-position input-large"
+                                     ng-show="vm.owner_form.phone_number.$error.required && (vm.owner_form.phone_number.$touched || vm.owner_form.$submitted)"
+                                     role="alert">
+                                    The Owner Phone Number is required.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label col-md-4">Email</label>
+                            <div class="col-md-8">
+                                <input type="text" class="input-large form-control" name="email"
+                                       ng-model="vm.business_info.email" ng-fade placeholder="name@somedomain.com"
+                                       ng-required="true">
+
+                                <div class="alert alert-danger ng-hide alert-reg-position input-large"
+                                     ng-show="vm.owner_form.email.$error.required && (vm.owner_form.email.$touched || vm.owner_form.$submitted)"
+                                     role="alert">
+                                    The Email Address is required.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-md-12 m-l-15 m-t-10">
+                                <div class="alert-success alert-reg-position form-submit-success fade-effect"
+                                     ng-show="vm.ownerInformationUpdatedSuccesfully"
+                                     role="alert">
+                                    <i class="fa fa-check-circle" aria-hidden="true"></i> Owner Info Updated.
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label col-md-4">Checking or Savings Account</label>
+                            <div class="col-md-8">
+                                <select name="bank_type_saving_checking" class="form-control input-med"
+                                        ng-required="true"
+                                        ng-model="vm.business_info.bank_type_saving_checking"
+                                        ng-options="account_type.code as account_type.desc for account_type in vm.account_type_checking_savings">
+                                    <option class="placeholder-color" value="" selected disabled>Account Type</option>
+                                </select>
+
+                                <div class="alert alert-danger ng-hide alert-reg-position input-large"
+                                     ng-show="vm.business_form.bank_type_saving_checking.$error.required && (vm.business_form.bank_type_saving_checking.$touched || vm.business_form.$submitted)"
+                                     role="alert">
+                                    Savings vs. Checking account type is required.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label col-md-4"><input type="checkbox" class="pull-right" ng-model="vm.business_info.form_agreement"></label>
+
+                            <div class="col-md-8">
+                                <p class="m-t-10"><strong>I accept the <a href="javascript:void(0);" data-toggle="modal"
+                                                                          ng-click="vm.form_agreement_opened = true"
+                                                                          data-target="#tos-modal">Terms and Conditions</a>.</strong></p>
+
+                                <div class="alert alert-danger alert-reg-position input-large"
+                                     ng-show="vm.owner_form.$submitted && !vm.business_info.form_agreement"
+                                     role="alert">
+                                    You must accept the Terms and Conditions to submit.
+                                </div>
+
+                                <div class="alert alert-danger alert-reg-position input-large"
+                                     ng-show="vm.owner_form.$submitted && !vm.form_agreement_opened"
+                                     role="alert">
+                                    You must open the Terms and Conditions agreement to accept them.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="submit-contain flex-init flex-justify-content-end">
+                            <div class="flex-align-self-end">
+                                <button type="submit" class='btn-soft-blue btn pull-right'>{{
+                                    'MESSAGE.SHARE.SUBMIT' | translate }}
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="alert alert-success alert-reg-position "
+                     ng-show="!vm.business_info.vio_result_status && !vm.business_info.vio_account_number"
+                     role="alert">
+                    Use this form ONLY to apply for credit card processing.
+                </div>
+                <div class="alert alert-success alert-reg-position "
+                     ng-show="vm.business_info.vio_result_status == '00' && vm.business_info.vio_account_number"
+                     role="alert">
+                    <i class="fa fa-check-circle" aria-hidden="true"></i> You have successfully converted your account, and it is ready for use.
+                </div>
+                <div class="alert alert-info alert-reg-position"
+                     ng-show="vm.business_info.vio_result_status == '00' && !vm.business_info.vio_account_number"
+                     role="alert">
+                    Please review and resubmit your application.
+                </div>
+                <div class="alert alert-danger alert-reg-position"
+                     ng-show="vm.business_info.vio_result_status && vm.business_info.vio_result_status != '00'"
+                     role="alert">
+                    Your application has been received but requires manual followup. You will be contacted my our underwriting team shortly to complete the application. No further action is needed until you hear from our team.
+                </div>
+            </div><!-- panel-body -->
+        </div>
+
+    </div>
+
+    <div class="col-md-6 col-lg-3">
+        <!--Location Panel-->
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">DOCUMENT IMAGES</h3></div>
+            <div class="panel-body">
+                <div class="alert-info alert-reg-position form-submit-success fade-effect"
+                     role="alert"> Please upload the following 2 documents in an image format of jpg, png, or gif.
+                </div>
+
+                <div class="col-md-12 m-t-10">
+                    <div class="form-group" ng-show="!vm.fileUploading">
+                        <label class="control-label col-md-12">Driver's License</label>
+                        <div class="col-md-12">
+                            <a class='btn-soft-blue btn m-r-5' style="line-height: 18px;"
+                               ng-click="vm.uploadFileLicense()">
+                                Select file for upload
+                            </a>
+
+                            <div class="alert alert-success alert-reg-position input-large"
+                                 ng-show="vm.business_info.primary_owner_drivers_license_url.length > 0"
+                                 role="alert">
+                                <i class="fa fa-check-circle" aria-hidden="true"></i> Driver's License Successfully Uploaded.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <HR>
+                <div class="col-md-12 m-t-40 m-b-20">
+                    <div class="form-group" ng-show="!vm.fileUploading">
+                        <label class="control-label col-md-12">Voided Check</label>
+                        <div class="col-md-12">
+                            <a style="line-height: 18px;" class='btn-soft-blue btn m-r-5'
+                               ng-click="vm.uploadFileVoidedCheck()">
+                                Select file for upload
+                            </a>
+                            <i class="fa fa-check-circle" aria-hidden="true" ng-if="!!vm.voidedCheckFile"></i>
+                            <div class="alert alert-success alert-reg-position input-large"
+                                 ng-show="vm.business_info.primary_owner_void_check_url.length > 0"
+                                 role="alert">
+                                <i class="fa fa-check-circle" aria-hidden="true"></i> Voided Check Successfully Uploaded
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div><!-- panel-body -->
+        </div>
+    </div>
+</div>
+
+
+<div id="upload-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Upload Your File</h4>
+            </div>
+            <div class="modal-body">
+                <div ng-show="false">
+                    <div class="filter-loader-contain">
+                        <div class="filter-loader"></div>
+                    </div>
+                </div>
+                <div style="margin: auto" ngf-drop ngf-select ng-model="vm.file" class="drop-box site-image-drop-box"
+                     ngf-max-size="5MB" ngf-drag-over-class="'dragover'" ngf-multiple="false"
+                     ngf-allow-dir="false" accept="image/*" ngf-pattern="'image/*'"
+                     ngf-validate-fn="vm.isValidLogo($file)"
+                >
+                    Drop image file here or click to upload
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" ng-disabled class="btn btn-default" data-dismiss="modal">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div id="tos-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Payment Services Terms and Conditions</h4>
+            </div>
+            <div class="modal-body">
+                <payment-services-tos></payment-services-tos>
+            </div>
+            <div class="modal-footer">
+                <button type="button" ng-disabled class="btn btn-default" data-dismiss="modal">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+

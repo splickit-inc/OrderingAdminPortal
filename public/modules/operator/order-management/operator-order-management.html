@@ -1,0 +1,1017 @@
+<div ng-class="om.confirmNewOrderClass()" ng-show="om.new_order_received" ng-click="om.confirmNewOrderReceived()">
+    <h1 class="m-t-100 text-center">
+        You have a new order.
+    </h1>
+    <h5 class="m-t-100 text-center">
+        Click or touch anywhere to close this alert.
+    </h5>
+</div>
+<div class="page-header-title menu-bg">
+    <h4 class="page-title">Order Management</h4>
+    <div id="last-refresh" class="col-md-3 pull-right m-t-5"><span ng-show="om.last_update.length > 3">Last Refresh: {{om.last_update}}</span></div>
+
+    <button ng-show="!om.audio_on" class="btn btn-danger" ng-disabled ng-click="om.turnOnAudio()">
+        Turn On Audio
+    </button>
+
+    <button ng-show="om.audio_on" class="btn btn-danger" ng-disabled ng-click="om.turnOffAudio()">
+        Turn Off Audio
+    </button>
+
+    <button class="btn btn-info" ng-disabled ng-click="om.refreshOrders()">
+        Refresh
+    </button>
+</div>
+
+<div class="order-management-page">
+    <div class="panel panel-primary">
+        <div class="panel-heading section-select"
+             ng-click="om.pending_orders.open = !om.pending_orders.open">
+            <h3 class="panel-title">
+                <i class="panel-title fa fa-plus pull-left" ng-if="!om.pending_orders.open" aria-hidden="true"></i>
+                <i class="panel-title fa fa-minus pull-left" ng-if="om.pending_orders.open" aria-hidden="true"></i>
+                Pending Orders
+            </h3>
+        </div>
+        <div class="panel-body" ng-if="om.pending_orders.open">
+            <h5 class="pre-load-text" ng-if="om.pending_orders.orders.length < 1">No Current Orders</h5>
+            <table class="table table-hover table-width-100 content-table" ng-if="om.pending_orders.orders.length > 0">
+                <thead>
+                <tr>
+                    <td style="width: 30px;"></td>
+                    <td class="bold fix-table-wrap">Order ID</td>
+                    <td class="bold fix-table-wrap">Time Due</td>
+                    <td class="bold fix-table-wrap">Order Type</td>
+                    <td class="bold">Name</td>
+                    <td class="bold"># Items</td>
+                    <td class="bold">Tip</td>
+                    <td class="bold">Total</td>
+                    <td ng-if="!om.read_only" style="width: 30px;" class="bold">Move to Complete</td>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat-start="order in om.pending_orders.orders" ng-click="order.show_detail = !order.show_detail" ng-class="{'active':order.show_detail}">
+                    <td>
+                        <div class="text-center">
+                            <i class="fa fa-plus" ng-show="!order.show_detail" aria-hidden="true"></i>
+                            <i class="fa fa-minus" ng-show="order.show_detail" aria-hidden="true"></i>
+                        </div>
+                    </td>
+                    <td>{{order.order_id}}</td>
+                    <td class="">{{order.pickup_time}} - {{order.pickup_day}}, {{order.pickup_month}} {{order.pickup_day_of_month}}</td>
+                    <td class="">{{om.decodeOrderType(order.order_type)}}</td>
+                    <td class="">{{order.full_name}}</td>
+                    <td class="">{{order.order_qty}}</td>
+                    <td class="">{{order.tip_amt}}</td>
+                    <td class="">{{order.grand_total}}</td>
+                    <td ng-if="!om.read_only">
+                        <button ng-click="om.completeOrderConfirm(order, $index, 'pending_orders')" class="btn-soft-blue check-button">
+                            <i class="fa fa-check" aria-hidden="true"></i>
+                        </button>
+                    </td>
+                </tr>
+                <tr ng-if="order.show_detail" ng-repeat-end="" class="hidden-hover">
+                    <td colspan="9" style="border-top: transparent">
+                        <div style="margin-right: 20px; margin-left: 20px;">
+                            <div><span class="bold">Customer:</span> {{order.user_email}}</div>
+                            <div><span class="bold">Contact No:</span> {{order.user_phone_no}}</div>
+                            <div><span ng-show="order.note.length > 0" class="bold">Note:</span> {{order.note}}</div>
+                            <div ng-show="order.order_type == 'D'"><span class="bold">Address:</span> {{order.delivery_address}}</div>
+                            <h4 class="bold">Items</h4>
+                            <div ng-repeat="order_item in order.order_items">
+                                <hr/>
+                                <div class="item">
+                                    <strong>{{order_item.quantity}} {{order_item.size_name}} {{order_item.item_name}}</strong>
+                                    <div>$ {{order_item.price}}</div>
+                                </div>
+
+                                <div>
+                                    <div ng-show="order_item.note.length > 0" class="dark-grey-2 m-l-10">NOTE:</div>
+                                    <div class="m-l-20" ng-show="order_item.note.length > 0">
+                                        <span>
+                                            {{order_item.note}}
+                                        </span>
+                                    </div>
+                                    <div ng-show="order_item.order_detail_held_modifiers.length > 0" class="dark-grey-2 m-l-10">HOLD THE:</div>
+                                    <div class="m-l-20" ng-show="order_item.order_detail_held_modifiers.length > 0">
+                                        <span>
+                                            {{om.commaAndList(order_item.order_detail_held_modifiers)}}
+                                        </span>
+                                    </div>
+
+                                    <div ng-show="order_item.order_detail_modifiers.length > 0" class="dark-grey-2 m-l-10">WITH:</div>
+                                    <div class="m-l-20" ng-show="order_item.order_detail_modifiers.length > 0">
+                                        <span>
+                                            {{om.commaAndList(order_item.order_detail_modifiers)}}
+                                        </span>
+                                    </div>
+                                    <div ng-show="order_item.order_detail_sides.length > 0" class="dark-grey-2 m-l-10">SIDES:</div>
+                                    <div class="m-l-20" ng-show="order_item.order_detail_sides.length > 0">
+                                        <span>
+                                            {{om.commaAndList(order_item.order_detail_sides)}}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="total-container">
+                                <div class="payment-numbers">
+                                    <div>Order Amount:</div>
+                                    <div class="amount">{{order.order_amt}}</div>
+                                </div>
+                                <div class="payment-numbers" ng-show="order.promo_amt > 0">
+                                    <div>Promo:</div>
+                                    <div class="amount">
+                                        {{order.promo_amt}}<BR>
+                                        {{order.promo_code}} code
+                                    </div>
+                                </div>
+                                <div class="payment-numbers" ng-show="order.delivery_amt > 0">
+                                    <div>Delivery:</div>
+                                    <div class="amount">{{order.delivery_amt}}</div>
+                                </div>
+                                <div class="payment-numbers">
+                                    <div>Tax Amount:</div>
+                                    <div class="amount">{{order.total_tax_amt}}</div>
+                                </div>
+                                <div class="payment-numbers">
+                                    <div>Grand Total:</div>
+                                    <div class="amount">{{order.grand_total}}</div>
+                                </div>
+                                <div class="payment-numbers">
+                                    <div>Tip:</div>
+                                    <div class="amount">{{order.tip_amt}}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <div class="content-responsive" ng-if="om.pending_orders.orders.length > 0">
+                <div ng-repeat="order in om.pending_orders.orders">
+                    <div class="panel panel-body row-table" ng-click="order.show_detail = !order.show_detail">
+                        <div class="name">
+                            <h5 class="dark-grey" style="margin: 7px 0px;"><b>
+                                <i class="fa fa-plus" ng-show="!order.show_detail" aria-hidden="true"></i>
+                                <i class="fa fa-minus" ng-show="order.show_detail" aria-hidden="true"></i>
+                                {{order.full_name}}
+                            </b></h5>
+                        </div>
+                        <div class="id">
+                            <h5 class="dark-grey id-title">Order Count #<span class="id-number">{{order.order_id}}</span>
+                            </h5>
+                        </div>
+                        <div class="description clear">
+                            <div>
+                                Time Due:
+                            </div>
+                            <div>
+                                {{order.pickup_time}} - {{order.pickup_day}}, {{order.pickup_month}} {{order.pickup_day_of_month}}
+                            </div>
+                            <div>
+                                {{order.order_qty}} Item(s)
+                            </div>
+
+                            <div class="pull-right">
+                                <b>Tip:</b>{{order.tip_amt}} -
+                                <b>Grant Total:</b> {{order.grand_total}}
+                            </div>
+                            <div class="clear refund-button">
+                                <button ng-click="om.completeOrderConfirm(order, $index, 'pending_orders')" class="btn-soft-blue check-button">
+                                    <i class="fa fa-check" aria-hidden="true"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="line-box-container" ng-if="order.show_detail">
+                        <div class="line-border">
+                            <span class="text">
+                                Details
+                            </span>
+                        </div>
+                    </div>
+                    <div ng-if="order.show_detail" >
+                        <div class="p-0">
+                            <div style="margin-right: 20px; margin-left: 20px;">
+                                <div><span class="bold">Customer:</span> {{order.user_email}}</div>
+                                <div><span class="bold">Contact No:</span> {{order.user_phone_no}}</div>
+                                <div><span ng-show="order.note.length > 0"  class="bold">Note:</span> {{order.note}}</div>
+                                <div ng-show="order.order_type == 'D'"><span class="bold">Address:</span> {{order.delivery_address}}</div>
+                                <h4 class="bold">Items</h4>
+                                <div ng-repeat="order_item in order.order_items">
+                                    <hr/>
+                                    <div class="item">
+                                        <strong>{{order_item.quantity}} {{order_item.size_name}} {{order_item.item_name}}</strong>
+                                        <div>$ {{order_item.price}}</div>
+                                    </div>
+
+                                    <div>
+                                        <div ng-show="order_item.note.length > 0" class="dark-grey-2 m-l-10">NOTE:</div>
+                                        <div class="m-l-20" ng-show="order_item.note.length > 0">
+                                        <span>
+                                            {{order_item.note}}
+                                        </span>
+                                        </div>
+                                        <div ng-show="order_item.order_detail_held_modifiers.length > 0" class="dark-grey-2 m-l-10">HOLD THE:</div>
+                                        <div class="m-l-20" ng-show="order_item.order_detail_held_modifiers.length > 0">
+                                        <span>
+                                            {{om.commaAndList(order_item.order_detail_held_modifiers)}}
+                                        </span>
+                                        </div>
+
+                                        <div ng-show="order_item.order_detail_modifiers.length > 0" class="dark-grey-2 m-l-10">WITH:</div>
+                                        <div class="m-l-20" ng-show="order_item.order_detail_modifiers.length > 0">
+                                        <span>
+                                            {{om.commaAndList(order_item.order_detail_modifiers)}}
+                                        </span>
+                                        </div>
+                                        <div ng-show="order_item.order_detail_sides.length > 0" class="dark-grey-2 m-l-10">SIDES:</div>
+                                        <div class="m-l-20" ng-show="order_item.order_detail_sides.length > 0">
+                                        <span>
+                                            {{om.commaAndList(order_item.order_detail_sides)}}
+                                        </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="total-container">
+                                    <div class="payment-numbers">
+                                        <div>Order Amount:</div>
+                                        <div class="amount">{{order.order_amt}}</div>
+                                    </div>
+                                    <div class="payment-numbers" ng-show="order.promo_amt > 0">
+                                        <div>Promo:</div>
+                                        <div class="amount">
+                                            {{order.promo_amt}}<BR>
+                                            {{order.promo_code}} code
+                                        </div>
+                                    </div>
+                                    <div class="payment-numbers" ng-show="order.delivery_amt > 0">
+                                        <div>Delivery:</div>
+                                        <div class="amount">{{order.delivery_amt}}</div>
+                                    </div>
+                                    <div class="payment-numbers">
+                                        <div>Tax Amount:</div>
+                                        <div class="amount">{{order.total_tax_amt}}</div>
+                                    </div>
+                                    <div class="payment-numbers">
+                                        <div>Grand Total:</div>
+                                        <div class="amount">{{order.grand_total}}</div>
+                                    </div>
+                                    <div class="payment-numbers">
+                                        <div>Tip:</div>
+                                        <div class="amount">{{order.tip_amt}}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="line-box-container" ng-if="order.show_detail">
+                        <div class="line-border">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="panel panel-primary">
+        <div class="panel-heading section-select" ng-click="om.active_orders.open = !om.active_orders.open">
+            <h3 class="panel-title">
+                Active Orders
+            </h3>
+            <!--<i class="panel-title fa fa-plus" ng-if="!om.active_orders.open" aria-hidden="true"></i>-->
+            <!--<i class="panel-title fa fa-minus" ng-if="om.active_orders.open" aria-hidden="true"></i>-->
+        </div>
+        <div class="panel-body" ng-if="om.active_orders.open">
+            <h5 class="pre-load-text" ng-show="om.active_orders.orders.length < 1">No Current Orders</h5>
+
+            <table class="table table-hover table-width-100 content-table" ng-if="om.active_orders.orders.length > 0">
+                <thead>
+                <tr>
+                    <td style="width: 30px;"></td>
+                    <td class="bold fix-table-wrap">Order ID</td>
+                    <td class="bold fix-table-wrap">Time Due</td>
+                    <td class="bold fix-table-wrap">Order Type</td>
+                    <td class="bold">Name</td>
+                    <td class="bold"># Items</td>
+                    <td class="bold">Tip</td>
+                    <td class="bold">Total</td>
+                    <td ng-if="!om.read_only" style="width: 30px;" class="bold">Move to Complete</td>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat-start="order in om.active_orders.orders" ng-click="order.show_detail = !order.show_detail" ng-class="{'active':order.show_detail}">
+                    <td>
+                        <div class="text-center">
+                            <i class="fa fa-plus" ng-show="!order.show_detail" aria-hidden="true"></i>
+                            <i class="fa fa-minus" ng-show="order.show_detail" aria-hidden="true"></i>
+                        </div>
+                    </td>
+                    <td>{{order.order_id}}</td>
+                    <td class="">{{order.pickup_time}} - {{order.pickup_day}}, {{order.pickup_month}} {{order.pickup_day_of_month}}</td>
+                    <td class="">{{om.decodeOrderType(order.order_type)}}</td>
+                    <td class="">{{order.full_name}}</td>
+                    <td class="">{{order.order_qty}}</td>
+                    <td class="">{{order.tip_amt}}</td>
+                    <td class="">{{order.grand_total}}</td>
+                    <td ng-if="!om.read_only">
+                        <button ng-click="om.completeOrderConfirm(order, $index, 'active_orders')" class="btn-soft-blue check-button">
+                            <i class="fa fa-check" aria-hidden="true"></i>
+                        </button>
+                    </td>
+                </tr>
+                <tr ng-if="order.show_detail" ng-repeat-end="" class="hidden-hover">
+                    <td colspan="9" style="border-top: transparent">
+                        <div style="margin-right: 20px; margin-left: 20px;">
+                            <div><span class="bold">Customer:</span> {{order.user_email}}</div>
+                            <div><span class="bold">Contact No:</span> {{order.user_phone_no}}</div>
+                            <div><span ng-show="order.note.length > 0" class="bold">Note:</span> {{order.note}}</div>
+                            <div ng-show="order.order_type == 'D'"><span class="bold">Address:</span> {{order.delivery_address}}</div>
+                            <h4 class="bold">Items</h4>
+                            <div ng-repeat="order_item in order.order_items">
+                                <hr/>
+                                <div class="item">
+                                    <strong>{{order_item.quantity}} {{order_item.size_name}} {{order_item.item_name}}</strong>
+                                    <div>$ {{order_item.price}}</div>
+                                </div>
+
+                                <div>
+                                    <div ng-show="order_item.note.length > 0" class="dark-grey-2 m-l-10">NOTE:</div>
+                                    <div class="m-l-20" ng-show="order_item.note.length > 0">
+                                        <span>
+                                            {{order_item.note}}
+                                        </span>
+                                    </div>
+                                    <div ng-show="order_item.order_detail_held_modifiers.length > 0" class="dark-grey-2 m-l-10">HOLD THE:</div>
+                                    <div class="m-l-20" ng-show="order_item.order_detail_held_modifiers.length > 0">
+                                        <span>
+                                            {{om.commaAndList(order_item.order_detail_held_modifiers)}}
+                                        </span>
+                                    </div>
+
+                                    <div ng-show="order_item.order_detail_modifiers.length > 0" class="dark-grey-2 m-l-10">WITH:</div>
+                                    <div class="m-l-20" ng-show="order_item.order_detail_modifiers.length > 0">
+                                        <span>
+                                            {{om.commaAndList(order_item.order_detail_modifiers)}}
+                                        </span>
+                                    </div>
+                                    <div ng-show="order_item.order_detail_sides.length > 0" class="dark-grey-2 m-l-10">SIDES:</div>
+                                    <div class="m-l-20" ng-show="order_item.order_detail_sides.length > 0">
+                                        <span>
+                                            {{om.commaAndList(order_item.order_detail_sides)}}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="total-container">
+                                <div class="payment-numbers">
+                                    <div>Order Amount:</div>
+                                    <div class="amount">{{order.order_amt}}</div>
+                                </div>
+                                <div class="payment-numbers" ng-show="order.promo_amt > 0">
+                                    <div>Promo:</div>
+                                    <div class="amount">
+                                        {{order.promo_amt}}<BR>
+                                        {{order.promo_code}} code
+                                    </div>
+                                </div>
+                                <div class="payment-numbers" ng-show="order.delivery_amt > 0">
+                                    <div>Delivery:</div>
+                                    <div class="amount">{{order.delivery_amt}}</div>
+                                </div>
+                                <div class="payment-numbers">
+                                    <div>Tax Amount:</div>
+                                    <div class="amount">{{order.total_tax_amt}}</div>
+                                </div>
+                                <div class="payment-numbers">
+                                    <div>Grand Total:</div>
+                                    <div class="amount">{{order.grand_total}}</div>
+                                </div>
+                                <div class="payment-numbers">
+                                    <div>Tip:</div>
+                                    <div class="amount">{{order.tip_amt}}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <div class="content-responsive" ng-if="om.active_orders.orders.length > 0">
+                <div ng-repeat="order in om.active_orders.orders">
+                    <div class="panel panel-body row-table" ng-click="order.show_detail = !order.show_detail">
+                        <div class="name">
+                            <h5 class="dark-grey" style="margin: 7px 0px;"><b>
+                                <i class="fa fa-plus" ng-show="!order.show_detail" aria-hidden="true"></i>
+                                <i class="fa fa-minus" ng-show="order.show_detail" aria-hidden="true"></i>
+                                {{order.full_name}}
+                            </b></h5>
+                        </div>
+                        <div class="id">
+                            <h5 class="dark-grey id-title">Order Count #<span class="id-number">{{order.order_id}}</span>
+                            </h5>
+                        </div>
+                        <div class="description clear">
+                            <div>
+                                Time Due:
+                            </div>
+                            <div>
+                                {{order.pickup_time}} - {{order.pickup_day}}, {{order.pickup_month}} {{order.pickup_day_of_month}}
+                            </div>
+                            <div>
+                                {{order.order_qty}} Item(s)
+                            </div>
+
+                            <div class="pull-right">
+                                <b>Tip:</b>{{order.tip_amt}} -
+                                <b>Grant Total:</b> {{order.grand_total}}
+                            </div>
+                            <div class="clear refund-button">
+                                <button ng-click="om.completeOrderConfirm(order, $index, 'active_orders')" class="btn-soft-blue check-button">
+                                    <i class="fa fa-check" aria-hidden="true"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="line-box-container" ng-if="order.show_detail">
+                        <div class="line-border">
+                            <span class="text">
+                                Details
+                            </span>
+                        </div>
+                    </div>
+                    <div ng-if="order.show_detail">
+                        <div class="p-0">
+                            <div style="margin-right: 20px; margin-left: 20px;">
+                                <div><span class="bold">Customer:</span> {{order.user_email}}</div>
+                                <div><span class="bold">Contact No:</span> {{order.user_phone_no}}</div>
+                                <div><span ng-show="order.note.length > 0" class="bold">Note:</span> {{order.note}}</div>
+                                <div ng-show="order.order_type == 'D'"><span class="bold">Address:</span> {{order.delivery_address}}</div>
+                                <h4 class="bold">Items</h4>
+                                <div ng-repeat="order_item in order.order_items">
+                                    <hr/>
+                                    <div class="item">
+                                        <strong>{{order_item.quantity}} {{order_item.size_name}} {{order_item.item_name}}</strong>
+                                        <div>$ {{order_item.price}}</div>
+                                    </div>
+
+                                    <div>
+                                        <div ng-show="order_item.note.length > 0" class="dark-grey-2 m-l-10">NOTE:</div>
+                                        <div class="m-l-20" ng-show="order_item.note.length > 0">
+                                        <span>
+                                            {{order_item.note}}
+                                        </span>
+                                        </div>
+                                        <div ng-show="order_item.order_detail_held_modifiers.length > 0" class="dark-grey-2 m-l-10">HOLD THE:</div>
+                                        <div class="m-l-20" ng-show="order_item.order_detail_held_modifiers.length > 0">
+                                        <span>
+                                            {{om.commaAndList(order_item.order_detail_held_modifiers)}}
+                                        </span>
+                                        </div>
+
+                                        <div ng-show="order_item.order_detail_modifiers.length > 0" class="dark-grey-2 m-l-10">WITH:</div>
+                                        <div class="m-l-20" ng-show="order_item.order_detail_modifiers.length > 0">
+                                        <span>
+                                            {{om.commaAndList(order_item.order_detail_modifiers)}}
+                                        </span>
+                                        </div>
+                                        <div ng-show="order_item.order_detail_sides.length > 0" class="dark-grey-2 m-l-10">SIDES:</div>
+                                        <div class="m-l-20" ng-show="order_item.order_detail_sides.length > 0">
+                                        <span>
+                                            {{om.commaAndList(order_item.order_detail_sides)}}
+                                        </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="total-container">
+                                    <div class="payment-numbers">
+                                        <div>Order Amount:</div>
+                                        <div class="amount">{{order.order_amt}}</div>
+                                    </div>
+                                    <div class="payment-numbers" ng-show="order.promo_amt > 0">
+                                        <div>Promo:</div>
+                                        <div class="amount">
+                                            {{order.promo_amt}}<BR>
+                                            {{order.promo_code}} code
+                                        </div>
+                                    </div>
+                                    <div class="payment-numbers" ng-show="order.delivery_amt > 0">
+                                        <div>Delivery:</div>
+                                        <div class="amount">{{order.delivery_amt}}</div>
+                                    </div>
+                                    <div class="payment-numbers">
+                                        <div>Tax Amount:</div>
+                                        <div class="amount">{{order.total_tax_amt}}</div>
+                                    </div>
+                                    <div class="payment-numbers">
+                                        <div>Grand Total:</div>
+                                        <div class="amount">{{order.grand_total}}</div>
+                                    </div>
+                                    <div class="payment-numbers">
+                                        <div>Tip:</div>
+                                        <div class="amount">{{order.tip_amt}}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="line-box-container" ng-if="order.show_detail">
+                        <div class="line-border">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="panel panel-primary">
+        <div id="over-due-heading" class="panel-heading section-select">
+            <h3 class="panel-title">
+                Overdue Orders
+            </h3>
+            <!--<i class="panel-title fa fa-plus" ng-if="!om.overdue_orders.open" aria-hidden="true"></i>-->
+            <!--<i class="panel-title fa fa-minus" ng-if="om.overdue_orders.open" aria-hidden="true"></i>-->
+        </div>
+        <div class="panel-body">
+            <h5 class="pre-load-text" ng-if="om.overdue_orders.orders.length < 1">No Current Orders</h5>
+            <table class="table table-hover table-width-100 content-table" ng-if="om.overdue_orders.orders.length > 0">
+                <thead>
+                <tr>
+                    <td style="width: 30px;"></td>
+                    <td class="bold fix-table-wrap">Order ID</td>
+                    <td class="bold fix-table-wrap">Time Due</td>
+                    <td class="bold fix-table-wrap">Order Type</td>
+                    <td class="bold">Name</td>
+                    <td class="bold"># Items</td>
+                    <td class="bold">Tip</td>
+                    <td class="bold">Total</td>
+                    <td ng-if="!om.read_only" style="width: 30px;" class="bold">Move to Complete</td>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat-start="order in om.overdue_orders.orders" ng-click="order.show_detail = !order.show_detail" ng-class="{'active':order.show_detail}">
+                    <td>
+                        <div class="text-center">
+                            <i class="fa fa-plus" ng-show="!order.show_detail" aria-hidden="true"></i>
+                            <i class="fa fa-minus" ng-show="order.show_detail" aria-hidden="true"></i>
+                        </div>
+                    </td>
+                    <td>{{order.order_id}}</td>
+                    <td class="">{{order.pickup_time}} - {{order.pickup_day}}, {{order.pickup_month}} {{order.pickup_day_of_month}}</td>
+                    <td class="">{{om.decodeOrderType(order.order_type)}}</td>
+                    <td class="">{{order.full_name}}</td>
+                    <td class="">{{order.order_qty}}</td>
+                    <td class="">{{order.tip_amt}}</td>
+                    <td class="">{{order.grand_total}}</td>
+                    <td ng-if="!om.read_only">
+                        <button ng-click="om.completeOrderConfirm(order, $index, 'overdue_orders')" class="btn-soft-blue check-button">
+                            <i class="fa fa-check" aria-hidden="true"></i>
+                        </button>
+                    </td>
+                </tr>
+                <tr ng-if="order.show_detail" ng-repeat-end="" class="hidden-hover">
+                    <td colspan="9" style="border-top: transparent">
+                        <div style="margin-right: 20px; margin-left: 20px;">
+                            <div><span class="bold">Customer:</span> {{order.user_email}}</div>
+                            <div><span class="bold">Contact No:</span> {{order.user_phone_no}}</div>
+                            <div><span ng-show="order.note.length > 0"  class="bold">Note:</span> {{order.note}}</div>
+                            <div ng-show="order.order_type == 'D'"><span class="bold">Address:</span> {{order.delivery_address}}</div>
+                            <h4 class="bold">Items</h4>
+                            <div ng-repeat="order_item in order.order_items">
+                                <hr/>
+                                <div class="item">
+                                    <strong>{{order_item.quantity}} {{order_item.size_name}} {{order_item.item_name}}</strong>
+                                    <div>$ {{order_item.price}}</div>
+                                </div>
+
+                                <div>
+                                    <div ng-show="order_item.note.length > 0" class="dark-grey-2 m-l-10">NOTE:</div>
+                                    <div class="m-l-20" ng-show="order_item.note.length > 0">
+                                        <span>
+                                            {{order_item.note}}
+                                        </span>
+                                    </div>
+
+                                    <div ng-show="order_item.order_detail_held_modifiers.length > 0" class="dark-grey-2 m-l-10">HOLD THE:</div>
+                                    <div class="m-l-20" ng-show="order_item.order_detail_held_modifiers.length > 0">
+                                        <span>
+                                            {{om.commaAndList(order_item.order_detail_held_modifiers)}}
+                                        </span>
+                                    </div>
+
+                                    <div ng-show="order_item.order_detail_modifiers.length > 0" class="dark-grey-2 m-l-10">WITH:</div>
+                                    <div class="m-l-20" ng-show="order_item.order_detail_modifiers.length > 0">
+                                        <span>
+                                            {{om.commaAndList(order_item.order_detail_modifiers)}}
+                                        </span>
+                                    </div>
+                                    <div ng-show="order_item.order_detail_sides.length > 0" class="dark-grey-2 m-l-10">SIDES:</div>
+                                    <div class="m-l-20" ng-show="order_item.order_detail_sides.length > 0">
+                                        <span>
+                                            {{om.commaAndList(order_item.order_detail_sides)}}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="total-container">
+                                <div class="payment-numbers">
+                                    <div>Order Amount:</div>
+                                    <div class="amount">{{order.order_amt}}</div>
+                                </div>
+                                <div class="payment-numbers" ng-show="order.promo_amt > 0">
+                                    <div>Promo:</div>
+                                    <div class="amount">
+                                        {{order.promo_amt}}<BR>
+                                        {{order.promo_code}} code
+                                    </div>
+                                </div>
+                                <div class="payment-numbers" ng-show="order.delivery_amt > 0">
+                                    <div>Delivery:</div>
+                                    <div class="amount">{{order.delivery_amt}}</div>
+                                </div>
+                                <div class="payment-numbers">
+                                    <div>Tax Amount:</div>
+                                    <div class="amount">{{order.total_tax_amt}}</div>
+                                </div>
+                                <div class="payment-numbers">
+                                    <div>Grand Total:</div>
+                                    <div class="amount">{{order.grand_total}}</div>
+                                </div>
+                                <div class="payment-numbers">
+                                    <div>Tip:</div>
+                                    <div class="amount">{{order.tip_amt}}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <div class="content-responsive" ng-if="om.overdue_orders.orders.length > 0">
+                <div ng-repeat="order in om.overdue_orders.orders">
+                    <div class="panel panel-body row-table" ng-click="order.show_detail = !order.show_detail">
+                        <div class="name">
+                            <h5 class="dark-grey" style="margin: 7px 0px;"><b>
+                                <i class="fa fa-plus" ng-show="!order.show_detail" aria-hidden="true"></i>
+                                <i class="fa fa-minus" ng-show="order.show_detail" aria-hidden="true"></i>
+                                {{order.full_name}}
+                            </b></h5>
+                        </div>
+                        <div class="id">
+                            <h5 class="dark-grey id-title">Order Count #<span class="id-number">{{order.order_id}}</span>
+                            </h5>
+                        </div>
+                        <div class="description clear">
+                            <div>
+                                Time Due:
+                            </div>
+                            <div>
+                                {{order.pickup_time}} - {{order.pickup_day}}, {{order.pickup_month}} {{order.pickup_day_of_month}}
+                            </div>
+                            <div>
+                                {{order.order_qty}} Item(s)
+                            </div>
+
+                            <div class="pull-right">
+                                <b>Tip:</b>{{order.tip_amt}} -
+                                <b>Grant Total:</b> {{order.grand_total}}
+                            </div>
+                            <div class="clear refund-button">
+                                <button ng-click="event.stopPropagation(); om.completeOrderConfirm(order, $index, 'overdue_orders');" class="btn-soft-blue check-button">
+                                    <i class="fa fa-check" aria-hidden="true"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="line-box-container" ng-if="order.show_detail">
+                        <div class="line-border">
+                            <span class="text">
+                                Details
+                            </span>
+                        </div>
+                    </div>
+                    <div ng-if="order.show_detail">
+                        <div class="p-0">
+                            <div style="margin-right: 20px; margin-left: 20px;">
+                                <div><span class="bold">Customer:</span> {{order.user_email}}</div>
+                                <div><span class="bold">Contact No:</span> {{order.user_phone_no}}</div>
+                                <div><span ng-show="order.note.length > 0" class="bold">Note:</span> {{order.note}}</div>
+                                <div ng-show="order.order_type == 'D'"><span class="bold">Address:</span> {{order.delivery_address}}</div>
+                                <h4 class="bold">Items</h4>
+                                <div ng-repeat="order_item in order.order_items">
+                                    <hr/>
+                                    <div class="item">
+                                        <strong>{{order_item.quantity}} {{order_item.size_name}} {{order_item.item_name}}</strong>
+                                        <div>$ {{order_item.price}}</div>
+                                    </div>
+
+                                    <div>
+                                        <div class="m-l-20" ng-show="order_item.note.length > 0">
+                                        <span>
+                                            {{order_item.note}}
+                                        </span>
+                                        </div>
+                                        <div ng-show="order_item.order_detail_held_modifiers.length > 0" class="dark-grey-2 m-l-10">HOLD THE:</div>
+                                        <div class="m-l-20" ng-show="order_item.order_detail_held_modifiers.length > 0">
+
+                                        <span>
+                                            {{om.commaAndList(order_item.order_detail_held_modifiers)}}
+                                        </span>
+                                        </div>
+
+                                        <div ng-show="order_item.order_detail_modifiers.length > 0" class="dark-grey-2 m-l-10">WITH:</div>
+                                        <div class="m-l-20" ng-show="order_item.order_detail_modifiers.length > 0">
+                                        <span>
+                                            {{om.commaAndList(order_item.order_detail_modifiers)}}
+                                        </span>
+                                        </div>
+                                        <div ng-show="order_item.order_detail_sides.length > 0" class="dark-grey-2 m-l-10">SIDES:</div>
+                                        <div class="m-l-20" ng-show="order_item.order_detail_sides.length > 0">
+                                        <span>
+                                            {{om.commaAndList(order_item.order_detail_sides)}}
+                                        </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="total-container">
+                                    <div class="payment-numbers">
+                                        <div>Order Amount:</div>
+                                        <div class="amount">{{order.order_amt}}</div>
+                                    </div>
+                                    <div class="payment-numbers" ng-show="order.promo_amt > 0">
+                                        <div>Promo:</div>
+                                        <div class="amount">
+                                            {{order.promo_amt}}<BR>
+                                            {{order.promo_code}} code
+                                        </div>
+                                    </div>
+                                    <div class="payment-numbers" ng-show="order.delivery_amt > 0">
+                                        <div>Delivery:</div>
+                                        <div class="amount">{{order.delivery_amt}}</div>
+                                    </div>
+                                    <div class="payment-numbers">
+                                        <div>Tax Amount:</div>
+                                        <div class="amount">{{order.total_tax_amt}}</div>
+                                    </div>
+                                    <div class="payment-numbers">
+                                        <div>Grand Total:</div>
+                                        <div class="amount">{{order.grand_total}}</div>
+                                    </div>
+                                    <div class="payment-numbers">
+                                        <div>Tip:</div>
+                                        <div class="amount">{{order.tip_amt}}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="line-box-container" ng-if="order.show_detail">
+                        <div class="line-border">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="panel panel-primary">
+        <div class="panel-heading section-select" ng-click="om.completed_orders.open = !om.completed_orders.open">
+            <h3 class="panel-title">
+                <i class="panel-title fa fa-plus" ng-if="!om.completed_orders.open" aria-hidden="true"></i>
+                <i class="panel-title fa fa-minus" ng-if="om.completed_orders.open" aria-hidden="true"></i>
+                Completed Orders
+            </h3>
+
+        </div>
+        <div class="panel-body" ng-if="om.completed_orders.open">
+            <h5 class="pre-load-text" ng-if="om.completed_orders.orders.length < 1">No Current Orders</h5>
+            <table class="table table-hover table-width-100 content-table" ng-if="om.completed_orders.orders.length > 0">
+                <thead>
+                <tr>
+                    <td style="width: 30px;"></td>
+                    <td class="bold fix-table-wrap">Order ID</td>
+                    <td class="bold fix-table-wrap">Time Due</td>
+                    <td class="bold fix-table-wrap">Order Type</td>
+                    <td class="bold">Name</td>
+                    <td class="bold"># Items</td>
+                    <td class="bold">Tip</td>
+                    <td class="bold">Total</td>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat-start="order in om.completed_orders.orders" ng-click="order.show_detail = !order.show_detail" ng-class="{'active':order.show_detail}">
+                    <td>
+                        <div class="text-center">
+                            <i class="fa fa-plus" ng-show="!order.show_detail" aria-hidden="true"></i>
+                            <i class="fa fa-minus" ng-show="order.show_detail" aria-hidden="true"></i>
+                        </div>
+                    </td>
+                    <td>{{order.order_id}}</td>
+                    <td class="">{{order.pickup_time}} - {{order.pickup_day}}, {{order.pickup_month}} {{order.pickup_day_of_month}}</td>
+                    <td class="">{{om.decodeOrderType(order.order_type)}}</td>
+                    <td class="">{{order.full_name}}</td>
+                    <td class="">{{order.order_qty}}</td>
+                    <td class="">{{order.tip_amt}}</td>
+                    <td class="">{{order.grand_total}}</td>
+                </tr>
+                <tr ng-if="order.show_detail" ng-repeat-end="" class="hidden-hover">
+                    <td colspan="9" style="border-top: transparent">
+                        <div style="margin-right: 20px; margin-left: 20px;">
+                            <div><span class="bold">Customer:</span> {{order.user_email}}</div>
+                            <div><span class="bold">Contact No:</span> {{order.user_phone_no}}</div>
+                            <div><span ng-show="order.note.length > 0" class="bold">Note:</span> {{order.note}}</div>
+                            <div ng-show="order.order_type == 'D'"><span class="bold">Address:</span> {{order.delivery_address}}</div>
+                            <h4 class="bold">Items</h4>
+                            <div ng-repeat="order_item in order.order_items">
+                                <hr/>
+                                <div class="item">
+                                    <strong>{{order_item.quantity}} {{order_item.size_name}} {{order_item.item_name}}</strong>
+                                    <div>$ {{order_item.price}}</div>
+                                </div>
+
+                                <div>
+                                    <div class="m-l-20" ng-show="order_item.note.length > 0">
+                                        <span>
+                                            {{order_item.note}}
+                                        </span>
+                                    </div>
+                                    <div ng-show="order_item.order_detail_held_modifiers.length > 0" class="dark-grey-2 m-l-10">HOLD THE:</div>
+                                    <div class="m-l-20" ng-show="order_item.order_detail_held_modifiers.length > 0">
+                                        <span>
+                                            {{om.commaAndList(order_item.order_detail_held_modifiers)}}
+                                        </span>
+                                    </div>
+
+                                    <div ng-show="order_item.order_detail_modifiers.length > 0" class="dark-grey-2 m-l-10">WITH:</div>
+                                    <div class="m-l-20" ng-show="order_item.order_detail_modifiers.length > 0">
+                                        <span>
+                                            {{om.commaAndList(order_item.order_detail_modifiers)}}
+                                        </span>
+                                    </div>
+                                    <div ng-show="order_item.order_detail_sides.length > 0" class="dark-grey-2 m-l-10">SIDES:</div>
+                                    <div class="m-l-20" ng-show="order_item.order_detail_sides.length > 0">
+                                        <span>
+                                            {{om.commaAndList(order_item.order_detail_sides)}}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="total-container">
+                                <div class="payment-numbers">
+                                    <div>Order Amount:</div>
+                                    <div class="amount">{{order.order_amt}}</div>
+                                </div>
+                                <div class="payment-numbers" ng-show="order.promo_amt > 0">
+                                    <div>Promo:</div>
+                                    <div class="amount">
+                                        {{order.promo_amt}}<BR>
+                                        {{order.promo_code}} code
+                                    </div>
+                                </div>
+                                <div class="payment-numbers" ng-show="order.delivery_amt > 0">
+                                    <div>Delivery:</div>
+                                    <div class="amount">{{order.delivery_amt}}</div>
+                                </div>
+                                <div class="payment-numbers">
+                                    <div>Tax Amount:</div>
+                                    <div class="amount">{{order.total_tax_amt}}</div>
+                                </div>
+                                <div class="payment-numbers">
+                                    <div>Grand Total:</div>
+                                    <div class="amount">{{order.grand_total}}</div>
+                                </div>
+                                <div class="payment-numbers">
+                                    <div>Tip:</div>
+                                    <div class="amount">{{order.tip_amt}}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+            <div class="content-responsive" ng-if="om.completed_orders.orders.length > 0">
+                <div ng-repeat="order in om.completed_orders.orders">
+                    <div class="panel panel-body row-table" ng-click="order.show_detail = !order.show_detail">
+                        <div class="name">
+                            <h5 class="dark-grey" style="margin: 7px 0px;"><b>
+                                <i class="fa fa-plus" ng-show="!order.show_detail" aria-hidden="true"></i>
+                                <i class="fa fa-minus" ng-show="order.show_detail" aria-hidden="true"></i>
+                                {{order.full_name}}
+                            </b></h5>
+                        </div>
+                        <div class="id">
+                            <h5 class="dark-grey id-title">Order Count #<span class="id-number">{{order.order_id}}</span>
+                            </h5>
+                        </div>
+                        <div class="description clear">
+                            <div>
+                                Time Due:
+                            </div>
+                            <div>
+                                {{order.pickup_time}} - {{order.pickup_day}}, {{order.pickup_month}} {{order.pickup_day_of_month}}
+                            </div>
+                            <div>
+                                {{order.order_qty}} Item(s)
+                            </div>
+
+                            <div class="pull-right">
+                                <b>Tip:</b>{{order.tip_amt}} -
+                                <b>Grant Total:</b> {{order.grand_total}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="line-box-container" ng-if="order.show_detail">
+                        <div class="line-border">
+                            <span class="text">
+                                Details
+                            </span>
+                        </div>
+                    </div>
+                    <div ng-if="order.show_detail">
+                        <div class="p-0">
+                            <div style="margin-right: 20px; margin-left: 20px;">
+                                <div><span class="bold">Customer:</span> {{order.user_email}}</div>
+                                <div><span class="bold">Contact No:</span> {{order.user_phone_no}}</div>
+                                <div><span class="bold">Note:</span> {{order.note}}</div>
+                                <h4 class="bold">Items</h4>
+                                <div ng-repeat="order_item in order.order_items">
+                                    <hr/>
+                                    <div class="item">
+                                        <strong>{{order_item.quantity}} {{order_item.size_name}} {{order_item.item_name}}</strong>
+                                        <div>$ {{order_item.price}}</div>
+                                    </div>
+
+                                    <div>
+                                        <div class="m-l-20" ng-show="order_item.note.length > 0">
+                                        <span>
+                                            {{order_item.note}}
+                                        </span>
+                                        </div>
+                                        <div ng-show="order_item.order_detail_held_modifiers.length > 0" class="dark-grey-2 m-l-10">HOLD THE:</div>
+                                        <div class="m-l-20" ng-show="order_item.order_detail_held_modifiers.length > 0">
+                                        <span>
+                                            {{om.commaAndList(order_item.order_detail_held_modifiers)}}
+                                        </span>
+                                        </div>
+
+                                        <div ng-show="order_item.order_detail_modifiers.length > 0" class="dark-grey-2 m-l-10">WITH:</div>
+                                        <div class="m-l-20" ng-show="order_item.order_detail_modifiers.length > 0">
+                                        <span>
+                                            {{om.commaAndList(order_item.order_detail_modifiers)}}
+                                        </span>
+                                        </div>
+                                        <div ng-show="order_item.order_detail_sides.length > 0" class="dark-grey-2 m-l-10">SIDES:</div>
+                                        <div class="m-l-20" ng-show="order_item.order_detail_sides.length > 0">
+                                        <span>
+                                            {{om.commaAndList(order_item.order_detail_sides)}}
+                                        </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="total-container">
+                                    <div class="payment-numbers">
+                                        <div>Order Amount:</div>
+                                        <div class="amount">{{order.order_amt}}</div>
+                                    </div>
+                                    <div class="payment-numbers" ng-show="order.promo_amt > 0">
+                                        <div>Promo:</div>
+                                        <div class="amount">
+                                            {{order.promo_amt}}<BR>
+                                            {{order.promo_code}} code
+                                        </div>
+                                    </div>
+                                    <div class="payment-numbers" ng-show="order.delivery_amt > 0">
+                                        <div>Delivery:</div>
+                                        <div class="amount">{{order.delivery_amt}}</div>
+                                    </div>
+                                    <div class="payment-numbers">
+                                        <div>Tax Amount:</div>
+                                        <div class="amount">{{order.total_tax_amt}}</div>
+                                    </div>
+                                    <div class="payment-numbers">
+                                        <div>Grand Total:</div>
+                                        <div class="amount">{{order.grand_total}}</div>
+                                    </div>
+                                    <div class="payment-numbers">
+                                        <div>Tip:</div>
+                                        <div class="amount">{{order.tip_amt}}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="line-box-container" ng-if="order.show_detail">
+                        <div class="line-border">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<audio id="alert-tone">
+    <source src="/assets/sounds/45-minutes-of-silence.mp3" />
+</audio>

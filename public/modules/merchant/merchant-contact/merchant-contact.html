@@ -1,0 +1,578 @@
+<div class="row">
+    <div class="col-sm-12">
+        <div class="page-header-title merchant-bg">
+            <h4 class="page-title">{{ 'MERCHANT.CONTACT.CONTACT' | translate }}</h4>
+            <ol class="breadcrumb">
+                <li><a href="#/merchants">{{ 'MESSAGE.SHARE.MERCHANT' | translate }}</a></li>
+                <li><a href="#/merchant/contact">{{ 'MERCHANT.CONTACT.CONTACT' | translate }}</a>
+                </li>
+            </ol>
+        </div>
+    </div>
+</div>
+
+<div class="row contact-box">
+    <!-- Basic example -->
+    <div class="col-md-6">
+        <div class="panel panel-primary">
+            <div class="panel-heading-with-tooltip">
+                <div class="panel-heading">
+                    <h3 class="panel-title">{{ 'MERCHANT.CONTACT.STORE' | translate }}</h3>
+                </div>
+                <div class="panel-heading-tooltip-right">
+                    <h4>
+                        <i class="fa fa-question-circle tooltip-help" aria-hidden="true">
+                            <span class="tool-tip-text-right">{{ 'MERCHANT.CONTACT.TOOLTIP.STORE_NOTIFICATION_SETTING' | translate }}</span>
+                        </i>
+                    </h4>
+                </div>
+            </div>
+            <div class="panel-body" style="padding-top: 15px;">
+                <table id="store-notification-settings-table" class="table table-hover content-table fix-email-nowrap-table">
+                    <thead>
+                    <tr>
+                        <th>{{ 'MESSAGE.SHARE.NAME' | translate }}</th>
+                        <th>{{ 'MERCHANT.CONTACT.EMAIL' | translate }}</th>
+                        <th class="center-head">{{ 'MERCHANT.CONTACT.DAILYRPTS' | translate }}</th>
+                        <th class="center-head">{{ 'MERCHANT.CONTACT.WEEKLYSTMTS' | translate }}</th>
+                        <th class="center-head">{{ 'MERCHANT.CONTACT.ADMIN' | translate }}</th>
+                        <th width="40px"></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="admin_email in contact.admin_emails"
+                        tooltip-placement="bottom" uib-tooltip="Click to Edit"
+                        ng-click="contact.editEditAdminEmailDialog(admin_email, $index)"
+                        data-toggle="modal"
+                        data-target="#edit-admin-email-modal"
+                    >
+                        <td>
+                            <div class="trim-info" uib-tooltip="{{admin_email.name}}">{{admin_email.name}}</div>
+                        </td>
+                        <td>
+                            <div>{{admin_email.email}}</div>
+                        </td>
+                        <td class="boolean-table-field">
+                            <i class="fa fa-check-square-o" aria-hidden="true" ng-show="admin_email.daily"></i>
+                            <i class="fa fa-ban" aria-hidden="true" ng-show="!admin_email.daily"></i>
+                        </td>
+                        <td class="boolean-table-field">
+                            <i class="fa fa-check-square-o" aria-hidden="true" ng-show="admin_email.weekly"></i>
+                            <i class="fa fa-ban" aria-hidden="true" ng-show="!admin_email.weekly"></i>
+                        </td>
+                        <td class="boolean-table-field">
+                            <i class="fa fa-check-square-o" aria-hidden="true" ng-show="admin_email.admin"></i>
+                            <i class="fa fa-ban" aria-hidden="true" ng-show="!admin_email.admin"></i>
+                        </td>
+                        <td class="delete-icon" style="padding: 0px;">
+                            <i class="fa fa-times" aria-hidden="true" data-toggle="modal"
+                               data-target="#delete-adm-email-modal"
+                               ng-click="contact.deleteAdmEmailDialog(admin_email, $index,$event)"></i>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <div class="content-responsive">
+                    <div ng-repeat="admin_email in contact.admin_emails"
+                         ng-click="contact.editEditAdminEmailDialog(admin_email, $index)"
+                         aria-hidden="true" data-toggle="modal" data-target="#edit-admin-email-modal">
+                        <div class="panel panel-body row-table">
+                            <div class="name">
+                                <h5 class="dark-grey"><b>{{admin_email.name}}</b></h5>
+                            </div>
+                            <div class="description">
+                                <div class="clear">
+                                    <div class="email-wrap">
+                                        Email: {{admin_email.email}}
+                                    </div>
+                                    <div class="last-row-container-with-delete-icon">
+                                        <div class="icons">
+                                            <div class="box">
+                                                <i class="fa fa-check-square-o green-text" aria-hidden="true"
+                                                   ng-show="admin_email.daily"></i>
+                                                <i class="fa fa-ban gray-text" aria-hidden="true"
+                                                   ng-show="!admin_email.daily"></i>
+                                                {{ 'MERCHANT.CONTACT.DAILYRPTS' | translate }}
+
+                                            </div>
+                                            <div class="box">
+                                                <i class="fa fa-check-square-o green-text" aria-hidden="true"
+                                                   ng-show="admin_email.weekly"></i>
+                                                <i class="fa fa-ban gray-text" aria-hidden="true"
+                                                   ng-show="!admin_email.weekly"></i>
+                                                {{ 'MERCHANT.CONTACT.WEEKLYSTMTS' | translate }}
+                                            </div>
+                                            <div class="box ">
+                                                <i class="fa fa-check-square-o green-text" aria-hidden="true"
+                                                   ng-show="admin_email.admin"></i>
+                                                <i class="fa fa-ban gray-text" aria-hidden="true"
+                                                   ng-show="!admin_email.admin"></i>
+                                                {{ 'MERCHANT.CONTACT.ADMIN' | translate }}
+                                            </div>
+                                        </div>
+                                        <div class="fa fa-times delete-icon-small-screen" aria-hidden="true"
+                                             ng-click="contact.deleteAdmEmailDialog(admin_email, $index, $event)"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="alert alert-success alert-reg-position form-submit-success fade-effect" role="alert"
+                     maxlength=""
+                     ng-show="contact.edit_admin_email.success">
+                    <i class="fa fa-check-circle" aria-hidden="true"></i> The Admin Email for
+                    <strong>{{contact.edit_admin_email.name}}</strong>
+                    {{ 'MESSAGE.SHARE.UPDATED' | translate }}
+                </div>
+
+                <div class="alert alert-success alert-reg-position form-submit-success fade-effect"
+                     ng-show="contact.new_admin_email.success"
+                     role="alert">
+                    <i class="fa fa-check-circle" aria-hidden="true"></i> {{ 'MERCHANT.CONTACT.CREATED' | translate }}
+                </div>
+                <button id="open-new-contact-button" type="button" ng-disabled class="btn btn-soft-blue pull-right m-t-20" data-toggle="modal"
+                        data-target="#add-admin-email-modal">
+                    <i class="fa fa-plus" aria-hidden="true"></i> {{ 'MERCHANT.CONTACT.NEWADMIN' | translate }}
+                </button>
+            </div><!-- panel-body -->
+        </div> <!-- panel -->
+    </div> <!-- col-->
+
+    <div class="col-md-6">
+        <div class="panel panel-primary">
+            <div class="panel-heading additional-contact">
+                <h3 class="panel-title">{{ 'MERCHANT.CONTACT.ADDITIONAL' | translate }}</h3></div>
+            <div class="panel-body">
+                <table id="additional-contact-info-table" class="table table-hover content-table fix-email-nowrap-table">
+                    <thead>
+                    <tr>
+                        <th>{{ 'MESSAGE.SHARE.NAME' | translate }}</th>
+                        <th>{{ 'MERCHANT.CONTACT.TITLE' | translate }}</th>
+                        <th>{{ 'MERCHANT.CONTACT.PHONE' | translate }}</th>
+                        <th>{{ 'MERCHANT.CONTACT.EMAIL' | translate }}</th>
+                        <th width="40px"></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="admin_phone in contact.admin_phones"
+                        tooltip-placement="bottom" uib-tooltip="Click to Edit"
+                        data-toggle="modal" data-target="#edit-admin-phone-modal"
+                        ng-click="contact.editAdminPhoneDialog(admin_phone, $index)"
+                    >
+                        <td>
+                            <div class="trim-info" uib-tooltip="{{admin_phone.name}}">{{admin_phone.name}}</div>
+                        </td>
+                        <td>
+                            <div>{{admin_phone.title}}</div>
+                        </td>
+                        <td>
+                            {{contact.formatPhone(admin_phone.phone_no)}}
+                        </td>
+                        <td>
+                            <div>{{admin_phone.email}}</div>
+                        </td>
+                        <td class="delete-icon" style="padding: 0px;">
+                            <i class="fa fa-times" aria-hidden="true" data-toggle="modal"
+                               data-target="#delete-admin-phone-modal"
+                               ng-click="contact.deleteAdminPhoneDialog(admin_phone, $index,$event)"></i>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <div class="content-responsive">
+                    <div ng-repeat="admin_phone in contact.admin_phones" aria-hidden="true" data-toggle="modal"
+                         data-target="#edit-admin-phone-modal"
+                         ng-click="contact.editAdminPhoneDialog(admin_phone, $index)">
+                        <div class="panel panel-body row-table">
+                            <div class="name">
+                                <h5 class="dark-grey"><b>{{admin_phone.name}}</b></h5>
+                            </div>
+                            <div class="description">
+                                <div class="clear">
+                                    <div>
+                                        Title: {{admin_phone.title}}
+                                    </div>
+                                    <div>
+                                        Phone: {{contact.formatPhone(admin_phone.phone_no)}}
+                                    </div>
+                                    <div class="last-row-container-with-delete-icon">
+                                        <div class="email-wrap">Email: {{admin_phone.email}}</div>
+                                        <div class="fa fa-times delete-icon-small-screen" aria-hidden="true"
+                                             ng-click="contact.deleteAdminPhoneDialog(admin_phone, $index, $event)"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="alert alert-success alert-reg-position"
+                     ng-show="contact.new_admin_phone.success"
+                     role="alert">
+                    <i class="fa fa-check-circle" aria-hidden="true"></i> {{ 'MERCHANT.CONTACT.PHONECREATED' | translate }}
+                </div>
+                <div class="alert alert-success alert-reg-position"
+                     ng-show="contact.edit_admin_phone.success"
+                     role="alert">
+                    <i class="fa fa-check-circle" aria-hidden="true"></i> {{ 'MERCHANT.CONTACT.EMAILFOR' | translate }}
+                    <strong>{{contact.edit_admin_phone.name}}</strong>
+                    {{ 'MESSAGE.SHARE.UPDATED' | translate }}
+                </div>
+                <button id="open-new-additional-contact-info" type="button" ng-disabled class="btn btn-soft-blue pull-right m-t-20" data-toggle="modal"
+                        data-target="#add-admin-phone-modal">
+                    <i class="fa fa-plus" aria-hidden="true"></i> {{ 'MERCHANT.CONTACT.NEWCONTACT' | translate }}
+                </button>
+            </div><!-- panel-body -->
+        </div> <!-- panel -->
+    </div> <!-- col-->
+</div>
+<!-- End row -->
+
+<div id="add-admin-email-modal" class="modal fade" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">New Admin Email</h4>
+            </div>
+            <div class="modal-body">
+                <form name="contact.new_admin_email_form" class="form-horizontal m-l-15 m-r-15" novalidate
+                      ng-submit="contact.createNewAdminEmail()">
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Name</label>
+                        <div class="col-md-8 m-t-5">
+                            <input type="text" class="input-med form-control" name="name"
+                                   ng-model="contact.new_admin_email.name" ng-fade>
+                            <div class="input-med alert alert-danger ng-hide alert-reg-position"
+                                 ng-show="contact.new_admin_email_form.name.$error.required
+                                 && (contact.new_admin_email_form.name.$faded || contact.new_admin_email.submit)"
+                                 role="alert">
+                                Name is required.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Email</label>
+                        <div class="col-md-8 m-t-5">
+                            <input type="text" class="input-med form-control" name="email"
+                                   ng-model="contact.new_admin_email.email" ng-fade>
+                            <div class="input-med alert alert-danger ng-hide alert-reg-position"
+                                 ng-show="contact.new_admin_email_form.email.$error.required
+                                 && (contact.new_admin_email_form.email.$faded || contact.new_admin_email.submit)"
+                                 role="alert">
+                                Email is required.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">{{ 'MERCHANT.CONTACT.DAILY' | translate }}</label>
+                        <div class="col-md-8 m-t-10">
+                            <toggle-switch id="daily-new-admin-toggle" name="daily"
+                                           ng-model="contact.new_admin_email.daily">
+                            </toggle-switch>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">{{ 'MERCHANT.CONTACT.WEEKLY' | translate }}</label>
+                        <div class="col-md-8 m-t-10">
+                            <toggle-switch name="weekly"
+                                           ng-model="contact.new_admin_email.weekly">
+                            </toggle-switch>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">{{ 'MERCHANT.CONTACT.ADMIN' | translate }}</label>
+                        <div class="col-md-8 m-t-10">
+                            <toggle-switch name="admin"
+                                           ng-model="contact.new_admin_email.admin">
+                            </toggle-switch>
+                        </div>
+                    </div>
+                    <div class="alert alert-danger ng-hide alert-reg-position"
+                         ng-show="contact.new_admin_email_error"
+                         role="alert">
+                        The email is already registered, please provide a valid email address.
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" ng-disabled class="btn btn-default" data-dismiss="modal">{{ 'MESSAGE.SHARE.CANCEL' | translate }}</button>
+                        <button id="new-contact-admin-submit" class="btn btn-info">{{ 'MESSAGE.SHARE.SUBMIT' | translate }}</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="edit-admin-email-modal" class="modal fade" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">{{ 'MERCHANT.CONTACT.UPDATEEMAIL' | translate }}</h4>
+            </div>
+            <div class="modal-body">
+                <form name="contact.edit_admin_email_form" novalidate class="form-horizontal m-l-15 m-r-15" ng-submit="contact.updateAdminEmail()">
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">{{ 'MESSAGE.SHARE.NAME' | translate }}</label>
+                        <div class="col-md-8 m-t-5">
+                            <input type="text" class="input-med form-control" name="name"
+                                   ng-model="contact.edit_admin_email.name" ng-fade>
+                            <div class="input-med alert alert-danger ng-hide alert-reg-position"
+                                 ng-show="contact.edit_admin_email_form.name.$error.required
+                                 && (contact.edit_admin_email_form.name.$faded || contact.edit_admin_email.submit)"
+                                 role="alert">
+                                {{ 'MESSAGE.SHARE.NAMEREQUIRED' | translate }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">{{ 'MERCHANT.CONTACT.EMAIL' | translate }}</label>
+                        <div class="col-md-8 m-t-5">
+                            <input type="text" class="input-med form-control" name="email"
+                                   ng-model="contact.edit_admin_email.email" ng-fade>
+                            <div class="input-med alert alert-danger ng-hide alert-reg-position"
+                                 ng-show="contact.edit_admin_email_form.email.$error.required
+                                 && (contact.edit_admin_email_form.email.$faded || contact.edit_admin_email.submit)"
+                                 role="alert">
+                                {{ 'MESSAGE.SHARE.EMAILREQUIRED' | translate }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">{{ 'MERCHANT.CONTACT.DAILY' | translate }}</label>
+                        <div class="col-md-8 m-t-10">
+                            <toggle-switch name="daily"
+                                           ng-model="contact.edit_admin_email.daily">
+                            </toggle-switch>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">{{ 'MERCHANT.CONTACT.WEEKLY' | translate }}</label>
+                        <div class="col-md-8 m-t-10">
+                            <toggle-switch name="weekly"
+                                           ng-model="contact.edit_admin_email.weekly">
+                            </toggle-switch>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Admin</label>
+                        <div class="col-md-8 m-t-10">
+                            <toggle-switch name="admin"
+                                           ng-model="contact.edit_admin_email.admin">
+                            </toggle-switch>
+                        </div>
+                    </div>
+
+                    <div class="alert alert-danger ng-hide alert-reg-position"
+                         ng-show="contact.new_admin_email_error"
+                         role="alert">
+                        The email is already registered, please provide a valid email address.
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" ng-disabled class="btn btn-default" data-dismiss="modal">{{ 'MESSAGE.SHARE.CANCEL' | translate }}</button>
+                        <button class="btn btn-info">{{ 'MESSAGE.SHARE.SUBMIT' | translate }}</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="delete-adm-email-modal" class="modal fade" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="myModalLabel">Delete Admin Email</h4>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to delete the admin email for
+                <span class="bold">{{contact.delete_admin_email_name}}</span>?
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" ng-disabled class="btn btn-default" data-dismiss="modal">{{ 'MESSAGE.SHARE.CANCEL' | translate }}</button>
+                <button class="btn btn-danger" ng-click="contact.confirmDeleteEmail()">{{ 'MESSAGE.SHARE.DELETE' | translate }}</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="add-admin-phone-modal" class="modal fade" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">{{ 'MERCHANT.CONTACT.NEWCONTACT' | translate }}</h4>
+            </div>
+            <div class="modal-body">
+                <form name="contact.new_admin_phone_form" novalidate class="form-horizontal m-l-15 m-r-15" ng-submit="contact.createNewAdminPhone()">
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">{{ 'MESSAGE.SHARE.NAME' | translate }}</label>
+                        <div class="col-md-8 m-t-5">
+                            <input type="text" class="input-med form-control" name="name"
+                                   ng-model="contact.new_admin_phone.name" ng-fade ng-required="true">
+                            <div class="input-med alert alert-danger ng-hide alert-reg-position"
+                                 ng-show="contact.new_admin_phone_form.name.$error.required
+                                 && (contact.new_admin_phone_form.name.$faded || contact.new_admin_phone.submit)"
+                                 role="alert">
+                                {{ 'MESSAGE.SHARE.NAMEREQUIRED' | translate }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">{{ 'MERCHANT.CONTACT.TITLE' | translate }}</label>
+                        <div class="col-md-8 m-t-5">
+                            <input type="text" class="input-med form-control" name="title"
+                                   ng-model="contact.new_admin_phone.title" ng-fade maxlength="250">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">{{ 'MESSAGE.SHARE.PHONENUMBER' | translate }}</label>
+                        <div class="col-md-8 m-t-5">
+                            <input type="text" class="input-med form-control" name="phone_no"
+                                   ng-model="contact.new_admin_phone.phone_no" ng-fade ng-required="true">
+                            <div class="input-med alert alert-danger ng-hide alert-reg-position"
+                                 ng-show="contact.new_admin_phone_form.phone_no.$error.required
+                                 && (contact.new_admin_phone_form.phone_no.$faded || contact.new_admin_phone.submit)"
+                                 role="alert">
+                                {{ 'MESSAGE.SHARE.PHONENUMBERREQUIRED' | translate }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">{{ 'MERCHANT.CONTACT.EMAIL' | translate }}</label>
+                        <div class="col-md-8 m-t-5">
+                            <input type="email" class="input-med form-control" name="email"
+                                   ng-model="contact.new_admin_phone.email" ng-fade>
+                            <div class="input-med alert alert-danger ng-hide alert-reg-position"
+                                 ng-show="contact.new_admin_phone_form.email.$error.email
+                                 && (contact.new_admin_phone_form.email.$faded || contact.new_admin_phone.submit)"
+                                 role="alert">
+                                {{ 'MERCHANT.CONTACT.EMAILNOTVALIDFORMAT' | translate }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" ng-disabled class="btn btn-default" data-dismiss="modal">{{ 'MESSAGE.SHARE.CANCEL' | translate }}</button>
+                        <button id="create-new-addtl-contact-submit" class="btn btn-info">{{ 'MESSAGE.SHARE.SUBMIT' | translate }}</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="edit-admin-phone-modal" class="modal fade" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">{{ 'MERCHANT.CONTACT.NEWCONTACT' | translate }}</h4>
+            </div>
+            <div class="modal-body">
+                <form name="contact.edit_admin_phone_form" novalidate class="form-horizontal m-l-15 m-r-15" ng-submit="contact.updateAdminPhone()">
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">{{ 'MESSAGE.SHARE.NAME' | translate }}</label>
+                        <div class="col-md-8 m-t-5">
+                            <input type="text" class="input-med form-control" name="name"
+                                   ng-model="contact.edit_admin_phone.name" ng-fade ng-required="true">
+                            <div class="input-med alert alert-danger ng-hide alert-reg-position"
+                                 ng-show="contact.edit_admin_phone.name.$error.required
+                                 && (contact.edit_admin_phone.name.$faded || contact.edit_admin_phone.submit)"
+                                 role="alert">
+                                {{ 'MESSAGE.SHARE.NAMEREQUIRED' | translate }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">{{ 'MERCHANT.CONTACT.TITLE' | translate }}</label>
+                        <div class="col-md-8 m-t-5">
+                            <input type="text" class="input-med form-control" name="title"
+                                   ng-model="contact.edit_admin_phone.title" ng-fade maxlength="250">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">{{ 'MESSAGE.SHARE.PHONENUMBER' | translate }}</label>
+                        <div class="col-md-8 m-t-5">
+                            <input type="text" class="input-med form-control" name="phone_no"
+                                   ng-model="contact.edit_admin_phone.phone_no" ng-fade ng-required="true">
+                            <div class="input-med alert alert-danger ng-hide alert-reg-position"
+                                 ng-show="contact.edit_admin_phone.phone_no.$error.required
+                                 && (contact.edit_admin_phone.phone_no.$faded || contact.edit_admin_phone.submit)"
+                                 role="alert">
+                                {{ 'MESSAGE.SHARE.PHONENUMBERREQUIRED' | translate }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">{{ 'MERCHANT.CONTACT.EMAIL' | translate }}</label>
+                        <div class="col-md-8 m-t-5">
+                            <input type="text" class="input-med form-control" name="email"
+                                   ng-model="contact.edit_admin_phone.email" ng-fade>
+                            <div class="input-med alert alert-danger ng-hide alert-reg-position"
+                                 ng-show="contact.edit_admin_phone.email.$error.email
+                                 && (contact.edit_admin_phone.email.$faded || contact.edit_admin_phone.submit)"
+                                 role="alert">
+                                {{ 'MERCHANT.CONTACT.EMAILNOTVALIDFORMAT' | translate }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" ng-disabled class="btn btn-default" data-dismiss="modal">{{ 'MESSAGE.SHARE.CANCEL' | translate }}</button>
+                        <button id='submit-additional-contact' class="btn btn-info">{{ 'MESSAGE.SHARE.SUBMIT' | translate }}</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="delete-admin-phone-modal" class="modal fade" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">{{ 'MERCHANT.CONTACT.DELETEADDITIONALCONTACT' | translate }}</h4>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to delete the admin phone for
+                <span class="bold">{{contact.delete_admin_phone_name}}</span>?
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" ng-disabled class="btn btn-default" data-dismiss="modal">{{ 'MESSAGE.SHARE.CANCEL' | translate }}</button>
+                <button class="btn btn-danger" ng-click="contact.confirmDeleteAdminPhone()">{{ 'MESSAGE.SHARE.DELETE' | translate }}</button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,29 @@
+<div class="left side-menu">
+    <div class="sidebar-inner slimscrollleft">
+        <!-- Divider -->
+        <div id="sidebar-menu" ng-controller="SideNavCustomerController">
+            <div class="user-details hidden-xs">
+                <div class="user-info" ng-cloak>
+                    Customer Menu
+                </div>
+            </div>
+            <ul>
+                <li>
+                    <a href="#/customer/create" class="waves-effect customersrv" ng-click="set_hover('customer_service')"ng-class="{'active': active.customer_service}">
+                        <div id="customersrv" class="main-icon"
+                             ng-include="'assets/icons/sidebar_icons/customersrv.html'"></div>
+                        <span> Customer Setup </span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#/customer/sales_report" class="waves-effect reports" ng-click="set_hover('report')"ng-class="{'active': active.report}">
+                        <div id="reports" class="main-icon"
+                             ng-include="'assets/icons/sidebar_icons/reports.html'"></div>
+                        <span> Sales Report </span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <div class="clearfix"></div>
+    </div> <!-- end sidebarinner -->
+</div>

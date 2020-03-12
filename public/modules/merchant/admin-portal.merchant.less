@@ -1,0 +1,177 @@
+/* Component LESS */
+@import "merchant-list/merchant-list.less";
+@import "merchant-create/merchant-create.less";
+@import "merchant-info/merchant-info.less";
+@import "merchant-contact/merchant-contact.less";
+@import "merchant-hours/merchant-hours.less";
+@import "merchant-tax/merchant-tax.less";
+@import "merchant-delivery/merchant-delivery.less";
+@import "merchant-ordering/merchant-ordering.less";
+@import "merchant-order-send/merchant-order-send.less";
+@import "merchant-search/merchant-search.less";
+@import "merchant-nav-bar/merchant-nav-bar.less";
+@import "directive/lead-time-modal/lead-time-modal.less";
+@import "merchant-ordering-on-off/merchant-ordering-on-off.less";
+@import "merchant-catering/merchant-catering.less";
+@import "payment-services/payment-services.less";
+/* Add Component LESS Above */
+
+.accounts path,
+.brands g path,
+.customersrv g path,
+.marketing g path,
+.menus path,
+.orders g path,
+.reports g path,
+.settings g path,
+.ordering_on_off path,
+.sites g path{
+  fill: @sidebar-menu-item-color;
+}
+
+.ordering_on_off:hover path, .ordering_on_off.active path{
+  fill: @ordering-on-off-color;
+}
+
+.accounts:hover path, .accounts.active path{
+  fill: @accounts-section-color;
+}
+
+.brands:hover g path, .brands.active g path{
+  fill: @brands-section-color;
+}
+
+.customersrv:hover g path, .customersrv.active g path{
+  fill: @customer-section-color;
+}
+
+.marketing:hover g path, .marketing.active g path{
+  fill: @marketing-section-color;
+}
+
+.menus:hover path, .menus.active path{
+  fill: @menu-section-color;
+}
+
+.orders:hover g path, .orders.active g path{
+  fill: @operator-section-color;
+}
+
+.sites:hover g path, .sites.active g path{
+  fill: @sites-section-color;
+}
+
+.reports:hover g path, .reports.active g path{
+  fill: @reports-section-color;
+}
+
+.settings:hover g path, .settings.active g path{
+  fill: @accounts-section-color;
+}
+
+.small-icon-bg-size {
+  background-size: @sidebar-submenu-icon-size;
+  @media (max-width: @sidebar-collapse-threshold) {
+    background-size: @sidebar-submenu-icon-size * 0.75;
+  }
+}
+
+.orders-small-icon{
+  background-image: url("assets/icons/sidebar_icons/orders.svg");
+  .small-icon-bg-size;
+}
+.info-icon{
+  background-image: url("assets/icons/sidebar_icons/icons_subnav/info.svg");
+  .small-icon-bg-size;
+}
+.contact-icon{
+  background-image: url("assets/icons/sidebar_icons/icons_subnav/contact.svg");
+  .small-icon-bg-size;
+}
+.hours-icon{
+  background-image: url("assets/icons/sidebar_icons/icons_subnav/hours.svg");
+  .small-icon-bg-size;
+}
+.tax-icon{
+  background-image: url("assets/icons/sidebar_icons/icons_subnav/taxes.svg");
+  .small-icon-bg-size;
+}
+.ordering-icon{
+  background-image: url("assets/icons/sidebar_icons/icons_subnav/liveorders.svg");
+  .small-icon-bg-size;
+}
+.delivery-icon{
+  background-image: url("assets/icons/sidebar_icons/icons_subnav/delivery.svg");
+  .small-icon-bg-size;
+}
+.statements-icon{
+    background-image: url("assets/icons/sidebar_icons/icons_subnav/statements.svg");
+    .small-icon-bg-size;
+}
+.payment-icon{
+  background-image: url("assets/icons/sidebar_icons/icons_subnav/payment.svg");
+  .small-icon-bg-size;
+}
+.user-icon{
+  background-image: url("assets/icons/sidebar_icons/icons_subnav/users.svg");
+  .small-icon-bg-size;
+}
+.full-mg-icon{
+  background-image: url("assets/icons/sidebar_icons/icons_subnav/fullmgmt.svg");
+  .small-icon-bg-size;
+}
+.quick-edit-icon{
+  background-image: url("assets/icons/sidebar_icons/icons_subnav/quickedit.svg");
+  .small-icon-bg-size;
+}
+.upsells-icon{
+  background-image: url("assets/icons/sidebar_icons/icons_subnav/upsells.svg");
+  .small-icon-bg-size;
+}
+
+.card-upsells-icon{
+    background-image: url("assets/icons/sidebar_icons/icons_subnav/card-upsells.svg");
+    .small-icon-bg-size;
+}
+
+.catering-icon{
+    background-image: url("assets/icons/sidebar_icons/icons_subnav/catering.svg");
+    .small-icon-bg-size;
+}
+
+.nutrition-icon{
+    background-image: url("assets/icons/sidebar_icons/icons_subnav/icon_nutrition.svg");
+    .small-icon-bg-size;
+}
+
+.payment-icon{
+    background-image: url("assets/icons/sidebar_icons/icons_subnav/icon_payment.svg");
+    .small-icon-bg-size;
+}
+
+.loyalty-icon{
+    background-image: url("assets/icons/sidebar_icons/icons_subnav/icon_loyalty.svg");
+    .small-icon-bg-size;
+}
+
+.parking-lot-icon{
+    background-image: url("assets/icons/sidebar_icons/icons_subnav/icon_parking.svg");
+    .small-icon-bg-size;
+}
+
+
+#sidebar-menu > ul > li > a > i.fa-home{
+  font-size:27px;
+  margin: 0 20px 0 15px;
+}
+#sidebar-menu > ul > li > a > i.fa-home{
+  @media (max-width: @sidebar-collapse-threshold-res ) {
+    font-size: 21px;
+    margin: 0 3px;
+  }
+}
+#sidebar-menu .home{
+  @media (max-width: @sidebar-collapse-threshold-res ){
+    padding: 12px 7px !important;
+  }
+}

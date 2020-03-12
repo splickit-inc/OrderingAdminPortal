@@ -1,0 +1,906 @@
+<div class="row">
+    <div class="col-sm-12">
+        <div class="page-header-title merchant-bg">
+            <h4 class="page-title">{{ 'MERCHANT.HOURS.HOURS' | translate }}</h4>
+            <ol class="breadcrumb">
+                <li><a href="#/merchants">{{ 'MESSAGE.SHARE.MERCHANT' | translate }}</a></li>
+                <li><a href="#/merchant/hours">{{ 'MERCHANT.HOURS.HOURS' | translate }}</a></li>
+            </ol>
+        </div>
+    </div>
+</div>
+
+<div id="hours-default-section" class="row">
+    <div class="col-md-7">
+        <div class="panel panel-primary">
+            <div class="panel-heading hours-heading">
+                <h3 class="panel-title">{{ 'MERCHANT.HOURS.STANDARDSTORE' | translate }}</h3>
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <form name="vm_hour.hours_form" novalidate ng-submit="vm_hour.updateHours()">
+                            <table class="table content-table">
+                                <thead>
+                                <tr>
+                                    <th>Weekday</th>
+                                    <th>Open</th>
+                                    <th>Close</th>
+                                    <th>Closed All Day</th>
+                                </tr>
+                                </thead>
+                                <tbody id="store-hours-table">
+                                <tr ng-repeat="hour in vm_hour.hours">
+                                    <td>{{vm_hour.decodeWeekday(hour.day_of_week)}}</td>
+                                    <td ng-form="hour_open_form" ng-class="vm_hour.fiftyOpacity(!hour.day_open)">
+                                        <input type="text" class="form-control input-micro inline open-hour-human"
+                                               placeholder="HH:MM"
+                                               name="open" ng-fade maxlength="5"
+                                               ng-model="hour.open_human" ng-required="true"
+                                               ng-pattern="/^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/"
+                                               ng-readonly="!hour.day_open" ng-disabled="!hour.day_open">
+
+                                        <div class="select input-micro inline margin-left-five am-pm"><select
+                                            name="open_am_pm"
+                                            class="form-control"
+                                            ng-model="hour.open_am_pm" ng-required="true" ng-disabled="!hour.day_open">
+                                            <option value="am">am</option>
+                                            <option value="pm">pm</option>
+                                        </select></div>
+                                        <div class="alert alert-danger ng-hide alert-reg-position"
+                                             ng-show="hour_open_form.open.$invalid && (hour_open_form.open.$faded || vm_hour.hours.submit)"
+                                             role="alert">
+                                            Must be in HH:MM time format.
+                                        </div>
+                                    </td>
+                                    <td ng-form="hour_close_form" ng-class="vm_hour.fiftyOpacity(!hour.day_open)">
+                                        <input type="text" class="form-control input-micro inline" placeholder="HH:MM"
+                                               name="close" ng-fade maxlength="5"
+                                               ng-model="hour.close_human" ng-required="true"
+                                               ng-pattern="/^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/"
+                                               ng-readonly="!hour.day_open" ng-disabled="!hour.day_open">
+
+                                        <div class="select input-micro inline margin-left-five am-pm"><select
+                                            name="close_am_pm"
+                                            class="form-control"
+                                            ng-model="hour.close_am_pm" ng-required="true" ng-disabled="!hour.day_open">
+                                            <option value="am">am</option>
+                                            <option value="pm">pm</option>
+                                        </select></div>
+                                        <div class="alert alert-danger ng-hide alert-reg-position"
+                                             ng-show="hour_close_form.close.$invalid && (hour_close_form.close.$faded || vm_hour.hours.submit)"
+                                             role="alert">
+                                            Must be in HH:MM time format.
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <toggle-switch class="toggle-switch-margin6 store-hour-open-close-toggle"
+                                                       name="active"
+                                                       on-label="Open" off-label="Closed"
+                                                       ng-model="hour.day_open">
+                                        </toggle-switch>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <div class="content-responsive">
+                                <div class="hours-cards">
+                                    <div ng-repeat="hour in vm_hour.hours" class="m-10">
+                                        <div><b>{{vm_hour.decodeWeekday(hour.day_of_week)}}</b></div>
+                                        <div ng-form="hour_open_form" class="m-t-10 hours-rows"
+                                             ng-class="vm_hour.fiftyOpacity(!hour.day_open)">
+                                            <div style="width: 45px">
+                                                <span class="label" style="font-size: 11px">{{ 'MERCHANT.HOURS.OPENDOTS' | translate }}  </span>
+                                            </div>
+                                            <div>
+                                                <input type="text"
+                                                       class="form-control input-micro inline open-input"
+                                                       placeholder="HH:MM" name="open" ng-fade
+                                                       maxlength="5"
+                                                       ng-model="hour.open_human"
+                                                       ng-required="true"
+                                                       ng-pattern="/^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/"
+                                                       ng-disabled="!hour.day_open" ng-readonly="!hour.day_open">
+
+                                                <div class="select input-micro inline margin-left-five am-pm"><select
+                                                    name="open_am_pm"
+                                                    class="form-control"
+                                                    ng-model="hour.open_am_pm" ng-required="true"
+                                                    ng-disabled="!hour.day_open">
+                                                    <option value="am">{{ 'MERCHANT.HOURS.AM' | translate }}</option>
+                                                    <option value="pm">{{ 'MERCHANT.HOURS.PM' | translate }}</option>
+                                                </select></div>
+                                            </div>
+                                        </div>
+                                        <div class="alert alert-danger ng-hide alert-reg-position"
+                                             ng-show="hour_open_form.open.$invalid && (hour_open_form.open.$faded || vm_hour.hours.submit)"
+                                             role="alert">
+                                            {{ 'MERCHANT.HOURS.INFORMAT' | translate }}
+                                        </div>
+                                        <div ng-form="hour_close_form" class="m-t-5 hours-rows"
+                                             ng-class="vm_hour.fiftyOpacity(!hour.day_open)">
+                                            <div style="width: 45px">
+                                                <span class="label" style="font-size: 11px">{{ 'MERCHANT.HOURS.CLOSEDOTS' | translate }} </span>
+                                            </div>
+                                            <div>
+                                                <input type="text"
+                                                       class="form-control input-micro inline"
+                                                       placeholder="HH:MM" name="close"
+                                                       ng-fade maxlength="5"
+                                                       ng-model="hour.close_human"
+                                                       ng-required="true"
+                                                       ng-pattern="/^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/"
+                                                       ng-disabled="!hour.day_open" ng-readonly="!hour.day_open">
+
+                                                <div class="select input-micro inline margin-left-five am-pm"><select
+                                                    name="close_am_pm"
+                                                    class="form-control"
+                                                    ng-model="hour.close_am_pm" ng-required="true"
+                                                    ng-disabled="!hour.day_open">
+                                                    <option value="am">{{ 'MERCHANT.HOURS.AM' | translate }}</option>
+                                                    <option value="pm">{{ 'MERCHANT.HOURS.PM' | translate }}</option>
+                                                </select></div>
+                                            </div>
+                                        </div>
+                                        <div class="alert alert-danger ng-hide alert-reg-position"
+                                             ng-show="hour_close_form.close.$invalid && (hour_close_form.close.$faded || vm_hour.hours.submit)"
+                                             role="alert">
+                                            {{ 'MERCHANT.HOURS.INFORMAT' | translate }}
+                                        </div>
+                                        <div class="hours-rows-2">
+                                            <div>
+                                                <span class="label" style="font-size: 11px">Closed All Day:</span>
+                                            </div>
+                                            <div class="closed-all-day-checkbox">
+                                                <toggle-switch class="" name="active"
+                                                               on-label="Open" off-label="Closed"
+                                                               ng-model="hour.day_open">
+                                                </toggle-switch>
+                                            </div>
+                                        </div>
+                                        <br/>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="col-md-12 m-t-10">
+                                <div ng-show="vm_hour.hours.processing" class="form-loader">
+                                    <div class="line"></div>
+                                    <div class="line"></div>
+                                    <div class="line"></div>
+                                    <div class="line"></div>
+                                </div>
+                            </div>
+
+                            <div class="submit-contain">
+                                <div class="col-md-8">
+                                    <div id="store-hours-updated-success"
+                                         class="alert alert-success alert-reg-position form-submit-success pull-left fade-effect"
+                                         ng-show="vm_hour.hours.success" role="alert">
+                                        <i class="fa fa-check-circle" aria-hidden="true"></i> {{
+                                        'MERCHANT.HOURS.HOURSUPDATED' | translate }}
+                                    </div>
+                                </div>
+                                <button id="store-hours-submit-button" class='btn-soft-blue btn pull-right'>{{
+                                    'MESSAGE.SHARE.SUBMIT' | translate }}
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="panel panel-primary">
+            <div class="panel-heading hours-heading">
+                <h3 class="panel-title">{{ 'MERCHANT.HOURS.DELIVERYHOURS' | translate }}</h3>
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <form name="vm_hour.delivery_hours_form" novalidate ng-submit="vm_hour.updateDeliveryHours()">
+                            <table class="table content-table">
+                                <thead>
+                                <tr>
+                                    <th>{{ 'MERCHANT.HOURS.WEEKDAY' | translate }}</th>
+                                    <th>{{ 'MERCHANT.HOURS.OPEN' | translate }}</th>
+                                    <th>{{ 'MERCHANT.HOURS.CLOSE' | translate }}</th>
+                                    <th>Closed All Day</th>
+                                </tr>
+                                </thead>
+                                <tbody id="delivery-hours-table">
+                                <tr ng-repeat="hour in vm_hour.delivery_hours">
+                                    <td>{{vm_hour.decodeWeekday(hour.day_of_week)}}</td>
+                                    <td ng-form="hour_open_form" ng-class="vm_hour.fiftyOpacity(!hour.day_open)">
+                                        <input type="text" class="form-control input-micro inline open-human-hour"
+                                               placeholder="HH:MM"
+                                               name="open" ng-fade maxlength="5"
+                                               ng-model="hour.open_human" ng-required="true"
+                                               ng-pattern="/^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/"
+                                               ng-readonly="!hour.day_open" ng-disabled="!hour.day_open">
+
+                                        <div class="select input-micro inline margin-left-five am-pm"><select
+                                            name="open_am_pm"
+                                            class="form-control"
+                                            ng-model="hour.open_am_pm" ng-required="true" ng-disabled="!hour.day_open">
+                                            <option value="am">{{ 'MERCHANT.HOURS.AM' | translate }}</option>
+                                            <option value="pm">{{ 'MERCHANT.HOURS.PM' | translate }}</option>
+                                        </select></div>
+                                        <div class="alert alert-danger ng-hide alert-reg-position"
+                                             ng-show="hour_open_form.open.$invalid && (hour_open_form.open.$faded || vm_hour.delivery_hours.submit)"
+                                             role="alert">
+                                            {{ 'MERCHANT.HOURS.INFORMAT' | translate }}
+                                        </div>
+                                    </td>
+                                    <td ng-form="hour_close_form" ng-class="vm_hour.fiftyOpacity(!hour.day_open)">
+                                        <input type="text" class="form-control input-micro inline" placeholder="HH:MM"
+                                               name="close" ng-fade maxlength="5"
+                                               ng-model="hour.close_human" ng-required="true"
+                                               ng-pattern="/^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/"
+                                               ng-readonly="!hour.day_open" ng-disabled="!hour.day_open">
+
+                                        <div class="select input-micro inline margin-left-five am-pm"><select
+                                            name="close_am_pm"
+                                            class="form-control"
+                                            ng-model="hour.close_am_pm" ng-required="true" ng-disabled="!hour.day_open">
+                                            <option value="am">{{ 'MERCHANT.HOURS.AM' | translate }}</option>
+                                            <option value="pm">{{ 'MERCHANT.HOURS.PM' | translate }}</option>
+                                        </select></div>
+                                        <div class="alert alert-danger ng-hide alert-reg-position"
+                                             ng-show="hour_close_form.close.$invalid && (hour_close_form.close.$faded || vm_hour.delivery_hours.submit)"
+                                             role="alert">
+                                            {{ 'MERCHANT.HOURS.INFORMAT' | translate }}
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <toggle-switch class="toggle-switch-margin6 delivery-hour-closed-toggle"
+                                                       name="active"
+                                                       on-label="Open" off-label="Closed"
+                                                       ng-model="hour.day_open">
+                                        </toggle-switch>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <div class="content-responsive">
+                                <div class="hours-cards">
+                                    <div ng-repeat="hour in vm_hour.delivery_hours" class="m-10">
+                                        <div><b>{{vm_hour.decodeWeekday(hour.day_of_week)}}</b></div>
+                                        <div ng-form="hour_open_form" class="hours-rows m-t-10"
+                                             ng-class="vm_hour.fiftyOpacity(!hour.day_open)">
+                                            <div style="width: 45px">
+                                                <span class="label" style="font-size: 11px">{{ 'MERCHANT.HOURS.OPENDOTS' | translate }} </span>
+                                            </div>
+                                            <div>
+                                                <input type="text"
+                                                       class="form-control input-micro inline open-input"
+                                                       placeholder="HH:MM" name="open" ng-fade
+                                                       maxlength="5"
+                                                       ng-model="hour.open_human"
+                                                       ng-required="true"
+                                                       ng-pattern="/^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/"
+                                                       ng-disabled="!hour.day_open" ng-readonly="!hour.day_open">
+
+                                                <div class="select input-micro inline margin-left-five am-pm"><select
+                                                    name="open_am_pm"
+                                                    class="form-control"
+                                                    ng-model="hour.open_am_pm" ng-required="true"
+                                                    ng-disabled="!hour.day_open">
+                                                    <option value="am">{{ 'MERCHANT.HOURS.AM' | translate }}</option>
+                                                    <option value="pm">{{ 'MERCHANT.HOURS.PM' | translate }}</option>
+                                                </select></div>
+                                            </div>
+                                        </div>
+                                        <div class="alert alert-danger ng-hide alert-reg-position"
+                                             ng-show="hour_open_form.open.$invalid && (hour_open_form.open.$faded || vm_hour.delivery_hours.submit)"
+                                             role="alert">
+                                            {{ 'MERCHANT.HOURS.INFORMAT' | translate }}
+                                        </div>
+                                        <div ng-form="hour_close_form" class="hours-rows m-t-5"
+                                             ng-class="vm_hour.fiftyOpacity(!hour.day_open)">
+                                            <div style="width: 45px">
+                                                <span class="label" style="font-size: 11px">{{ 'MERCHANT.HOURS.CLOSEDOTS' | translate }} </span>
+                                            </div>
+                                            <div>
+                                                <input type="text"
+                                                       class="form-control input-micro inline"
+                                                       placeholder="HH:MM" name="close"
+                                                       ng-fade maxlength="5"
+                                                       ng-model="hour.close_human"
+                                                       ng-required="true"
+                                                       ng-pattern="/^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/"
+                                                       ng-disabled="!hour.day_open" ng-readonly="!hour.day_open">
+
+                                                <div class="select input-micro inline margin-left-five am-pm"><select
+                                                    name="close_am_pm"
+                                                    class="form-control"
+                                                    ng-model="hour.close_am_pm" ng-required="true"
+                                                    ng-disabled="!hour.day_open">
+                                                    <option value="am">{{ 'MERCHANT.HOURS.AM' | translate }}</option>
+                                                    <option value="pm">{{ 'MERCHANT.HOURS.PM' | translate }}</option>
+                                                </select></div>
+                                            </div>
+                                        </div>
+                                        <div class="alert alert-danger ng-hide alert-reg-position"
+                                             ng-show="hour_close_form.close.$invalid && (hour_close_form.close.$faded || vm_hour.delivery_hours.submit)"
+                                             role="alert">
+                                            {{ 'MERCHANT.HOURS.INFORMAT' | translate }}
+                                        </div>
+                                        <div class="hours-rows-2">
+                                            <div>
+                                                <span class="label" style="font-size: 11px">Closed All Day:</span>
+                                            </div>
+                                            <div class="closed-all-day-checkbox">
+                                                <toggle-switch class="" name="active"
+                                                               on-label="Open" off-label="Closed"
+                                                               ng-model="hour.day_open">
+                                                </toggle-switch>
+                                            </div>
+                                        </div>
+                                        <br/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12 m-t-10">
+                                <div ng-show="vm_hour.delivery_hours.processing" class="form-loader">
+                                    <div class="line"></div>
+                                    <div class="line"></div>
+                                    <div class="line"></div>
+                                    <div class="line"></div>
+                                </div>
+                            </div>
+
+                            <div class="submit-contain">
+                                <div class="col-md-8">
+                                    <div id="delivery-hours-update-success"
+                                         class="alert alert-success alert-reg-position form-submit-success pull-left fade-effect"
+                                         ng-show="vm_hour.delivery_hours.success" role="alert">
+                                        <i class="fa fa-check-circle" aria-hidden="true"></i> {{
+                                        'MERCHANT.HOURS.HOURSUPDATE' | translate }}
+                                    </div>
+                                </div>
+                                <button id="delivery-hours-submit" class='btn-soft-blue btn pull-right'>{{
+                                    'MESSAGE.SHARE.SUBMIT' | translate }}
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--<div class="col-md-4">-->
+    <!--<div class="panel panel-primary">-->
+    <!--<div class="panel-heading">-->
+    <!--<h3 class="panel-title">Holidays</h3>-->
+    <!--</div>-->
+    <!--<div class="panel-body">-->
+    <!--<div class="row">-->
+    <!--<div class="col-xs-12">-->
+    <!--<form name="holiday_form" novalidate ng-submit="vm_hour.updateHoliday()">-->
+    <!--<table class="table table-bordered">-->
+    <!--<tbody>-->
+    <!--<tr ng-repeat="default_hour in default_holidays">-->
+    <!--<td>New Years Day</td>-->
+    <!--<td>-->
+    <!--<toggle-switch-->
+    <!--on-label="Open" off-label="Closed"-->
+    <!--name="newyearsday" ng-model="vm_hour.holiday.newyearsday">-->
+    <!--</toggle-switch>-->
+    <!--</td>-->
+    <!--</tr>-->
+    <!--<tr>-->
+    <!--<td>Easter</td>-->
+    <!--<td>-->
+    <!--<toggle-switch-->
+    <!--on-label="Open" off-label="Closed"-->
+    <!--name="easter" ng-model="vm_hour.holiday.easter">-->
+    <!--</toggle-switch>-->
+    <!--</td>-->
+    <!--</tr>-->
+    <!--<tr>-->
+    <!--<td>July 4th</td>-->
+    <!--<td>-->
+    <!--<toggle-switch-->
+    <!--on-label="Open" off-label="Closed"-->
+    <!--name="fourthofjuly" ng-model="vm_hour.holiday.fourthofjuly">-->
+    <!--</toggle-switch>-->
+    <!--</td>-->
+    <!--</tr>-->
+    <!--<tr>-->
+    <!--<td>Thanksgiving</td>-->
+    <!--<td>-->
+    <!--<toggle-switch-->
+    <!--on-label="Open" off-label="Closed"-->
+    <!--name="thanksgiving" ng-model="vm_hour.holiday.thanksgiving">-->
+    <!--</toggle-switch>-->
+    <!--</td>-->
+    <!--</tr>-->
+    <!--<tr>-->
+    <!--<td>Christmas</td>-->
+    <!--<td>-->
+    <!--<toggle-switch-->
+    <!--on-label="Open" off-label="Closed"-->
+    <!--name="christmas" ng-model="vm_hour.holiday.christmas">-->
+    <!--</toggle-switch>-->
+    <!--</td>-->
+    <!--</tr>-->
+    <!--</tbody>-->
+    <!--</table>-->
+    <!--<div class="col-md-12">-->
+    <!--<div ng-show="vm_hour.holiday.processing" class="form-loader">-->
+    <!--<div class="line"></div>-->
+    <!--<div class="line"></div>-->
+    <!--<div class="line"></div>-->
+    <!--<div class="line"></div>-->
+    <!--</div>-->
+    <!--</div>-->
+
+
+    <!--<div class="col-md-12">-->
+    <!--<div class="col-md-12 submit-contain">-->
+    <!--<div class="col-md-8">-->
+    <!--<div class="alert alert-success alert-reg-position form-submit-success pull-left fade-effect"-->
+    <!--ng-show="vm_hour.holiday.success"-->
+    <!--role="alert">-->
+    <!--<i class="fa fa-check-circle" aria-hidden="true"></i> Holiday Open/Closed Dates Updated!-->
+    <!--</div>-->
+    <!--</div>-->
+
+    <!--<div class="col-md-4">-->
+    <!--<button class = 'btn-info btn pull-right'>Submit</button>-->
+    <!--</div>-->
+    <!--</div>-->
+    <!--</div>-->
+    <!--</form>-->
+    <!--</div>-->
+    <!--</div>-->
+    <!--</div>-->
+    <!--</div>-->
+    <!--</div>-->
+
+    <div class="col-md-5">
+        <div class="panel panel-primary">
+            <div class="panel-heading hours-heading">
+                <h3 class="panel-title">{{ 'MERCHANT.HOURS.HOLIDAYS' | translate }}</h3>
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <table class="table table-hover content-table">
+                            <thead>
+                            <tr>
+                                <th>{{ 'MERCHANT.HOURS.DAY' | translate }}</th>
+                                <th>{{ 'MERCHANT.HOURS.FULLCLOSURE' | translate }}</th>
+                                <th>{{ 'MERCHANT.HOURS.OPEN' | translate }}</th>
+                                <th>{{ 'MERCHANT.HOURS.CLOSE' | translate }}</th>
+                                <th width="40px"></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="full_holiday_hour in vm_hour.full_holiday_hours"
+                                data-toggle="modal" data-target="#edit-full-holiday-hour-modal"
+                                ng-click="vm_hour.editFullHolidayDialog(full_holiday_hour, $index)"
+                                tooltip-placement="bottom" uib-tooltip="Click to Edit" style="height: 43px">
+                                <td><b>{{full_holiday_hour.the_date}}</b></td>
+                                <td class="text-center">
+                                    <i class="fa fa-check-square-o true-negative" aria-hidden="true"
+                                       ng-show="!full_holiday_hour.day_open"></i>
+                                    <i class="fa fa-square-o false-positive" aria-hidden="true"
+                                       ng-show="full_holiday_hour.day_open"></i>
+                                </td>
+                                <td>{{full_holiday_hour.open}}{{full_holiday_hour.open_am_pm}}</td>
+                                <td>{{full_holiday_hour.close}}{{full_holiday_hour.close_am_pm}}</td>
+                                <td></td>
+                            </tr>
+                            <tr ng-repeat="custom_holiday_hour in vm_hour.custom_holiday_hours"
+                                data-toggle="modal" data-target="#edit-full-holiday-hour-modal"
+                                ng-click="vm_hour.editFullHolidayDialog(custom_holiday_hour, $index)"
+                                tooltip-placement="bottom" uib-tooltip="Click to Edit"
+                            >
+                                <td>{{custom_holiday_hour.the_date | date : 'MM/dd/yyyy'}}</td>
+                                <td class="text-center">
+                                    <i class="fa fa-check-square-o true-negative" aria-hidden="true"
+                                       ng-show="!custom_holiday_hour.day_open"></i>
+                                    <i class="fa fa-square-o false-positive" aria-hidden="true"
+                                       ng-show="custom_holiday_hour.day_open"></i>
+                                </td>
+                                <td>{{custom_holiday_hour.open_hours | date : 'hh:mm a'}}</td>
+                                <td>{{custom_holiday_hour.close_hours | date : 'hh:mm a'}}</td>
+                                <td class="delete-icon" style="padding: 0px;">
+                                    <i class="fa fa-times" aria-hidden="true"
+                                       ng-click="vm_hour.deleteCustomHolidayConfirm(custom_holiday_hour, $index,$event)"></i>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <div class="content-responsive">
+                            <div ng-repeat="full_holiday_hour in vm_hour.full_holiday_hours" aria-hidden="true"
+                                 data-toggle="modal"
+                                 data-target="#edit-full-holiday-hour-modal"
+                                 ng-click="vm_hour.editFullHolidayDialog(full_holiday_hour, $index)">
+                                <div class="panel panel-body row-table">
+                                    <div><b>Day: </b> {{full_holiday_hour.day_name}}</div>
+                                    <div class="description">
+                                        <i class="fa fa-check-square-o true-negative green-text" aria-hidden="true"
+                                           ng-show="!day_open.day_open"></i>
+                                        <i class="fa fa-square-o false-positive green-text" aria-hidden="true"
+                                           ng-show="day_open.day_open"></i>
+                                        {{ 'MERCHANT.HOURS.FULLCLOSURE' | translate }}
+                                    </div>
+                                    <!--TODO send param to translate-->
+                                    <div>Open from {{full_holiday_hour.open}}{{full_holiday_hour.open_am_pm}} to
+                                        {{full_holiday_hour.close}}{{full_holiday_hour.close_am_pm}}
+                                    </div>
+                                </div>
+                            </div>
+                            <div ng-repeat="custom_holiday_hour in vm_hour.custom_holiday_hours" aria-hidden="true"
+                                 data-toggle="modal"
+                                 data-target="#edit-full-holiday-hour-modal"
+                                 ng-click="vm_hour.editFullHolidayDialog(custom_holiday_hour, $index)">
+                                <div class="panel panel-body row-table">
+                                    <div><b>Day: </b> {{custom_holiday_hour.display_date}}</div>
+                                    <div class="description">
+                                        <i class="fa fa-check-square-o true-negative green-text" aria-hidden="true"
+                                           ng-show="!day_open.day_open"></i>
+                                        <i class="fa fa-square-o false-positive green-text" aria-hidden="true"
+                                           ng-show="day_open.day_open"></i>
+                                        {{ 'MERCHANT.HOURS.FULLCLOSURE' | translate }}
+                                    </div>
+                                    <div class="last-row-container-with-delete-icon">
+                                        <div>Open from {{custom_holiday_hour.open_hours | date : 'hh:mm a'}} to
+                                            {{custom_holiday_hour.close_hours | date : 'hh:mm a'}}
+                                        </div>
+                                        <i class="fa fa-times delete-icon-small-screen" aria-hidden="true"
+                                           ng-click="vm_hour.deleteCustomHolidayConfirm(custom_holiday_hour, $index, $event)"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="alert alert-success alert-reg-position form-submit-success fade-effect" role="alert"
+                             maxlength=""
+                             ng-show="vm_hour.edit_holiday_hour.success">
+                            <!--todo send param to translate-->
+                            <i class="fa fa-check-circle" aria-hidden="true"></i> The holiday
+                            {{vm_hour.edit_holiday_hour.day_name}} has been updated!
+                        </div>
+                        <button id="open-custom-holiday-hour" type="button" ng-disabled
+                                class="m-t-15 pull-right btn btn-soft-blue" ng-click="vm_hour.clickAddNewHoliday()"
+                                data-toggle="modal" data-target="#add-custom-holiday-hours-modal">
+                            <i class="fa fa-plus" aria-hidden="true"></i> {{ 'MERCHANT.HOURS.ADDHOLIDAY' | translate }}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-5">
+        <div class="panel panel-primary">
+            <div class="panel-heading hours-heading">
+                <h3 class="panel-title">{{ 'MERCHANT.HOURS.MID_DAY_TITLE' | translate }}</h3>
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <table class="table table-hover content-table">
+                            <thead>
+                            <tr>
+                                <th>{{ 'MERCHANT.HOURS.DAY' | translate }}</th>
+                                <th>{{ 'MERCHANT.HOURS.ORDER_TYPE' | translate }}</th>
+                                <th>{{ 'MERCHANT.HOURS.START_TIME' | translate }}</th>
+                                <th>{{ 'MERCHANT.HOURS.END_TIME' | translate }}</th>
+                                <th width="40px"></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="item in vm_hour.mid_day_hours"
+                                tooltip-placement="bottom" uib-tooltip="Click to Edit" style="height: 43px"
+                                ng-click="vm_hour.openMidDayUpdateModal(item, index, $event)">
+                                <td>{{item.day_of_week | dayOfWeekFormatter}}</td>
+                                <td>{{item.order_type}}</td>
+                                <td>{{item.start_time | date : 'hh:mm a'}}</td>
+                                <td>{{item.end_time | date : 'hh:mm a'}}</td>
+                                <td class="delete-icon" style="padding: 0px;">
+                                    <i class="fa fa-times" aria-hidden="true"
+                                       ng-click="vm_hour.deleteMidDayHourConfirm(item, $index,$event)"></i>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <div class="content-responsive">
+                            <div ng-repeat="item in vm_hour.mid_day_hours" aria-hidden="true"
+                                 ng-click="vm_hour.openMidDayUpdateModal(item, index, $event)">
+                                <div class="panel panel-body row-table">
+                                    <div class="description">
+                                        <div>Order Type: {{item.order_type}}</div>
+                                        <div>Day of week: {{item.day_of_week}}</div>
+                                        <div>Start Time: {{item.start_time | date : 'hh:mm a'}}</div>
+                                    </div>
+                                    <div class="last-row-container-with-delete-icon">
+                                        <div>End Time: {{item.end_time | date : 'hh:mm a'}}</div>
+                                        <i class="fa fa-times delete-icon-small-screen" aria-hidden="true"
+                                           ng-click="vm_hour.deleteMidDayHourConfirm(item, $index, $event)"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="alert alert-success alert-reg-position form-submit-success fade-effect" role="alert"
+                             maxlength=""
+                             ng-show="vm_hour.success_mid_hour">
+                            <i class="fa fa-check-circle" aria-hidden="true"></i> The mid-day closures have been
+                            updated!
+                        </div>
+                        <div class="alert alert-danger ng-hide alert-reg-position"
+                             ng-show="vm_hour.error"
+                             role="alert">
+                            Something went wrong, please try again.
+                        </div>
+                        <button id="open-mid-day-closures-hour" type="button" ng-disabled
+                                class="m-t-15 pull-right btn btn-soft-blue" ng-click="vm_hour.openAddMidDayHourModal()">
+                            <i class="fa fa-plus" aria-hidden="true"></i> {{ 'MERCHANT.HOURS.ADD_MID_DAY' | translate }}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="add-custom-holiday-hours-modal" class="modal fade" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="myModalLabel">{{ 'MERCHANT.HOURS.CUSTOMHOLIDAY' | translate }}</h4>
+            </div>
+            <div class="modal-body">
+                <div style="margin: 10px;">
+                    <form name="holiday_form" novalidate>
+                        <date-single-picker on-date-changed="vm_hour.onDateChanged(startDate)"></date-single-picker>
+                        <input type="hidden" ng-model="vm_hour.new_hours_date">
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox" name="closed_all_day"
+                                       ng-init="vm_hour.edit_holiday_hours.closed_all_day = false"
+                                       ng-model="vm_hour.edit_holiday_hours.closed_all_day">
+                                {{ 'MERCHANT.HOURS.CLOSEALLDAY' | translate }}
+                                <span></span>
+                            </label>
+                        </div>
+
+                        <div ng-class="vm_hour.fiftyOpacity(vm_hour.edit_holiday_hours.closed_all_day)"
+                             class="form-group">
+                            <label vm_hour.edit_holiday_hours.closed_all_day for="open" class="block">{{
+                                'MERCHANT.HOURS.OPEN' | translate }}</label>
+                            <input id="custom-holiday-hour-start" type="time" class="form-control input-med inline"
+                                   name="open" style="margin-left: 0px"
+                                   ng-readonly="vm_hour.edit_holiday_hours.closed_all_day"
+                                   ng-model="vm_hour.new_hours_open"
+                                   ng-required="true">
+                        </div>
+
+                        <div ng-class="vm_hour.fiftyOpacity(vm_hour.edit_holiday_hours.closed_all_day)"
+                             class="form-group"
+                        >
+                            <label for="close" class="block">{{ 'MERCHANT.HOURS.CLOSE' | translate }}</label>
+                            <input id="custom-holiday-hour-end" type="time" class="form-control input-med inline"
+                                   name="close" style="margin-left: 0px"
+                                   ng-readonly="vm_hour.edit_holiday_hours.closed_all_day"
+                                   ng-model="vm_hour.new_hours_close" ng-required="true">
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" ng-disabled class="btn btn-default" data-dismiss="modal">{{ 'MESSAGE.SHARE.CANCEL'
+                    | translate }}
+                </button>
+                <button id="create-custom-holiday-hour-button" class="btn btn-info"
+                        ng-click="vm_hour.addCustomHolidayHours()">{{ 'MESSAGE.SHARE.SUBMIT' | translate }}
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="delete-holiday-hour-modal" class="modal fade" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">{{ 'MERCHANT.HOURS.DELETEHOLIDAY' | translate }}</h4>
+            </div>
+            <div class="modal-body">
+                <!--TODO send param to translate-->
+                Are you sure you want to remove the special holiday hours for <strong>{{vm_hour.delete_holiday_hours_desc}}</strong>?
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" ng-disabled class="btn btn-default" data-dismiss="modal">{{ 'MESSAGE.SHARE.CANCEL'
+                    | translate }}
+                </button>
+                <button class="btn btn-danger" ng-click="vm_hour.confirmDeleteHolidayHour()">{{ 'MESSAGE.SHARE.DELETE' |
+                    translate }}
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div id="edit-full-holiday-hour-modal" class="modal fade" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                </button>
+                <!--TODO send param to translate-->
+                <h4 class="modal-title">Edit {{vm_hour.edit_holiday_hour.day_name}} Hours</h4>
+            </div>
+            <form name="vm_hour.standard_holiday_form" novalidate ng-submit="vm_hour.updateStandardHolidayHours()">
+                <div class="modal-body m-l-10 m-r-10">
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" name="closed_all_day"
+                                   ng-model="vm_hour.edit_holiday_hour.closed_all_day"
+                                   ng-change="vm_hour.flipStandardHolidayOpenClosed()">
+                            {{ 'MERCHANT.HOURS.CLOSEALLDAY' | translate }}
+                            <span></span>
+                        </label>
+                    </div>
+                    <div ng-class="vm_hour.fiftyOpacity(vm_hour.edit_holiday_hour.closed_all_day)" class="form-group">
+                        <label for="open">{{ 'MERCHANT.HOURS.OPEN' | translate }}</label>
+                        <div ng-class="vm_hour.fiftyOpacity(vm_hour.edit_holiday_hour.closed_all_day)">
+                            <input type="time" class="form-control input-med inline" name="open"
+                                   ng-model="vm_hour.edit_holiday_hour.open_hours" style="margin-left: 0px"
+                                   ng-required="!vm_hour.edit_holiday_hour.closed_all_day"
+                                   ng-readonly="vm_hour.edit_holiday_hour.closed_all_day">
+                        </div>
+
+                        <label for="close">{{ 'MERCHANT.HOURS.CLOSE' | translate }}</label>
+                        <div ng-class="vm_hour.fiftyOpacity(vm_hour.edit_holiday_hour.closed_all_day)">
+                            <input type="time" class="form-control input-med inline" placeholder="HH:MM" name="close"
+                                   ng-model="vm_hour.edit_holiday_hour.close_hours" style="margin-left: 0px"
+                                   ng-required="!vm_hour.edit_holiday_hour.closed_all_day"
+                                   ng-readonly="vm_hour.edit_holiday_hour.closed_all_day">
+                        </div>
+                    </div>
+
+                    <div>
+                        <div ng-show="vm_hour.edit_holiday_hour.processing" class="form-loader">
+                            <div class="line"></div>
+                            <div class="line"></div>
+                            <div class="line"></div>
+                            <div class="line"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" ng-disabled class="btn btn-default" data-dismiss="modal">{{
+                        'MESSAGE.SHARE.CANCEL' | translate }}
+                    </button>
+                    <button class="btn btn-info">{{ 'MESSAGE.SHARE.SUBMIT' | translate }}</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<div id="add-mid-day-hour-modal" class="modal fade" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" ng-if="!vm_hour.isMidDayUpdate">{{ 'MERCHANT.HOURS.MID_DAY_ADD_MODAL_TITLE' |
+                    translate }}</h4>
+                <h4 class="modal-title" ng-if="vm_hour.isMidDayUpdate">{{ 'MERCHANT.HOURS.MID_DAY_UPDATE_MODAL_TITLE' |
+                    translate }}</h4>
+            </div>
+            <div class="modal-body">
+                <div style="margin: 10px;">
+                    <form name="vm_hour.mid_day_form" novalidate>
+                        <div class="form-group">
+                            <label for="day" class="block">{{'MERCHANT.HOURS.DAY' | translate }}</label>
+                            <select name="day" class="input-large form-control"
+                                    ng-required="true"
+                                    ng-model="vm_hour.new_mid_day_hour.day_of_week">
+                                <option class="placeholder-color" value="" selected disabled>Day of Week</option>
+                                <option ng-repeat="day_of_week in vm_hour.days_of_week" value="{{day_of_week.id}}">
+                                    {{day_of_week.name}}
+                                </option>
+                            </select>
+                            <div class="alert alert-danger ng-hide alert-reg-position"
+                                 ng-show="vm_hour.mid_day_form.day.$error.required &&
+                                 (vm_hour.mid_day_form.day.$touched || vm_hour.mid_day_form.$submitted)"
+                                 role="alert">
+                                The day of the week is required.
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="order_type" class="block">{{'MERCHANT.HOURS.ORDER_TYPE' | translate }}</label>
+                            <select name="order_type" class="input-large form-control"
+                                    ng-required="true"
+                                    ng-model="vm_hour.new_mid_day_hour.order_type">
+                                <option class="placeholder-color" value="" selected disabled>
+                                    {{'MERCHANT.HOURS.ORDER_TYPE' | translate }}
+                                </option>
+                                <option>Delivery</option>
+                                <option>Pickup</option>
+                            </select>
+                            <div class="alert alert-danger ng-hide alert-reg-position"
+                                 ng-show="vm_hour.mid_day_form.order_type.$error.required &&
+                                 (vm_hour.mid_day_form.order_type.$touched || vm_hour.mid_day_form.$submitted)"
+                                 role="alert">
+                                The order type is required.
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="start_time" class="block">{{'MERCHANT.HOURS.START_TIME' | translate }}</label>
+                            <input id="start_time" name="start_time" type="time" class="form-control input-med inline"
+                                   ng-model="vm_hour.new_mid_day_hour.start_time"
+                                   name="start-time"
+                                   ng-max="vm_hour.new_mid_day_hour.end_time"
+                                   ng-required="true">
+                            <div class="alert alert-danger ng-hide alert-reg-position"
+                                 ng-show="(vm_hour.mid_day_form.start_time.$error.required || vm_hour.mid_day_form.start_time.$error.time) &&
+                                 (vm_hour.mid_day_form.start_time.$touched || vm_hour.mid_day_form.$submitted)"
+                                 role="alert">
+                                The start time is required and must be in HH:MM AM/PM time format.
+                            </div>
+                            <div class="alert alert-danger ng-hide alert-reg-position"
+                                 ng-show="vm_hour.mid_day_form.start_time.$error.max && (vm_hour.mid_day_form.start_time.$touched || vm_hour.mid_day_form.$submitted)"
+                                 role="alert">
+                                The start time must not be grater than end time.
+                            </div>
+
+                        </div>
+
+                        <div class="form-group">
+                            <label for="end_time" class="block">{{ 'MERCHANT.HOURS.END_TIME' | translate }}</label>
+                            <input id="end_time" name="end_time" type="time" class="form-control input-med inline"
+                                   ng-model="vm_hour.new_mid_day_hour.end_time"
+                                   ng-min="vm_hour.new_mid_day_hour.start_time"
+                                   name="close"
+                                   ng-required="true">
+                            <div class="alert alert-danger ng-hide alert-reg-position"
+                                 ng-show="(vm_hour.mid_day_form.end_time.$error.required || vm_hour.mid_day_form.end_time.$error.time) &&
+                                 (vm_hour.mid_day_form.end_time.$touched || vm_hour.mid_day_form.$submitted)"
+                                 role="alert">
+                                The end time is required and must be in HH:MM AM/PM time format.
+                            </div>
+                            <div class="alert alert-danger ng-hide alert-reg-position"
+                                 ng-show="vm_hour.mid_day_form.end_time.$error.min && (vm_hour.mid_day_form.end_time.$touched || vm_hour.mid_day_form.$submitted)"
+                                 role="alert">
+                                The end time must not be less than start time.
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" ng-disabled class="btn btn-default" data-dismiss="modal">
+                    {{ 'MESSAGE.SHARE.CANCEL' | translate }}
+                </button>
+                <button class="btn btn-info" ng-click="vm_hour.addNewMidDayHour()">
+                    {{ 'MESSAGE.SHARE.SUBMIT' | translate }}
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

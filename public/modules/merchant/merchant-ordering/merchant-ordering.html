@@ -1,0 +1,1254 @@
+<div class="row">
+    <div class="col-sm-12">
+        <div class="page-header-title merchant-bg">
+            <h4 class="page-title">{{ 'MERCHANT.ORDERING.ORDERING' | translate }}</h4>
+            <ol class="breadcrumb">
+                <li><a href="#/merchants">{{ 'MESSAGE.SHARE.MERCHANT' | translate }}</a></li>
+                <li><a href="#/merchant/ordering">{{ 'MERCHANT.ORDERING.ORDERING' | translate }}</a>
+                </li>
+            </ol>
+        </div>
+    </div>
+</div>
+
+<div class="button-select" ng-if="ordering.loading">
+    <div class="filter-loader-contain">
+        <div class="filter-loader"></div>
+    </div>
+</div>
+
+<div ng-if="!ordering.loading">
+    <div class="panel panel-primary">
+        <div class="panel-heading-with-tooltip flex-justify-content-space-between flex-align-items-center" style="height: 45px;">
+            <div class="flex-init">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Menu configuration</h3>
+                </div>
+                <div class="panel-heading-tooltip-right hide-on-mobile">
+                    <h4>
+                        <i class="fa fa-question-circle tooltip-help" aria-hidden="true">
+                            <span class="tool-tip-text-responsive">{{ 'MERCHANT.CONTACT.TOOLTIP.ORDERING.MENU_CONFIGURATION' | translate }}</span>
+                        </i>
+                    </h4>
+                </div>
+            </div>
+            <div class="m-r-10">
+                <button class="btn btn-soft-blue pull-right" data-toggle="modal" ng-click="ordering.loadModalData();">Select Menu</button>
+            </div>
+        </div>
+
+        <div class="panel-body p-t-15">
+            <h5 class="pre-load-text" ng-show="ordering.lookup.menus.length == 0">Menu Not Selected.</h5>
+            <table class="table m-b-clear content-table" ng-show="ordering.lookup.menus.length > 0">
+                <thead>
+                <tr>
+                    <th>Menu ID</th>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Type</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="menu in ordering.lookup.menus">
+                    <td>{{menu.menu_id}}</td>
+                    <td>{{menu.name}}</td>
+                    <td>{{menu.description}}</td>
+                    <td class="text-capitalize">{{menu.pivot.merchant_menu_type}}</td>
+                </tr>
+                </tbody>
+            </table>
+            <div class="content-responsive">
+                <div ng-repeat="menu in ordering.lookup.menus">
+                    <div class="panel panel-body row-table">
+                        <div class="name">
+                            <h5 class="dark-grey"><b>Menu ID: {{menu.menu_id}}</b>
+                            </h5>
+                        </div>
+                        <div class="description clear">
+                            <div>Name{{menu.name}}</div>
+                            <div class="text-capitalize">{{menu.pivot.merchant_menu_type}}</div>
+                            <div>{{menu.description}}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="panel panel-primary">
+        <div class="panel-heading-with-tooltip flex-justify-content-space-between flex-align-items-center" style="height: 45px;">
+            <div class="flex-init">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Site Association</h3>
+                </div>
+                <div class="panel-heading-tooltip-right hide-on-mobile">
+                    <h4>
+                        <i class="fa fa-question-circle tooltip-help" aria-hidden="true">
+                            <span class="tool-tip-text-responsive">{{ 'MERCHANT.CONTACT.TOOLTIP.ORDERING.SIDE_ASSOCIATION' | translate }}</span>
+                        </i>
+                    </h4>
+                </div>
+            </div>
+            <div class="m-r-10">
+                <button class="btn btn-soft-blue pull-right" data-toggle="modal" data-target="#{{ordering.skinSelector}}" ng-click="">Choose site</button>
+            </div>
+        </div>
+        <div class="panel-body p-t-15">
+            <h5 class="pre-load-text" ng-show="!!ordering.lookup.skins && ordering.lookup.skins.length == 0">Site Not Selected.</h5>
+            <table class="table m-b-clear" ng-show="ordering.lookup.skins.length > 0">
+                <thead>
+                <tr>
+                    <th>Skin ID</th>
+                    <th>Name</th>
+                    <th>Public Client ID</th>
+                    <th>Description</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="skin in ordering.lookup.skins">
+                    <td>{{skin.skin_id}}</td>
+                    <td>{{skin.skin_name}}</td>
+                    <td>{{skin.public_client_id}}</td>
+                    <td>{{skin.skin_description}}</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="panel panel-primary">
+        <div class="panel-heading-with-tooltip flex-justify-content-space-between flex-align-items-center" style="height: 45px;">
+            <div class="flex-init">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Lead Times Configuration</h3>
+                </div>
+                <div class="panel-heading-tooltip-right hide-on-mobile">
+                    <h4>
+                        <i class="fa fa-question-circle tooltip-help" aria-hidden="true">
+                            <span class="tool-tip-text-responsive">{{ 'MERCHANT.CONTACT.TOOLTIP.ORDERING.LEAD_TIMES_CONFIGURATION' | translate }}</span>
+                        </i>
+                    </h4>
+                </div>
+            </div>
+            <div class="m-r-10">
+                <button class="btn btn-soft-blue" data-toggle="modal" ng-click="ordering.newLeadTime()">Add Lead Time</button>
+            </div>
+        </div>
+
+        <div class="panel-body p-t-15">
+            <div class="row">
+                <div class="col-md-6">
+                    <label class="pre-load-text">Pickup Custom Lead Times</label>
+                    <h5 class="pre-load-text" ng-show="ordering.lead_time.pickup.length == 0">Custom Pickup Lead Times Not Configured.</h5>
+                    <table class="table m-b-clear table-hover" ng-show="ordering.lead_time.pickup.length > 0">
+                        <thead>
+                        <tr>
+                            <th>Day of week</th>
+                            <th>Start Time</th>
+                            <th>End Time</th>
+                            <th>Lead Time</th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="leadTime in ordering.lead_time.pickup"
+                            ng-click="ordering.editLeadTime(leadTime)"
+                            data-toggle="modal" data-target="#{{ordering.leadTimeModal}}">
+                            <td>{{leadTime.day_of_week | numberToDayOfWeek}}</td>
+                            <td>{{leadTime.start_time | stringTimeToDate | date : 'hh:mm a'}}</td>
+                            <td>{{leadTime.end_time | stringTimeToDate | date : 'hh:mm a'}}</td>
+                            <td>{{leadTime.lead_time}}</td>
+                            <td class="delete-icon" style="padding: 0px; width: 50px" ng-click="ordering.deleteLeadTime(leadTime); $event.stopPropagation()">
+                                <i class="fa fa-times" aria-hidden="true"></i>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-md-6">
+                    <label class="pre-load-text">Delivery Custom Lead Times</label>
+                    <h5 class="pre-load-text" ng-show="ordering.lead_time.delivery.length == 0">Custom Delivery Lead Times Not Configured.</h5>
+                    <table class="table m-b-clear table-hover" ng-show="ordering.lead_time.delivery.length > 0">
+                        <thead>
+                        <tr>
+                            <th>Day of week</th>
+                            <th>Start Time</th>
+                            <th>End Time</th>
+                            <th>Lead Time</th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="leadTime in ordering.lead_time.delivery"
+                            ng-click="ordering.editLeadTime(leadTime)"
+                            data-toggle="modal" data-target="#{{ordering.leadTimeModal}}">
+                            <td>{{leadTime.day_of_week | numberToDayOfWeek}}</td>
+                            <td>{{leadTime.start_time | stringTimeToDate | date : 'hh:mm a'}}</td>
+                            <td>{{leadTime.end_time | stringTimeToDate | date : 'hh:mm a'}}</td>
+                            <td>{{leadTime.lead_time}}</td>
+                            <td class="delete-icon" style="padding: 0px; width: 50px" ng-click="ordering.deleteLeadTime(leadTime); $event.stopPropagation()">
+                                <i class="fa fa-times" aria-hidden="true"></i>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="m-l-5 col-md-12 alert-danger"
+                     ng-show="!!ordering.lead_time.error"
+                     role="alert">
+                    {{ordering.lead_time.error}}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="panel panel-primary">
+        <div class="panel-heading-with-tooltip">
+            <div class="panel-heading">
+                <h3 class="panel-title">{{ 'MESSAGE.SHARE.ORDERINFO' | translate }}</h3>
+            </div>
+            <div class="panel-heading-tooltip-right hide-on-mobile">
+                <h4>
+                    <i class="fa fa-question-circle tooltip-help" aria-hidden="true">
+                        <span class="tool-tip-text-responsive">{{ 'MERCHANT.CONTACT.TOOLTIP.ORDERING.ORDER_RECEIVING_INFO' | translate }}</span>
+                    </i>
+                </h4>
+            </div>
+        </div>
+        <div class="panel-body p-t-15">
+            <form name="merchant_info_form" class="ordering" novalidate ng-submit="updateSendOrder()">
+                <div class="m-b-15">
+                    <table id="table-fix" class="table table-hover content-table">
+                        <thead>
+                        <tr>
+                            <th>{{ 'MESSAGE.SHARE.FORMAT' | translate }}</th>
+                            <th>{{ 'MESSAGE.SHARE.ADDRESS' | translate }}</th>
+                            <th>{{ 'MESSAGE.SHARE.DELAY' | translate }}</th>
+                            <th>{{ 'MESSAGE.SHARE.TEXT' | translate }}</th>
+                            <th>{{ 'MESSAGE.SHARE.INFO' | translate }}</th>
+                            <th>{{ 'MESSAGE.SHARE.TYPE' | translate }}</th>
+                            <th>Active</th>
+                            <th width="40px"></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="send_order in ordering.send_orders"
+                            data-toggle="modal" data-target="#edit-send-order-modal"
+                            tooltip-placement="bottom" uib-tooltip="Click to Edit"
+                            ng-click="ordering.updateOrderReceivingDialog(send_order, $index)"
+                        >
+                            <td>
+                                {{send_order.message_format_value}}
+                            </td>
+                            <td>
+                                <div class="text-wrap-word-break">{{send_order.delivery_addr}}</div>
+                            </td>
+                            <td>{{send_order.delay}}</td>
+                            <td>
+                                <div class="text-wrap-word-break">{{send_order.message_text}}</div>
+                            </td>
+                            <td>
+                                <div class="text-wrap-word-break">{{send_order.info}}</div>
+                            </td>
+                            <td>{{send_order.message_type_value}}</td>
+                            <td>
+                                <span ng-show="send_order.logical_delete">Active</span>
+                                <span ng-show="!send_order.logical_delete">Inactive</span>
+                            </td>
+                            <td class="delete-icon" style="padding: 0px;">
+                                <i class="fa fa-times" aria-hidden="true" data-toggle="modal"
+                                   data-target="#delete-send-order-modal"
+                                   ng-click="ordering.deleteSendOrderDialog(send_order, $index,$event)"></i>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <div class="content-responsive">
+                        <div ng-repeat="send_order in ordering.send_orders" aria-hidden="true" data-toggle="modal"
+                             data-target="#edit-send-order-modal"
+                             ng-click="ordering.updateOrderReceivingDialog(send_order, $index)">
+                            <div class="panel panel-body row-table">
+                                <div class="name">
+                                    <h5 class="dark-grey"><b>{{send_order.message_format_value}}</b>
+                                    </h5>
+                                </div>
+                                <div class="description clear">
+                                    <div>{{ 'MESSAGE.SHARE.ADDRESS' | translate }}: {{send_order.delivery_addr}}, Deplay: {{send_order.delay}}</div>
+                                    <div>{{ 'MESSAGE.SHARE.TEXT' | translate }}: {{send_order.message_text}}</div>
+                                    <div>{{ 'MESSAGE.SHARE.INFO' | translate }}: {{send_order.info}}</div>
+                                    <div class="last-row-container-with-delete-icon">
+                                        <div>
+                                            <div>{{ 'MESSAGE.SHARE.TYPE' | translate }}: {{send_order.message_type_value}}</div>
+                                        </div>
+                                        <div class="fa fa-times delete-icon-small-screen" aria-hidden="true"
+                                             data-toggle="modal" data-target="#delete-send-order-modal"
+                                             ng-click="ordering.deleteSendOrderDialog(send_order, $index, $event)"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="alert alert-success alert-reg-position form-submit-success"
+                     ng-show="send_order_update_success"
+                     role="alert">
+                    <i class="fa fa-check-circle" aria-hidden="true"></i> The order receiving record
+                    <strong>{{edit_send_order.message_text}}</strong>
+                    {{ 'MESSAGE.SHARE.UPDATED' | translate }}
+                </div>
+                <div class="alert alert-success alert-reg-position form-submit-success"
+                     ng-show="update_success"
+                     role="alert">
+                    <i class="fa fa-check-circle" aria-hidden="true"></i> {{ 'MESSAGE.SHARE.SENDORDERSAVED' | translate }}
+                </div>
+                <button type="button" ng-disabled class="btn btn-default pull-right btn-soft-blue" data-toggle="modal"
+                        ng-click="$event.stopPropagation(); ordering.clickAddSendOrder();">
+                    <i class="fa fa-plus" aria-hidden="true"></i> {{ 'MESSAGE.SHARE.ADDNEW' | translate }}
+                </button>
+            </form>
+        </div><!-- panel-body -->
+    </div> <!-- panel -->
+
+    <div class="panel panel-primary">
+        <div class="panel-heading-with-tooltip">
+            <div class="panel-heading">
+                <h3 class="panel-title">{{ 'MESSAGE.SHARE.CALL_IN_HISTORY' | translate }}</h3>
+            </div>
+            <div class="panel-heading-tooltip-right hide-on-mobile">
+                <h4>
+                    <i class="fa fa-question-circle tooltip-help" aria-hidden="true">
+                        <span class="tool-tip-text-responsive">{{ 'MERCHANT.CONTACT.TOOLTIP.ORDERING.CALL_IN_HISTORY' | translate }}</span>
+                    </i>
+                </h4>
+            </div>
+        </div>
+        <div class="panel-body p-t-15">
+            <div ng-if="!!!ordering.call_in_history.last_call_in_date">
+                <h4 class="pre-load-text">You have no devices with call-in capability.</h4>
+            </div>
+            <div ng-if="!!ordering.call_in_history.last_call_in_date">
+                <h4>Last Call In: {{ordering.call_in_history.readable_format}}.</h4>
+                <h4 ng-if="ordering.call_in_history.auto_turned_off === 1">This device was automatically turned off due to loss of connection.</h4>
+            </div>
+        </div><!-- panel-body -->
+    </div> <!-- panel -->
+
+    <div id="ordering-leadtime" class="row">
+        <div class="col-md-12 col-lg-4">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h3 class="panel-title">{{ 'MERCHANT.ORDERING.SETTINGS' | translate }}</h3>
+                </div>
+                <div class="panel-body">
+                    <form name="ordering.order_settings_form" class="ordering" novalidate
+                          ng-submit="ordering.updateOrderSettings()">
+                        <div class="form-group">
+                            <label class="control-label">{{ 'MERCHANT.ORDERING.GROUPORDERING' | translate }}</label>
+                            <div class="m-t-5">
+                                <toggle-switch name="group_ordering_on"
+                                               ng-model="ordering.order_settings.group_ordering_on"></toggle-switch>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">{{ 'MERCHANT.ORDERING.TIPMIN' | translate }}
+                                <i class="fa fa-question-circle tooltip-help" aria-hidden="true">
+                                    <span class="tool-tip-text-responsive">{{ 'MERCHANT.CONTACT.TOOLTIP.ORDERING.ORDER_SETTING.TIP_MIN' | translate }}</span>
+                                </i>
+                            </label>
+                            <div class="m-t-5">
+                                <input type="number" class="input-med form-control" name="tip_minimum_percentage"
+                                       placeholder="% Enter Min"
+                                       ng-model="ordering.order_settings.tip_minimum_percentage" ng-fade ng-min="0"
+                                       value="0" ng-required="true">
+                                <div class="input-med alert alert-danger ng-hide alert-reg-position input-med"
+                                     ng-show="(ordering.order_settings_form.tip_minimum_percentage.$error.number || ordering.order_settings_form.tip_minimum_percentage.$error.min
+                                 || ordering.order_settings_form.tip_minimum_percentage.$error.required)
+                                 && (ordering.order_settings_form.tip_minimum_percentage.$faded || ordering.order_settings.submit)"
+                                     role="alert">
+                                    {{ 'MERCHANT.ORDERING.TIPMINPOSITIVE' | translate }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label">{{ 'MERCHANT.ORDERING.TIPMINTRIGGER' | translate }}
+                                <i class="fa fa-question-circle tooltip-help" aria-hidden="true">
+                                    <span class="tool-tip-text-responsive">{{ 'MERCHANT.CONTACT.TOOLTIP.ORDERING.ORDER_SETTING.TIP_MIN_TRIGGER' | translate }}</span>
+                                </i>
+                            </label>
+                            <div class="m-t-5">
+                                <!--<input type="number" class="input-med form-control" name="tip_minimum_trigger_amount" step="0.01" value='0.00'-->
+                                <!--ng-model="ordering.test" ng-fade ng-min="0" placeholder="$ Enter Min">-->
+                                <input type="number" class="input-med form-control" name="tip_minimum_trigger_amount"
+                                       step="0.01" ng-required="true"
+                                       ng-model="ordering.order_settings.tip_minimum_trigger_amount" ng-fade ng-min="0"
+                                       placeholder="$ Enter Min" value="0.00">
+                                <div class="alert alert-danger ng-hide alert-reg-position input-med"
+                                     ng-show="(ordering.order_settings_form.tip_minimum_trigger_amount.$error.number || ordering.order_settings_form.tip_minimum_trigger_amount.$error.min
+                                 || ordering.order_settings_form.tip_minimum_trigger_amount.$error.required)
+                                 && (ordering.order_settings_form.tip_minimum_trigger_amount.$faded || ordering.order_settings.submit)"
+                                     role="alert">
+                                    {{ 'MERCHANT.ORDERING.TIPMINTRIGGERPOSITIVE' | translate }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label">{{ 'MERCHANT.ORDERING.ADVANCEDORDERING' | translate }}</label>
+                            <div class="tool-tip-fix">
+                                <label>
+                                    <i class="fa fa-question-circle tooltip-help" aria-hidden="true">
+                                        <span class="tool-tip-text">{{ 'MERCHANT.CONTACT.TOOLTIP.ORDERING.ORDER_SETTING.ADVANCED_ORDERING' | translate }}</span>
+                                    </i>
+                                </label>
+                            </div>
+                            <div class="m-t-5">
+                                <toggle-switch name="advanced_ordering"
+                                               ng-model="ordering.order_settings.advanced_ordering"></toggle-switch>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label">{{ 'MERCHANT.ORDERING.DAYSADVANCE' | translate }}</label>
+                            <div class="m-t-5">
+                                <input type="number" class="input-med form-control" name="number_of_days_advance"
+                                       ng-required="ordering.order_settings.advanced_ordering"
+                                       ng-model="ordering.order_settings.number_of_days_advance" ng-fade ng-min="0"
+                                       placeholder="Enter # of Days">
+                                <div class="alert alert-danger ng-hide alert-reg-position input-med"
+                                     ng-show="(ordering.order_settings_form.number_of_days_advance.$error.number || ordering.order_settings_form.number_of_days_advance.$error.min
+                                 || ordering.order_settings_form.number_of_days_advance.$error.required)
+                                 && (ordering.order_settings_form.number_of_days_advance.$faded || ordering.order_settings.submit)"
+                                     role="alert">
+                                    {{ 'MERCHANT.ORDERING.NUMBERDAYS' | translate }}
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="form-group" ng-show="ordering.order_settings.dine_in_option_show">
+                            <label class="control-label">Allow Dine In Option</label>
+                            <div class="tool-tip-fix">
+                                <label>
+                                    <i class="fa fa-question-circle tooltip-help" aria-hidden="true">
+                                        <span class="tool-tip-text">Use if you want to allow a user to dine in store rather than carry out.</span>
+                                    </i>
+                                </label>
+                            </div>
+                            <div class="m-t-5">
+                                <toggle-switch name="dine_in_option"
+                                               ng-model="ordering.order_settings.dine_in_option"></toggle-switch>
+                            </div>
+                        </div>
+
+                        <div class="form-group" ng-show="ordering.order_settings.dine_in_option_show">
+                            <label class="control-label">Allow Curbside Pickup</label>
+                            <div class="tool-tip-fix">
+                                <label>
+                                    <i class="fa fa-question-circle tooltip-help" aria-hidden="true">
+                                        <span class="tool-tip-text">Use if you want to give customers the option to pick their order up curbside.</span>
+                                    </i>
+                                </label>
+                            </div>
+                            <div class="m-t-5">
+                                <toggle-switch name="allows_curbside_pickup"
+                                               ng-model="ordering.order_settings.allows_curbside_pickup"></toggle-switch>
+                            </div>
+                        </div>
+
+                        <div ng-show="ordering.order_settings.processing" class="form-loader">
+                            <div class="line"></div>
+                            <div class="line"></div>
+                            <div class="line"></div>
+                            <div class="line"></div>
+                        </div>
+
+                        <div class="submit-contain flex-init flex-justify-content-space-between">
+                            <div class="flex-init flex-direction-column flex-justify-content-center">
+                                <div class="alert-success alert-reg-position form-submit-success fade-effect"
+                                     ng-show="ordering.order_settings.success"
+                                     role="alert">
+                                    <i class="fa fa-check-circle" aria-hidden="true"></i> {{ 'MERCHANT.ORDERING.SETTINGSUPDATED' | translate }}
+                                </div>
+                            </div>
+
+                            <div class="flex-align-self-end">
+                                <button class='btn-soft-blue btn pull-right'>{{ 'MESSAGE.SHARE.SUBMIT' | translate }}</button>
+                            </div>
+                        </div>
+                    </form>
+                </div><!-- panel-body -->
+            </div> <!-- panel -->
+        </div>
+        <div class="col-md-5 col-lg-4">
+            <div class="panel panel-primary">
+                <div class="panel-heading-with-tooltip">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">{{ 'MERCHANT.ORDERING.TIMEREQUIRED' | translate }}</h3>
+                    </div>
+                    <div class="panel-heading-tooltip-right hide-on-mobile">
+                        <h4>
+                            <i class="fa fa-question-circle tooltip-help" aria-hidden="true">
+                                <span class="tool-tip-text-responsive">{{ 'MERCHANT.CONTACT.TOOLTIP.ORDERING.PREP_TIME' | translate }}</span>
+                            </i>
+                        </h4>
+                    </div>
+                </div>
+                <div class="panel-body p-t-15">
+                    <form name="ordering.prep_time_form" class="ordering" novalidate ng-submit="ordering.updatePrepTime()">
+                        <div class="form-group">
+                            <label class="control-label">{{ 'MERCHANT.ORDERING.SECONDENTREE' | translate }}</label>
+                            <div class="tool-tip-fix">
+                                <label>
+                                    <i class="fa fa-question-circle tooltip-help" aria-hidden="true">
+                                        <span class="tool-tip-text">{{ 'MERCHANT.CONTACT.TOOLTIP.ORDERING.PREP_TIME.SECONDS_PER_ENTREE' | translate }}</span>
+                                    </i>
+                                </label>
+                            </div>
+                            <div class="m-t-5">
+                                <input type="number" class="input-med form-control" name="entree_preptime_seconds"
+                                       placeholder="Enter Seconds"
+                                       ng-model="ordering.prep_time.entree_preptime_seconds" ng-required="true" ng-fade
+                                       ng-min="0">
+                                <div class="input-med alert alert-danger ng-hide alert-reg-position input-med"
+                                     ng-show="(ordering.prep_time_form.entree_preptime_seconds.$error.required || ordering.prep_time_form.entree_preptime_seconds.$error.number
+                                 || ordering.prep_time_form.entree_preptime_seconds.$error.min)
+                                && (ordering.prep_time_form.entree_preptime_seconds.$faded || ordering.prep_time.submit)"
+                                     role="alert">
+                                    {{ 'MERCHANT.ORDERING.SECONDENTREEREQUIRED' | translate }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label" style="margin-bottom: 0px;">{{ 'MERCHANT.ORDERING.CAPABILITY' | translate }}</label>
+                            <div class="tool-tip-fix">
+                                <label>
+                                    <i class="fa fa-question-circle tooltip-help" aria-hidden="true">
+                                        <span class="tool-tip-text">{{ 'MERCHANT.CONTACT.TOOLTIP.ORDERING.PREP_TIME.CONCURRENT_ORDER_CAPABILITY' | translate }}</span>
+                                    </i>
+                                </label>
+                            </div>
+                            <div class="m-t-5">
+                                <input type="number" class="input-med form-control" name="concurrently_able_to_make"
+                                       ng-model="ordering.prep_time.concurrently_able_to_make" ng-required="true" ng-fade>
+                                <div class="input-med alert alert-danger ng-hide alert-reg-position input-med"
+                                     ng-show="(ordering.prep_time_form.concurrently_able_to_make.$error.required || ordering.prep_time_form.concurrently_able_to_make.$error.number)
+                                    && (ordering.prep_time_form.concurrently_able_to_make.$faded || ordering.prep_time.submit)"
+                                     role="alert">
+                                    {{ 'MERCHANT.ORDERING.CONCURRENTNUMERIC' | translate }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div ng-show="ordering.prep_time.processing" class="form-loader">
+                            <div class="line"></div>
+                            <div class="line"></div>
+                            <div class="line"></div>
+                            <div class="line"></div>
+                        </div>
+
+                        <div class="submit-contain flex-init flex-justify-content-space-between">
+                            <div class="flex-init flex-direction-column flex-justify-content-center">
+                                <div class="alert-success alert-reg-position form-submit-success fade-effect"
+                                     ng-show="ordering.prep_time.success"
+                                     role="alert">
+                                    <i class="fa fa-check-circle" aria-hidden="true"></i> {{ 'MERCHANT.ORDERING.PRETIMEUPDATED' | translate }}
+                                </div>
+                            </div>
+
+                            <div class="flex-align-self-end">
+                                <button class='btn-soft-blue btn'>{{ 'MESSAGE.SHARE.SUBMIT' | translate }}</button>
+                            </div>
+                        </div>
+                    </form>
+                </div><!-- panel-body -->
+            </div> <!-- panel -->
+        </div>
+        <div class="col-md-7 col-lg-4">
+            <div class="panel panel-primary">
+                <div class="panel-heading-with-tooltip">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">{{ 'MERCHANT.ORDERING.PAYMENT' | translate }}</h3>
+                    </div>
+                    <div class="panel-heading-tooltip-right">
+                        <h4>
+                            <i class="fa fa-question-circle tooltip-help" aria-hidden="true">
+                                <span class="tool-tip-text-responsive">{{ 'MERCHANT.CONTACT.TOOLTIP.ORDERING.PAYMENT' | translate }}</span>
+                            </i>
+                        </h4>
+                    </div>
+                </div>
+                <div class="panel-body p-t-15">
+                    <div class="m-b-15">
+                        <table class="table content-table">
+                            <thead>
+                            <tr>
+                                <th>{{ 'MERCHANT.ORDERING.PAYMENTTYPE' | translate }}</th>
+                                <th>{{ 'MERCHANT.ORDERING.BILLINGENTITY' | translate }}</th>
+                                <th></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="payment_group in ordering.payment_groups">
+                                <td>
+                                    {{payment_group.payment_type.name}}
+                                </td>
+                                <td>
+                                    {{payment_group.billing_entity.name}}
+                                </td>
+                                <td class="delete-icon" style="padding: 0px;">
+                                    <i class="fa fa-times" aria-hidden="true"
+                                       data-toggle="modal" data-target="#delete-payment_group-modal"
+                                       ng-click="ordering.deletePaymentGroupDialog(payment_group, $index)"></i>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <div id="disable-hover-card" class="content-responsive">
+                            <div ng-repeat="payment_group in ordering.payment_groups">
+                                <div class="panel panel-body row-table">
+                                    <div class="description">
+                                        <div class="clear">
+                                            <div>{{ 'MERCHANT.ORDERING.PAYMENTTYPEDOTS' | translate }} {{payment_group.payment_type.name}}</div>
+                                            <div class="last-row-container-with-delete-icon">
+                                                <div>{{ 'MERCHANT.ORDERING.BILLINGENTITYDOTS' | translate }} {{payment_group.billing_entity.name}}</div>
+                                                <div class="fa fa-times delete-icon-small-screen" aria-hidden="true"
+                                                     data-toggle="modal" data-target="#delete-payment_group-modal"
+                                                     ng-click="ordering.deletePaymentGroupDialog(payment_group, $index)"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="submit-contain flex-init flex-justify-content-space-between">
+                        <div class="flex-init flex-direction-column flex-justify-content-center">
+                            <div class="alert-success alert-reg-position form-submit-success fade-effect"
+                                 ng-show="payments_form_updated_success"
+                                 role="alert">
+                                <i class="fa fa-check-circle" aria-hidden="true"></i> {{ 'MERCHANT.ORDERING.PAYMENTSSAVED' | translate }}
+                            </div>
+                        </div>
+
+                        <div class="flex-align-self-end">
+                            <button type="button" ng-disabled class="btn btn-soft-blue pull-right"
+                                    data-toggle="modal" data-target="#add-payment-group-modal">
+                                <i class="fa fa-plus" aria-hidden="true"></i> {{ 'MERCHANT.ORDERING.ADDPAYMENT' | translate }}
+                            </button>
+                        </div>
+                    </div>
+                </div><!-- panel-body -->
+            </div> <!-- panel -->
+        </div>
+    </div>
+
+    <div id="add-payment-group-modal" class="modal fade" tabindex="-1" role="dialog"
+         aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">{{ 'MERCHANT.ORDERING.PAYMENT' | translate }}</h4>
+                </div>
+                <form name="ordering.new_payment_group_form" class="ordering m-l-15 m-r-15" novalidate
+                      ng-submit="ordering.createPaymentGroup()">
+
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label class="block">{{ 'MERCHANT.ORDERING.PAYMENTTYPE' | translate }}</label>
+                            <div class="select input-large">
+                                <select name="payment_type" class="form-control"
+                                        ng-required="true"
+                                        ng-model="ordering.new_payment_group.payment"
+                                        ng-options="payment_type.type_id_value as payment_type.type_id_name for payment_type in ordering.payment_types">
+                                </select></div>
+                            <div class="input-large alert alert-danger ng-hide alert-reg-position"
+                                 ng-show="ordering.new_payment_group_form.payment_type.$error.required
+                                        && (ordering.new_payment_group_form.payment_type.$faded || ordering.new_payment_group.submit)"
+                                 role="alert">
+                                {{ 'MERCHANT.ORDERING.PAYMENTREQUIRED' | translate }}
+                            </div>
+                        </div>
+
+                        <div class="form-group" ng-if="ordering.new_payment_group.payment === '2000'">
+                            <label>{{
+                                'MERCHANT.ORDERING.BILLINGENTITY' | translate }}</label>
+                            <div class="select input-large">
+                                <select
+                                        name="billing_entity" class="form-control"
+                                        ng-required="true"
+                                        ng-model="ordering.new_payment_group.billing_entity" ng-fade
+                                        ng-options="billing_entity.id as billing_entity.name for billing_entity in ordering.billing_entities">
+                                </select></div>
+                            <div class="input-large alert alert-danger ng-hide alert-reg-position"
+                                 ng-show="ordering.new_payment_group_form.billing_entity.$error.required
+                                        && (ordering.new_payment_group_form.billing_entity.$faded || ordering.new_payment_group_form.$submitted)"
+                                 role="alert">
+                                {{ 'MERCHANT.ORDERING.BILLINGREQUIRED' | translate }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" ng-disabled class="btn btn-default" data-dismiss="modal">{{ 'MESSAGE.SHARE.CANCEL' | translate }}</button>
+                        <button class="btn btn-info">{{ 'MESSAGE.SHARE.SUBMIT' | translate }}</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div id="delete-payment_group-modal" class="modal fade" tabindex="-1" role="dialog"
+         aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-md">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title">{{ 'MERCHANT.ORDERING.DELETEPAYMENT' | translate }}</h4>
+                </div>
+                <div class="modal-body">
+                    <!--TODO send param to translate-->
+                    {{ 'MERCHANT.ORDERING.CONFIRMREMOVEPAYMENT' | translate }}
+                    <strong>{{ordering.delete_payment_group.payment_type.name}}</strong>
+                    and billing entity
+                    <strong>{{ordering.delete_payment_group.billing_entity.name}}</strong>?
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" ng-disabled class="btn btn-default" data-dismiss="modal">{{ 'MESSAGE.SHARE.CANCEL' | translate }}</button>
+                    <button class="btn btn-danger" ng-click="ordering.deletePaymentGroup()">{{ 'MESSAGE.SHARE.DELETE' | translate }}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="add-send-order-modal" class="modal fade" tabindex="-1" role="dialog"
+         aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title">{{ 'MESSAGE.SHARE.CREATEORDER' | translate }}</h4>
+                </div>
+                <form name="ordering.new_send_order_form" class="ordering m-l-15 m-r-15" novalidate
+                      ng-submit="$event.stopPropagation(); ordering.createSendOrder();">
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label>{{ 'MESSAGE.SHARE.FORMAT' | translate }}</label>
+                            <div class="select input-large margin-top-five">
+                                <select name="message_format"
+                                        class="form-control"
+                                        ng-required="true"
+                                        ng-model="ordering.new_send_order.message_format"
+                                        ng-fade
+                                        ng-options="message_format.type_id_value as message_format.type_id_name for message_format in ordering.lookup.message_formats">
+                                    <option class="placeholder-color" value="" selected disabled>{{ 'MESSAGE.SHARE.SELECT' | translate }}
+                                    </option>
+                                </select></div>
+
+                            <div class='input-large alert alert-danger ng-hide alert-reg-position'
+                                 ng-show='ordering.new_send_order_form.message_format.$error.required
+                             && (ordering.new_send_order_form.message_format.$touched || ordering.new_send_order_form.$submitted)'
+                                 role='alert'>
+                                {{ 'MERCHANT.ORDERING.FORMATREQUIRED' | translate }}
+                            </div>
+                        </div>
+
+                        <div class="form-group" ng-if="ordering.defaultOrderReceivingType()">
+                            <label>{{ 'MESSAGE.SHARE.ADDRESS' | translate }}</label>
+                            <input type="text" name="delivery_addr" class="form-control input-med"
+                                   placeholder="Enter Address"
+                                   ng-init="ordering.new_send_order.delivery_addr = ''"
+                                   ng-model="ordering.new_send_order.delivery_addr">
+                        </div>
+
+                        <div class="form-group" ng-if="ordering.defaultOrderReceivingType()">
+                            <label>{{ 'MESSAGE.SHARE.DELAY' | translate }}</label>
+                            <input type='number' class='form-control input-med' name='delay' placeholder="Enter Seconds"
+                                   ng-init='ordering.new_send_order.delay = 0'
+                                   ng-model='ordering.new_send_order.delay'>
+                        </div>
+
+                        <div ng-if="ordering.new_send_order.message_format === 'V'">
+                            <div class="form-group">
+                                <label>Vivonet Store ID</label>
+                                <input type="text" name="vivonet_store_id" class="form-control input-large"
+                                       placeholder="Enter Vivonet Store ID"
+                                       ng-model="ordering.new_send_order.vivonet.store_id" ng-required="true">
+                                <div class='input-large alert alert-danger ng-hide alert-reg-position'
+                                     ng-show='ordering.new_send_order_form.vivonet_store_id.$error.required &&
+                                     (ordering.new_send_order_form.vivonet_store_id.$touched || ordering.new_send_order_form.$submitted)'
+                                     role='alert'>
+                                    The Vivonet Store ID is required.
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Tender ID</label>
+                                <input type="number" name="vivonet_tender_id" class="form-control input-large"
+                                       placeholder="Enter Tender ID"
+                                       ng-model="ordering.new_send_order.vivonet.tender_id" ng-required="true" ng-pattern="/^[0-9]*$/">
+                                <div class='input-large alert alert-danger ng-hide alert-reg-position'
+                                     ng-show='ordering.new_send_order_form.vivonet_tender_id.$error.required &&
+                                     (ordering.new_send_order_form.vivonet_tender_id.$touched || ordering.new_send_order_form.$submitted)'
+                                     role='alert'>
+                                    The Vivonet Tender ID is required.
+                                </div>
+                                <div class='input-large alert alert-danger ng-hide alert-reg-position'
+                                     ng-show='ordering.new_send_order_form.vivonet_tender_id.$error.pattern &&
+                                     (ordering.new_send_order_form.vivonet_tender_id.$touched || ordering.new_send_order_form.$submitted)'
+                                     role='alert'>
+                                    The Vivonet Tender ID must be number.
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>API Key</label>
+                                <input type="text" name="vivonet_api_key" class="form-control input-large"
+                                       placeholder="Enter Vivonet API Key"
+                                       ng-model="ordering.new_send_order.vivonet.merchant_key" ng-required="true">
+                                <div class='input-large alert alert-danger ng-hide alert-reg-position'
+                                     ng-show='ordering.new_send_order_form.vivonet_api_key.$error.required &&
+                                     (ordering.new_send_order_form.vivonet_api_key.$touched || ordering.new_send_order_form.$submitted)'
+                                     role='alert'>
+                                    The Vivonet API Key is required.
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Service Tip ID</label>
+                                <input type="number" name="vivonet_service_tip" class="form-control input-large"
+                                       placeholder="Enter Vivonet Service Tip ID"
+                                       ng-model="ordering.new_send_order.vivonet.service_tip_id" ng-pattern="/^[0-9]*$/">
+                                <div class='input-large alert alert-danger ng-hide alert-reg-position'
+                                     ng-show='ordering.new_send_order_form.vivonet_service_tip.$error.pattern &&
+                                     (ordering.new_send_order_form.vivonet_service_tip.$touched || ordering.new_send_order_form.$submitted)'
+                                     role='alert'>
+                                    The Vivonet Service Tip ID must be number.
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Charge ID</label>
+                                <div class="tool-tip-fix">
+                                    <label>
+                                        <i class="fa fa-question-circle tooltip-help" aria-hidden="true">
+                                            <span class="tool-tip-text ng-binding">{{'MERCHANT.TOOLTIP.ORDERING.VIVONET.CHARGE_ID' | translate}}</span>
+                                        </i>
+                                    </label>
+                                </div>
+                                <input type="number" name="vivonet_promo_charge_id" class="form-control input-large"
+                                       placeholder="Enter Vivonet Charge ID"
+                                       ng-model="ordering.new_send_order.vivonet.promo_charge_id" ng-pattern="/^[0-9]*$/">
+                                <div class='input-large alert alert-danger ng-hide alert-reg-position'
+                                     ng-show='ordering.new_send_order_form.vivonet_promo_charge_id.$error.pattern &&
+                                     (ordering.new_send_order_form.vivonet_promo_charge_id.$touched || ordering.new_send_order_form.$submitted)'
+                                     role='alert'>
+                                    The Vivonet Charge ID must be number.
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Alternate URL</label>
+                                <input type='text' class='form-control input-large' name='alternate_url'
+                                       ng-model='ordering.new_send_order.vivonet.alternate_url' placeholder="For testing and other purposes">
+                            </div>
+                        </div>
+
+                        <div ng-if="ordering.new_send_order.message_format === 'F'">
+                            <div class="form-group">
+                                <label>Vivonet Store ID</label>
+                                <input type="text" name="vivonet_store_id" class="form-control input-large"
+                                       placeholder="Enter Vivonet Store ID"
+                                       ng-model="ordering.new_send_order.vivonet.store_id" ng-required="true">
+                                <div class='input-large alert alert-danger ng-hide alert-reg-position'
+                                     ng-show='ordering.new_send_order_form.vivonet_store_id.$error.required &&
+                                     (ordering.new_send_order_form.vivonet_store_id.$touched || ordering.new_send_order_form.$submitted)'
+                                     role='alert'>
+                                    The Vivonet Store ID is required.
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-md-3 col-lg-3 control-label">Get Menu</label>
+                                <div class="col-md-9 col-lg-9 m-t-5">
+                                    <toggle-switch name="foundry_get_menu"
+                                                   ng-model="ordering.new_send_order.foundry.get_menu"></toggle-switch>
+                                </div>
+                            </div>
+
+                         </div>
+
+                        <div ng-if="ordering.new_send_order.message_format === 'B' || ordering.new_send_order.message_format === 'BO'">
+                            <div class="form-group">
+                                <label>Brinks Location</label>
+                                <input type="text" name="task_retail_location" class="form-control input-large"
+                                       placeholder="Enter Brink Location Token"
+                                       ng-model="ordering.new_send_order.brink.brink_location_token" ng-required="ordering.new_send_order.message_format === 'B' || ordering.new_send_order.message_format === 'BO'">
+                                <div class='input-large alert alert-danger ng-hide alert-reg-position'
+                                     ng-show='ordering.new_send_order_form.brink_location_token.$error.required &&
+                                     (ordering.new_send_order_form.brink_location_token.$touched || ordering.new_send_order_form.$submitted)'
+                                     role='alert'>
+                                    The Brinks Location Token is required.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div ng-if="ordering.new_send_order.message_format === 'A' || ordering.new_send_order.message_format === 'AJ'">
+                            <div class="form-group">
+                                <label>Location</label>
+                                <input type="text" name="task_retail_location" class="form-control input-large"
+                                       placeholder="Enter Location"
+                                       ng-model="ordering.new_send_order.task_retail.location" ng-required="ordering.new_send_order.message_format == 'A' || ordering.new_send_order.message_format == 'AJ'">
+                                <div class='input-large alert alert-danger ng-hide alert-reg-position'
+                                     ng-show='ordering.new_send_order_form.task_retail_location.$error.required &&
+                                     (ordering.new_send_order_form.task_retail_location.$touched || ordering.new_send_order_form.$submitted)'
+                                     role='alert'>
+                                    The Task Retail Location is required.
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Payment ID</label>
+                                <input type="text" name="task_retail_payment_id" class="form-control input-large"
+                                       placeholder="Enter Payment ID"
+                                       ng-model="ordering.new_send_order.task_retail.payment_id" ng-required="ordering.new_send_order.message_format == 'A' || ordering.new_send_order.message_format == 'AJ'">
+                                <div class='input-large alert alert-danger ng-hide alert-reg-position'
+                                     ng-show='ordering.new_send_order_form.task_retail_payment_id.$error.required &&
+                                     (ordering.new_send_order_form.task_retail_payment_id.$touched || ordering.new_send_order_form.$submitted)'
+                                     role='alert'>
+                                    The Task Retail Payment ID is required.
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Media ID</label>
+                                <input type="text" name="task_retail_media_id" class="form-control input-large"
+                                       placeholder="Enter Media ID"
+                                       ng-model="ordering.new_send_order.task_retail.media_id" ng-required="ordering.new_send_order.message_format == 'A' || ordering.new_send_order.message_format == 'AJ'">
+                                <div class='input-large alert alert-danger ng-hide alert-reg-position'
+                                     ng-show='ordering.new_send_order_form.task_retail_media_id.$error.required &&
+                                     (ordering.new_send_order_form.task_retail_media_id.$touched || ordering.new_send_order_form.$submitted)'
+                                     role='alert'>
+                                    The Task Retail Media ID is required.
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Task Retail URL</label>
+                                <input type="text" name="task_retail_url" class="form-control input-large"
+                                       placeholder="Enter Task Retail URL"
+                                       ng-model="ordering.new_send_order.task_retail.task_retail_url" ng-required="ordering.new_send_order.message_format == 'A' || ordering.new_send_order.message_format == 'AJ'">
+                                <div class='input-large alert alert-danger ng-hide alert-reg-position'
+                                     ng-show='ordering.new_send_order_form.task_retail_url.$error.required &&
+                                     (ordering.new_send_order_form.task_retail_url.$touched || ordering.new_send_order_form.$submitted)'
+                                     role='alert'>
+                                    The Task Retail URL is required.
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Task Retail Auth URL</label>
+                                <input type="text" name="task_retail_auth_url" class="form-control input-large"
+                                       placeholder="Enter Task Retail Auth URL"
+                                       ng-model="ordering.new_send_order.task_retail.task_retail_auth_url" ng-required="ordering.new_send_order.message_format == 'A'  || ordering.new_send_order.message_format == 'AJ'">
+                                <div class='input-large alert alert-danger ng-hide alert-reg-position'
+                                     ng-show='ordering.new_send_order_form.task_retail_auth_url.$error.required &&
+                                     (ordering.new_send_order_form.task_retail_auth_url.$touched || ordering.new_send_order_form.$submitted)'
+                                     role='alert'>
+                                    The Task Retail Auth URL is required.
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Task Retail Username</label>
+                                <input type="text" name="task_retail_username" class="form-control input-large"
+                                       placeholder="Enter Task Retail Username"
+                                       ng-model="ordering.new_send_order.task_retail.task_retail_username" ng-required="ordering.new_send_order.message_format == 'A' || ordering.new_send_order.message_format == 'AJ'">
+                                <div class='input-large alert alert-danger ng-hide alert-reg-position'
+                                     ng-show='ordering.new_send_order_form.task_retail_username.$error.required &&
+                                     (ordering.new_send_order_form.task_retail_username.$touched || ordering.new_send_order_form.$submitted)'
+                                     role='alert'>
+                                    The Task Retail Username is required.
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Task Retail Password</label>
+                                <input type="text" name="task_retail_password" class="form-control input-large"
+                                       placeholder="Enter Task Retail Password"
+                                       ng-model="ordering.new_send_order.task_retail.task_retail_password" ng-required="ordering.new_send_order.message_format == 'A' || ordering.new_send_order.message_format == 'AJ'">
+                                <div class='input-large alert alert-danger ng-hide alert-reg-position'
+                                     ng-show='ordering.new_send_order_form.task_retail_password.$error.required &&
+                                     (ordering.new_send_order_form.task_retail_password.$touched || ordering.new_send_order_form.$submitted)'
+                                     role='alert'>
+                                    The Task Retail Password is required.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group" ng-if="ordering.defaultOrderReceivingType()">
+                            <label>{{ 'MESSAGE.SHARE.MESSAGETEXT' | translate }}</label>
+                            <textarea class="form-control" rows="3" name="message_text"
+                                      ng-model="ordering.new_send_order.message_text"></textarea>
+                        </div>
+
+                        <div class="form-group" ng-if="ordering.defaultOrderReceivingType()">
+                            <label>{{ 'MESSAGE.SHARE.INFO' | translate }}</label>
+                            <input type='text' class='form-control input-med' name='info'
+                                   ng-model='ordering.new_send_order.info'>
+                        </div>
+
+                        <div class="form-group" ng-show="ordering.defaultOrderReceivingType()">
+                            <label>{{ 'MESSAGE.SHARE.MESSAGETYPE' | translate }}</label>
+                            <div class="select input-large margin-top-five">
+                                <select name="message_type" class="form-control"
+                                        ng-required="true"
+                                        ng-model="ordering.new_send_order.message_type"
+                                        ng-init="ordering.new_send_order.message_type = 'X'"
+                                        ng-options="message_type.type_id_value as message_type.type_id_name for message_type in ordering.lookup.messages_types">
+                                    <option class="placeholder-color" value="" selected disabled>Select</option>
+                                </select></div>
+                            <div class='input-large alert alert-danger ng-hide alert-reg-position'
+                                 ng-show='ordering.new_send_order_form.message_type.$error.required && (ordering.new_send_order_form.message_type.$touched || ordering.new_send_order_form.$submitted)'
+                                 role='alert'>
+                                {{ 'MESSAGE.SHARE.MESSAGETYPEREQUIRED' | translate }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" ng-disabled class="btn btn-default" data-dismiss="modal">{{ 'MESSAGE.SHARE.CANCEL' | translate }}
+                        </button>
+                        <button class="btn btn-info">{{ 'MESSAGE.SHARE.SUBMIT' | translate }}</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div id="edit-send-order-modal" class="modal fade" tabindex="-1" role="dialog"
+         aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title">{{ 'MESSAGE.SHARE.EDITORDER' | translate }}</h4>
+                </div>
+                <form name="ordering.edit_send_order_form" class="ordering m-l-15 m-r-15" novalidate ng-submit="$event.stopPropagation(); ordering.updateOrderReceiving();">
+                    <div class="modal-body">
+
+                        <div class="form-group">
+                            <label>{{ 'MESSAGE.SHARE.FORMAT' | translate }}</label>
+                            <div class="select input-large margin-top-five">
+                                <select name="message_format" class="form-control"
+                                        ng-required="true"
+                                        ng-model="ordering.edit_send_order.message_format"
+                                        ng-options="message_format.type_id_value as message_format.type_id_name for message_format in ordering.lookup.message_formats">
+                                    <option class="placeholder-color" value="" selected disabled>{{ 'MESSAGE.SHARE.SELECT' | translate }}
+                                    </option>
+                                </select></div>
+                            <div class='input-large alert alert-danger ng-hide alert-reg-position'
+                                 ng-show='ordering.edit_send_order_form.message_format.$error.required
+                             && (ordering.edit_send_order_form.message_format.$touched || ordering.edit_send_order_form.$submitted)'
+                                 role='alert'>
+                                {{ 'MERCHANT.ORDERING.FORMATREQUIRED' | translate }}
+                            </div>
+                        </div>
+
+                        <div class="form-group" ng-if="ordering.edit_send_order.message_format !== 'V'">
+                            <label>{{ 'MESSAGE.SHARE.ADDRESS' | translate }}</label>
+                            <input type="text" name="delivery_addr" class="form-control input-med" placeholder="Enter Email"
+                                   ng-model="ordering.edit_send_order.delivery_addr">
+                        </div>
+
+                        <div class="form-group" ng-if="ordering.edit_send_order.message_format !== 'V'">
+                            <label>{{ 'MESSAGE.SHARE.DELAY' | translate }}</label>
+                            <input type='text' class='form-control input-med' name='delay' placeholder="Enter Seconds"
+                                   ng-model='ordering.edit_send_order.delay'>
+                        </div>
+
+                        <div ng-if="ordering.edit_send_order.message_format === 'V'">
+                            <div class="form-group">
+                                <label>Vivonet Store ID</label>
+                                <input type="text" name="vivonet_store_id" class="form-control input-large"
+                                       placeholder="Enter Vivonet Store ID"
+                                       ng-model="ordering.edit_send_order.vivonet.store_id" ng-required="true">
+                                <div class='input-large alert alert-danger ng-hide alert-reg-position'
+                                     ng-show='ordering.edit_send_order_form.vivonet_store_id.$error.required &&
+                                     (ordering.edit_send_order_form.vivonet_store_id.$touched || ordering.edit_send_order_form.$submitted)'
+                                     role='alert'>
+                                    The Vivonet Store ID is required.
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Tender ID</label>
+                                <input type="number" name="vivonet_tender_id" class="form-control input-large"
+                                       placeholder="Enter Tender ID"
+                                       ng-model="ordering.edit_send_order.vivonet.tender_id" ng-required="true" ng-pattern="/^[0-9]*$/">
+                                <div class='input-large alert alert-danger ng-hide alert-reg-position'
+                                     ng-show='ordering.edit_send_order_form.vivonet_tender_id.$error.required &&
+                                     (ordering.edit_send_order_form.vivonet_tender_id.$touched || ordering.edit_send_order_form.$submitted)'
+                                     role='alert'>
+                                    The Vivonet Tender ID is required.
+                                </div>
+                                <div class='input-large alert alert-danger ng-hide alert-reg-position'
+                                     ng-show='ordering.edit_send_order_form.vivonet_tender_id.$error.pattern &&
+                                     (ordering.edit_send_order_form.vivonet_tender_id.$touched || ordering.edit_send_order_form.$submitted)'
+                                     role='alert'>
+                                    The Vivonet Tender ID must be number.
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>API Key</label>
+                                <input type="text" name="vivonet_api_key" class="form-control input-large"
+                                       placeholder="Enter Vivonet API Key"
+                                       ng-model="ordering.edit_send_order.vivonet.merchant_key" ng-required="true">
+                                <div class='input-large alert alert-danger ng-hide alert-reg-position'
+                                     ng-show='ordering.edit_send_order_form.vivonet_api_key.$error.required &&
+                                     (ordering.edit_send_order_form.vivonet_api_key.$touched || ordering.edit_send_order_form.$submitted)'
+                                     role='alert'>
+                                    The Vivonet API Key is required.
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Service Tip ID</label>
+                                <input type="number" name="vivonet_service_tip" class="form-control input-large"
+                                       placeholder="Enter Vivonet Service Tip ID"
+                                       ng-model="ordering.edit_send_order.vivonet.service_tip_id" ng-pattern="/^[0-9]*$/">
+                                <div class='input-large alert alert-danger ng-hide alert-reg-position'
+                                     ng-show='ordering.edit_send_order_form.vivonet_service_tip.$error.pattern &&
+                                     (ordering.edit_send_order_form.vivonet_service_tip.$touched || ordering.edit_send_order_form.$submitted)'
+                                     role='alert'>
+                                    The Vivonet Service Tip ID must be number.
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Charge ID</label>
+                                <div class="tool-tip-fix">
+                                    <label>
+                                        <i class="fa fa-question-circle tooltip-help" aria-hidden="true">
+                                            <span class="tool-tip-text ng-binding">{{'MERCHANT.TOOLTIP.ORDERING.VIVONET.CHARGE_ID' | translate}}</span>
+                                        </i>
+                                    </label>
+                                </div>
+                                <input type="number" name="vivonet_promo_charge_id" class="form-control input-large"
+                                       placeholder="Enter Vivonet Charge ID"
+                                       ng-model="ordering.edit_send_order.vivonet.promo_charge_id" ng-pattern="/^[0-9]*$/">
+                                <div class='input-large alert alert-danger ng-hide alert-reg-position'
+                                     ng-show='ordering.edit_send_order_form.vivonet_promo_charge_id.$error.pattern &&
+                                     (ordering.edit_send_order_form.vivonet_promo_charge_id.$touched || ordering.edit_send_order_form.$submitted)'
+                                     role='alert'>
+                                    The Vivonet Charge ID must be number.
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Alternate URL</label>
+                                <input type='text' class='form-control input-large' name='alternate_url' placeholder="For testing and other purposes"
+                                       ng-model='ordering.edit_send_order.vivonet.alternate_url'>
+                            </div>
+                        </div>
+
+                        <div class="form-group" ng-if="ordering.edit_send_order.message_format !== 'V'">
+                            <label>{{ 'MESSAGE.SHARE.MESSAGETEXT' | translate }}</label>
+                            <textarea class="form-control" rows="3" name="message_text"
+                                      ng-model="ordering.edit_send_order.message_text"></textarea>
+                        </div>
+
+                        <div class="form-group" ng-if="ordering.edit_send_order.message_format !== 'V'">
+                            <label>{{ 'MESSAGE.SHARE.INFO' | translate }}</label>
+                            <input type='text' class='form-control input-med' name='info'
+                                   ng-model='ordering.edit_send_order.info'>
+                        </div>
+
+                        <div class="form-group" ng-show="ordering.edit_send_order.message_format !== 'V'">
+                            <label>{{ 'MESSAGE.SHARE.MESSAGETYPE' | translate }}</label>
+                            <div class="select input-large margin-top-five">
+                                <select name="message_type" class="form-control"
+                                        ng-required="true"
+                                        ng-model="ordering.edit_send_order.message_type"
+                                        ng-options="message_type.type_id_value as message_type.type_id_name for message_type in ordering.lookup.messages_types">
+                                    <option class="placeholder-color" value="" selected disabled>Select</option>
+                                </select></div>
+                            <div class='input-large alert alert-danger ng-hide alert-reg-position'
+                                 ng-show='ordering.edit_send_order_form.message_type.$error.required && (ordering.ordering.edit_send_order_form.message_type.$touched || ordering.edit_send_order.$submitted)'
+                                 role='alert'>
+                                {{ 'MESSAGE.SHARE.MESSAGETYPEREQUIRED' | translate }}
+                            </div>
+                        </div>
+
+                        <div class="form-group" ng-show="ordering.edit_send_order.message_format !== 'V'">
+                            <label>Active</label>
+                            <div class="select input-large margin-top-five">
+                                <toggle-switch class="toggle-switch-margin6 delivery-hour-closed-toggle"
+                                               name="logical_delete"
+                                               on-label="Active" off-label="Inactive"
+                                               ng-model="ordering.edit_send_order.logical_delete">
+                                </toggle-switch>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">{{ 'MESSAGE.SHARE.CANCEL' | translate }}</button>
+                        <button class="btn btn-info">{{ 'MESSAGE.SHARE.SUBMIT' | translate }}</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div id="delete-send-order-modal" class="modal fade" tabindex="-1" role="dialog"
+         aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-md">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title">{{ 'MESSAGE.SHARE.DELETEORDER' | translate }}+Delete Order Receiving</h4>
+                </div>
+                <div class="modal-body">
+                    <!--TODO send param to translate-->
+                    Are you sure you want to remove the order receiving record for
+                    <strong>{{ordering.delete_send_order_desc}}</strong>?
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" ng-disabled class="btn btn-default" data-dismiss="modal">{{ 'MESSAGE.SHARE.CANCEL' | translate }}</button>
+                    <button class="btn btn-danger" ng-click="ordering.confirmDeleteSendOrder()">{{ 'MESSAGE.SHARE.DELETE' | translate }}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <modal-menu-picker modal-name="ordering.menuPicker"
+                       data-ng-click-right-button="ordering.changeMerchantButton()" data-ng-click-left-button="ordering.closeModal()"
+                       modal-selected-values="ordering.selectedMenu"
+                       modal-selectable-values="ordering.selectable" modal-search-function="ordering.getMenuList" modal-auto-load="false">
+    </modal-menu-picker>
+
+    <modal-picker modal-name="ordering.skinSelector"
+                  modal-header="ordering.skinSelectorTitle"
+                  modal-body="ordering.skinSelectorBody"
+                  modal-selected-values="ordering.skinSelected"
+                  modal-maximum-selection-permitted="1"
+                  init_value_search="ordering.initSkinSearch"
+                  disable_search_field="true"
+                  modal-search-function="ordering.lookupSkinFunction"
+                  modal-table-headers="ordering.skinTableHeaders"
+                  modal-table-fields="ordering.skinTableFields"
+                  data-ng-click-right-button="ordering.changeSkinButton()">
+    </modal-picker>
+
+    <lead-time-modal handler-name="ordering.leadTimeModal"
+                     current-lead-time-selected="ordering.lead_time.current"
+                     submit-button="ordering.submitLeadModal()"
+                     header-title="ordering.lead_time.headerTitle"
+                     form-model="ordering.lead_time_form">
+    </lead-time-modal>
+</div>

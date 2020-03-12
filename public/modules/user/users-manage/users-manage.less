@@ -1,0 +1,14 @@
+#user-list-page{
+  @max-small-cards: 529px;
+  @min-medium-cards: 530px;
+  @max-medium-cards: 777px;
+  @min-table-screen: 778px;
+
+  .content-table {
+    .content-table(@min-table-screen);
+  }
+
+  .content-responsive {
+    .content-responsive(@max-small-cards, @min-medium-cards, @max-medium-cards);
+  }
+}

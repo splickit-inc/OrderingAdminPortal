@@ -1,0 +1,209 @@
+<div class="row">
+    <div class="col-sm-12">
+        <div class="page-header-title merchant-bg">
+            <h4 class="page-title">{{ 'MESSAGE.SHARE.MERCHANT' | translate }}</h4>
+            <button id='create-merchant-popup-button' class="btn btn-primary"
+                    ng-click="merchant.createMerchant()">
+                {{ 'MERCHANT.CREATE.CREATE' | translate }}
+            </button>
+        </div>
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-md-6" ng-if="!merchant.isUserOperator()">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">{{ 'MERCHANT.LIST.FILTER' | translate }}</h3>
+            </div>
+            <div class="panel-body">
+                <form name="merchant.search_form" novalidate ng-submit="merchant.merchantSearch()">
+                    <div class="form-group">
+                        <div class="flex-init flex-align-items-center">
+                            <div class="search-box">
+                                <input type="text" class="form-control input-large" id="merchant-search-text"
+                                       name="search_text"
+                                       placeholder=""
+                                       ng-model="merchant.search_text">
+                            </div>
+                            <button id="merchant-search-button" class='btn-default btn m-l-10'>{{ 'MERCHANT.LIST.SEARCH'
+                                | translate }}
+                            </button>
+                        </div>
+                        <div class=" alert alert-danger ng-hide alert-reg-position"
+                             ng-show="(merchant.search_form.search_text.$error.required && merchant.search_form.search_text.$touched) ||
+                                 (merchant.search_form.search_text.$error.required && merchant.search_form.$submitted)"
+                             role="alert">
+                            {{ 'MERCHANT.LIST.TYPEATLEAST' | translate }}
+                        </div>
+
+                        <label class="m-l-2 m-t-5"><input class='m-r-5' type="checkbox" name="active_search"
+                                                          ng-model="merchant.active_only"> Active Only</label>
+                    </div>
+                </form>
+                <div ng-show="merchant.usersService.hasPermission('merchant_alpha_search')">
+                    <label>{{ 'MERCHANT.LIST.FILTERLETTER' | translate }}</label>
+                    <div class="alphabet">
+                        <span ng-class="merchant.currentLetter('A')"
+                              ng-click="merchant.merchantLetter('A')">A
+                        </span>
+                        <span ng-class="merchant.currentLetter('B')"
+                              ng-click="merchant.merchantLetter('B')">B
+                        </span>
+                        <span ng-class="merchant.currentLetter('C')"
+                              ng-click="merchant.merchantLetter('C')">C
+                        </span>
+                        <span ng-class="merchant.currentLetter('D')"
+                              ng-click="merchant.merchantLetter('D')">D
+                        </span>
+                        <span ng-class="merchant.currentLetter('E')"
+                              ng-click="merchant.merchantLetter('E')">E
+                        </span>
+                        <span ng-class="merchant.currentLetter('F')"
+                              ng-click="merchant.merchantLetter('F')">F
+                        </span>
+                        <span ng-class="merchant.currentLetter('G')"
+                              ng-click="merchant.merchantLetter('G')">G
+                        </span>
+                        <span ng-class="merchant.currentLetter('H')"
+                              ng-click="merchant.merchantLetter('H')">H
+                        </span>
+                        <span ng-class="merchant.currentLetter('I')"
+                              ng-click="merchant.merchantLetter('I')">I
+                        </span>
+                        <span ng-class="merchant.currentLetter('J')"
+                              ng-click="merchant.merchantLetter('J')">J
+                        </span>
+                        <span ng-class="merchant.currentLetter('K')"
+                              ng-click="merchant.merchantLetter('K')">K
+                        </span>
+                        <span ng-class="merchant.currentLetter('L')"
+                              ng-click="merchant.merchantLetter('L')">L
+                        </span>
+                        <span ng-class="merchant.currentLetter('M')"
+                              ng-click="merchant.merchantLetter('M')">M
+                        </span>
+                        <span ng-class="merchant.currentLetter('N')"
+                              ng-click="merchant.merchantLetter('N')">N
+                        </span>
+                        <span ng-class="merchant.currentLetter('O')"
+                              ng-click="merchant.merchantLetter('O')">O
+                        </span>
+                        <span ng-class="merchant.currentLetter('P')"
+                              ng-click="merchant.merchantLetter('P')">P
+                        </span>
+                        <span ng-class="merchant.currentLetter('Q')"
+                              ng-click="merchant.merchantLetter('Q')">Q
+                        </span>
+                        <span ng-class="merchant.currentLetter('R')"
+                              ng-click="merchant.merchantLetter('R')">R
+                        </span>
+                        <span ng-class="merchant.currentLetter('S')"
+                              ng-click="merchant.merchantLetter('S')">S
+                        </span>
+                        <span ng-class="merchant.currentLetter('T')"
+                              ng-click="merchant.merchantLetter('T')">T
+                        </span>
+                        <span ng-class="merchant.currentLetter('U')"
+                              ng-click="merchant.merchantLetter('U')">U
+                        </span>
+                        <span ng-class="merchant.currentLetter('V')"
+                              ng-click="merchant.merchantLetter('V')">V
+                        </span>
+                        <span ng-class="merchant.currentLetter('W')"
+                              ng-click="merchant.merchantLetter('W')">W
+                        </span>
+                        <span ng-class="merchant.currentLetter('X')"
+                              ng-click="merchant.merchantLetter('X')">X
+                        </span>
+                        <span ng-class="merchant.currentLetter('Y')"
+                              ng-click="merchant.merchantLetter('Y')">Y
+                        </span>
+                        <span ng-class="merchant.currentLetter('Z')"
+                              ng-click="merchant.merchantLetter('Z')">Z
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6" ng-class="merchant.hasSearchResult()" ng-hide="merchant.isUserOperator()">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">{{ 'MERCHANT.LIST.RECENTLYVISITED' | translate }}</h3>
+            </div>
+            <div class="panel-body recently-visited-container">
+                <div class="panel panel-body row-table"
+                     ng-repeat="recent_merchant in merchant.recently_visited_merchants"
+                     ng-click="merchant.viewMerchant(recent_merchant)">
+                    <div>
+                        <h5 class="bold">{{recent_merchant.merchant_id}} -
+                            {{recent_merchant.name}}</h5>
+                    </div>
+                    <div>
+                        {{recent_merchant.address1}}<br>
+                        {{recent_merchant.address2}}<br>
+                        {{merchant.formatPhone(recent_merchant.phone_no)}}
+                    </div>
+                </div>
+                <div ng-show="merchant.recently_visited_merchants.length %2 == 1"
+                     class="fake-div"></div>
+                <div ng-show="merchant.recently_visited_merchants.length == 1"
+                     class="fix-div-1"></div>
+                <div ng-show="merchant.recently_visited_merchants.length >= 4"
+                     class="fake-div"></div>
+                <div ng-show="merchant.recently_visited_merchants.length >= 4"
+                     class="fake-div"></div>
+                <div ng-show="merchant.recently_visited_merchants.length == 5"></div>
+                <div ng-show="merchant.recently_visited_merchants.length == 5"></div>
+                <div ng-show="merchant.recently_visited_merchants.length == 5"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-12">
+        <div class="panel panel-primary">
+            <div class="panel-heading flex-init flex-justify-content-space-between">
+                <h3 class="panel-title">{{merchant.isUserOperator()?'Merchants': 'Search Results'}}</h3>
+                <h3 class="panel-title" ng-if="!!merchant.Merchant.merchantPaginator.current_page">Page Number:
+                    {{merchant.Merchant.merchantPaginator.current_page}}</h3>
+            </div>
+            <div class="panel-body">
+                <div id="Merchant-Filter">
+                    <paginated-table container-id="'merchant-search-results-table'"
+                                     field-names="merchant.fieldNames" params="merchant.searchParams"
+                                     click-event="merchant.viewMerchant" endpoint-string="'/merchant_search_paginated'">
+                        <content-responsive>
+                            <div class="panel panel-body row-table"
+                                 ng-click="merchant.viewMerchant($parent.item)">
+                                <div class="name">
+                                    <h5 class="dark-grey"><b>{{$parent.item.name}}</b></h5>
+                                </div>
+
+                                <div class="id">
+                                    <h5 class="dark-grey id-title">{{ 'MESSAGE.SHARE.MERCHANTID' | translate }}
+                                        <span
+                                            class="id-number">{{$parent.item.merchant_id}}</span>
+                                    </h5>
+                                </div>
+                                <div class="description">
+                                    <div class="clear">
+                                        <b>{{ 'MESSAGE.SHARE.DISPLAYNAME' | translate }}:</b>
+                                        {{$parent.item.display_name}}
+                                    </div>
+                                    <div class="clear merchant-address">
+                                        {{$parent.item.address1}}
+                                    </div>
+                                    <div>
+                                        <b>{{ 'MERCHANT.LIST.PHONEDOTS' | translate }}</b> {{$parent.item.phone_no}}
+                                    </div>
+                                </div>
+                            </div>
+                        </content-responsive>
+                    </paginated-table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

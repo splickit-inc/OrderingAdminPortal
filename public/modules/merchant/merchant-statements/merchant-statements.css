@@ -1,0 +1,70 @@
+@media print {
+
+    html, body {
+        height:100vh;
+        margin: 0 !important;
+        padding: 0 !important;
+        overflow: hidden;
+    }
+
+    body * {
+        visibility: hidden;
+    }
+
+    .print-content * {
+        visibility: visible;
+        overflow: visible;
+    }
+
+    #mainPage * {
+        display: none;
+    }
+
+    .modal {
+        position: fixed;
+        left: 0;
+        top: 0;
+        margin: 0;
+        padding: 0;
+        min-height: 550px;
+        visibility: visible;
+        /**Remove scrollbar for printing.**/
+        overflow: visible !important;
+    }
+
+    .modal-dialog {
+        visibility: visible !important;
+        /**Remove scrollbar for printing.**/
+        overflow: visible !important;
+    }
+
+    li {
+        page-break-after: auto;
+    }
+
+    .hide-on-print {
+        display: none !important;
+    }
+
+    .show-on-print {
+        display: flex !important;
+    }
+
+    .panel-heading {
+        background-color: #0f0f0f !important;
+        -webkit-print-color-adjust: exact;
+        border-bottom: none;
+    }
+
+    .panel-heading .modal-title {
+        color: white !important;
+    }
+}
+
+#detailsModal .panel-heading {
+    border-bottom: 1px solid white;
+}
+
+.border-bottom{
+    border-bottom: 1px solid #d2d2d2;
+}

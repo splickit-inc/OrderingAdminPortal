@@ -1,0 +1,248 @@
+.tooltip-help {
+  position: relative;
+  display: inline-block;
+  border-bottom: 1px dotted black;
+  color: @color-tool-tip-icon;
+}
+
+.tooltip-help .tool-tip-text-right {
+  &.button-popup{
+    @media (max-width: 769px){
+      top: 1px;
+      right: 112%;
+    }
+    @media (min-width: 770px) {
+      top: 1px;
+      left: 112%;
+    }
+  }
+  @media (min-width: 770px) {
+    visibility: hidden;
+    max-width: 500px;
+    min-width: 200px;
+    background-color: @color-tool-tip-icon;
+    color: @body-bg;
+    text-align: center;
+    border-radius: 6px;
+
+    /* Position the tooltip */
+    position: absolute;
+    z-index: 10000;
+    top: -5px;
+    left: 200%;
+  }
+
+  @media (max-width: 769px)
+  {
+    visibility: hidden;
+    width: 120px;
+    text-align: center;
+    border-radius: 6px;
+    position: absolute;
+    z-index: 1;
+    top: -5px;
+    right: 200%;
+    max-width: 500px;
+    min-width: 200px;
+  }
+
+  background-color: @color-tool-tip-icon;
+  color: @body-bg;
+
+  font-family: "Myriad Set Pro", "Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-style: italic;
+  padding: 5px;
+
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.tooltip-help .tool-tip-text-responsive {
+  &.button-popup{
+    top: 1px;
+    left: 110%;
+    @media (max-width: 651px) {
+      top: 128%;
+      left: 50%;
+    }
+  }
+
+  @media (max-width: 651px) {
+    visibility: hidden;
+    width: 200px;
+    background-color: @color-tool-tip-icon;
+    color: @body-bg;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px;
+    position: absolute;
+    z-index: 10000;
+    top: 150%;
+    left: 50%;
+    margin-left: -60px;
+  }
+  visibility: hidden;
+  max-width: 500px;
+  min-width: 200px;
+  background-color: @color-tool-tip-icon;
+  color: @body-bg;
+  text-align: center;
+  border-radius: 6px;
+
+  /* Position the tooltip */
+  position: absolute;
+  z-index: 10000;
+  top: -5px;
+  left: 200%;
+
+  font-family: "Myriad Set Pro", "Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-style: italic;
+  padding: 5px;
+
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.tooltip-help .tool-tip-text {
+  &.input-med-popup{
+    top: 2px;
+    left: 105%;
+  }
+  visibility: hidden;
+  max-width: 500px;
+  min-width: 200px;
+  background-color: @color-tool-tip-icon;
+  color: @body-bg;
+  text-align: center;
+  border-radius: 6px;
+
+  /* Position the tooltip */
+  position: absolute;
+  z-index: 10000;
+  top: -5px;
+  left: 200%;
+
+  font-family: "Myriad Set Pro", "Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-style: italic;
+  padding: 5px;
+
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.tooltip-help .tool-tip-text-left {
+  visibility: hidden;
+  max-width: 500px;
+  min-width: 200px;
+  background-color: @color-tool-tip-icon;
+  color: @body-bg;
+  text-align: center;
+  border-radius: 6px;
+  position: absolute;
+  z-index: 1;
+  top: -1px;
+  right: 170%;
+
+  font-family: "Myriad Set Pro", "Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-style: italic;
+  padding: 5px;
+
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.tooltip-help .tool-tip-text-left::after {
+  content: " ";
+  position: absolute;
+  top: 10px;
+  left: 100%; /* To the right of the tooltip */
+  margin-top: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: transparent transparent transparent @color-tool-tip-icon;
+}
+
+.tooltip-help .tool-tip-text-responsive::after {
+  @media (max-width: 651px) {
+    content: "";
+    position: absolute;
+    bottom: 100%;
+    left: 30%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: transparent transparent @color-tool-tip-icon transparent;
+  }
+  @media (min-width: 650px) {
+    content: "";
+    position: absolute;
+    top: 12px;
+    right: 100%;
+    margin-top: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: transparent @color-tool-tip-icon transparent transparent;
+  }
+}
+
+.tooltip-help .tool-tip-text::after {
+  content: "";
+  position: absolute;
+  top: 12px;
+  right: 100%;
+  margin-top: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: transparent @color-tool-tip-icon transparent transparent;
+}
+
+.tooltip-help .tool-tip-text-right::after {
+  @media (min-width: 770px)
+  {
+    content: "";
+    position: absolute;
+    top: 12px;
+    right: 100%;
+    margin-top: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: transparent @color-tool-tip-icon transparent transparent;
+  }
+  @media (max-width: 769px)
+  {
+    content: " ";
+    position: absolute;
+    top: 12px;
+    left: 100%; /* To the right of the tooltip */
+    margin-top: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: transparent transparent transparent @color-tool-tip-icon;
+  }
+}
+
+.tooltip-help:hover .tool-tip-text {
+  visibility: visible;
+}
+
+.tooltip-help:hover .tool-tip-text-responsive {
+  visibility: visible;
+}
+
+.tooltip-help:hover .tool-tip-text-right {
+  visibility: visible;
+}
+
+.tooltip-help:hover .tool-tip-text-left {
+  visibility: visible;
+}
+
+
+.panel-heading-tooltip-right {
+  position: relative;
+  top: -1px;
+  left: 0;
+  height: 0;
+  width: 0;
+}
+
+.panel-heading-with-tooltip {
+  display: flex;
+  background-color: @panel-primary-heading-bg;
+}

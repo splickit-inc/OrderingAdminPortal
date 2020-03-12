@@ -1,0 +1,478 @@
+<div class="row">
+    <div class="col-sm-12">
+        <div class="page-header-title">
+            <h4 class="page-title">Create New Customer</h4>
+            <ol class="breadcrumb">
+                <li><a href="#/">Home</a></li>
+            </ol>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Basic example -->
+    <div class="col-md-10">
+        <div class="panel panel-primary">
+            <div class="panel-heading"><h3 class="panel-title">New Customer</h3></div>
+            <div class="panel-body">
+                <form name="vm.createForm" class="form-horizontal" novalidate
+                      ng-submit="vm.create()">
+
+                    <h4 class="dark-grey">Owner Info</h4>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Name</label>
+                        <div class="col-md-8">
+                            <input type="text" class="input-large form-control" name="contact_name"
+                                   placeholder="Enter Contact Name" maxlength="100"
+                                   ng-model="vm.newLead.contact_name" ng-fade ng-required="true">
+                            <div class="alert alert-danger ng-hide alert-reg-position"
+                                 ng-show="vm.createForm.contact_name.$error.required
+                                 && (vm.createForm.contact_name.$faded || vm.newLead.submit)"
+                                 role="alert">
+                                Name is required.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Title</label>
+                        <div class="col-md-8">
+                            <input type="text" class="input-large form-control" name="contact_title"
+                                   placeholder="Enter Contact Title" maxlength="100"
+                                   ng-model="vm.newLead.contact_title" ng-fade ng-required="true">
+                            <div class="alert alert-danger ng-hide alert-reg-position"
+                                 ng-show="vm.createForm.contact_title.$error.required
+                                 && (vm.createForm.contact_title.$faded || vm.newLead.submit)"
+                                 role="alert">
+                                Title is required.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Email</label>
+                        <div class="col-md-8">
+                            <input type="email" class="input-large form-control"
+                                   name="contact_email"
+                                   placeholder="Enter Email Address" maxlength="100"
+                                   ng-pattern="/^[_a-z0-9]+(\.[_a-z0-9]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$/"
+                                   ng-model="vm.newLead.contact_email" ng-fade ng-required="true">
+                            <div class="alert alert-danger ng-hide alert-reg-position"
+                                 ng-show="(vm.createForm.contact_email.$error.required || vm.createForm.contact_email.$error.email
+                                 || vm.createForm.contact_email.$error.pattern)
+                                 && (vm.createForm.contact_email.$faded || vm.newLead.submit)"
+                                 role="alert">
+                                Email is required and must be in a valid email format.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Phone Number</label>
+                        <div class="col-md-8">
+                            <input type="text" class="input-large form-control"
+                                   name="contact_phone_no" placeholder="Phone" ng-fade
+                                   ng-model="vm.newLead.contact_phone_no" ng-required="true"
+                                   valid-phone
+                                   maxlength="100">
+                            <div class="alert alert-danger ng-hide alert-reg-position"
+                                 ng-show="vm.createForm.contact_phone_no.$error.required
+                                 && (vm.createForm.contact_phone_no.$faded || vm.newLead.submit)"
+                                 role="alert">
+                                Phone Number is required.
+                            </div>
+                            <div class="alert alert-danger ng-hide alert-reg-position"
+                                 ng-show="vm.createForm.contact_phone_no.$error.invalidPhone && !vm.createForm.contact_phone_no.$error.required
+                                 && (vm.createForm.contact_phone_no.$faded || vm.newLead.submit)"
+                                 role="alert">
+                                Phone Number must contain 10 digits.
+                            </div>
+                        </div>
+                    </div>
+
+                    <h4 class="dark-grey">Store Info</h4>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Name</label>
+                        <div class="col-md-8">
+                            <input type="text" class="input-large form-control" name="store_name"
+                                   placeholder="Enter Store Name" maxlength="100"
+                                   ng-model="vm.newLead.store_name" ng-fade ng-required="true">
+                            <div class="alert alert-danger ng-hide alert-reg-position"
+                                 ng-show="vm.createForm.store_name.$error.required
+                                 && (vm.createForm.store_name.$faded || vm.newLead.submit)"
+                                 role="alert">
+                                Name is required.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Address</label>
+                        <div class="col-md-8 mt-5">
+                            <input type="text" class="input-large form-control"
+                                   name="store_address1" placeholder="Address Line 1"
+                                   maxlength="100"
+                                   ng-model="vm.newLead.store_address1" ng-required="true" ng-fade>
+
+                            <div class="alert alert-danger ng-hide alert-reg-position"
+                                 ng-show="vm.createForm.store_address1.$error.required
+                                 && (vm.createForm.store_address1.$faded || vm.newLead.submit)"
+                                 role="alert">
+                                Address Line 1 is required.
+                            </div>
+
+                            <input type="text" class="input-large form-control margin-top-five"
+                                   name="store_address2" placeholder="Address Line 2"
+                                   maxlength="100"
+                                   ng-model="vm.newLead.store_address2" ng-fade>
+
+                            <input type="text" class="input-med form-control margin-top-five inline"
+                                   name="store_city" placeholder="City" maxlength="100"
+                                   ng-model="vm.newLead.store_city" ng-required="true" ng-fade>
+
+                            <div class="select input-micro margin-top-five inline margin-left-five">
+                                <select name="store_state"
+                                        class="form-control"
+                                        ng-required="true"
+                                        ng-model="vm.newLead.store_state"
+                                        ng-options="state.type_id_value as state.type_id_value for state in vm.states">
+                                    <option class="placeholder-color" value="" selected disabled>ST
+                                    </option>
+                                </select>
+                            </div>
+
+                            <input type="text"
+                                   class="input-small form-control margin-left-five margin-top-five inline"
+                                   name="store_zip" placeholder="Zip Code" maxlength="5"
+                                   ng-pattern="/(\d{5})/g"
+                                   ng-model="vm.newLead.store_zip" ng-required="true" ng-fade>
+
+                            <div class="alert alert-danger ng-hide alert-reg-position"
+                                 ng-show="vm.createForm.store_city.$error.required && (vm.createForm.store_city.$faded || vm.newLead.submit)"
+                                 role="alert">
+                                City is required.
+                            </div>
+
+                            <div class="alert alert-danger ng-hide alert-reg-position"
+                                 ng-show="vm.createForm.store_state.$error.required && (vm.createForm.store_state.$faded || vm.newLead.submit)"
+                                 role="alert">
+                                State is required.
+                            </div>
+
+                            <div class="alert alert-danger ng-hide alert-reg-position"
+                                 ng-show="vm.createForm.store_zip.$error.required && (vm.createForm.store_zip.$faded || vm.newLead.submit)"
+                                 role="alert">
+                                Zip code is required.
+                            </div>
+                            <div class="alert alert-danger ng-hide alert-reg-position"
+                                 ng-show="vm.createForm.store_zip.$error.pattern && !vm.createForm.store_zip.$error.required && (vm.createForm.store_zip.$faded || vm.newLead.submit)"
+                                 role="alert">
+                                Zip code is invalid.
+                            </div>
+                            <div class="select input-large margin-top-five">
+                                <select name="store_country"
+                                        class="form-control"
+                                        ng-required="true"
+                                        ng-model="vm.newLead.store_country"
+                                        ng-options="country.type_id_value as country.type_id_name for country in vm.countries">
+                                    <option class="placeholder-color" value="" selected disabled>
+                                        Country
+                                    </option>
+                                </select>
+                            </div>
+
+                            <div class="alert alert-danger ng-hide alert-reg-position"
+                                 ng-show="vm.createForm.store_country.$error.required && (vm.createForm.store_country.$faded || vm.newLead.submit)"
+                                 role="alert">
+                                Country is required.
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Email</label>
+                        <div class="col-md-8">
+                            <input type="email" class="input-large form-control" name="store_email"
+                                   placeholder="Enter Email Address" maxlength="100"
+                                   ng-pattern="/^[_a-z0-9]+(\.[_a-z0-9]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$/"
+                                   ng-model="vm.newLead.store_email" ng-fade ng-required="true">
+                            <div class="alert alert-danger ng-hide alert-reg-position"
+                                 ng-show="(vm.createForm.store_email.$error.required || vm.createForm.store_email.$error.email ||
+                                 vm.createForm.store_email.$error.pattern)
+                                 && (vm.createForm.store_email.$faded || vm.newLead.submit)"
+                                 role="alert">
+                                Email is required and must be in a valid email format.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Time Zone</label>
+                        <div class="col-md-8">
+                            <div class="select input-x-large">
+                                <select name="store_time_zone"
+                                        class="form-control"
+                                        ng-required="true"
+                                        ng-model="vm.newLead.store_time_zone"
+                                        ng-options="time_zone.type_id_value as time_zone.type_id_name for time_zone in vm.time_zones">
+                                    <option class="placeholder-color" value="" disabled>Time Zone
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="alert alert-danger ng-hide alert-reg-position"
+                                 ng-show="vm.createForm.store_time_zone.$error.required &&
+                                 (vm.createForm.store_time_zone.$faded || vm.newLead.submit)"
+                                 role="alert">
+                                Time Zone is required.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Phone Number</label>
+                        <div class="col-md-8">
+                            <input type="text" class="input-large form-control"
+                                   name="store_phone_no" placeholder="Phone" ng-fade
+                                   ng-model="vm.newLead.store_phone_no" ng-required="true"
+                                   valid-phone
+                                   maxlength="100">
+                            <div class="alert alert-danger ng-hide alert-reg-position"
+                                 ng-show="vm.createForm.store_phone_no.$error.required
+                                 && (vm.createForm.store_phone_no.$faded || vm.newLead.submit)"
+                                 role="alert">
+                                Phone Number is required.
+                            </div>
+                            <div class="alert alert-danger ng-hide alert-reg-position"
+                                 ng-show="vm.createForm.store_phone_no.$error.invalidPhone && !vm.createForm.store_phone_no.$error.required
+                                 && (vm.createForm.store_phone_no.$faded || vm.newLead.submit)"
+                                 role="alert">
+                                Phone Number must contain 10 digits.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Category</label>
+                        <div class="col-md-8">
+                            <input type="text" class="input-large form-control" name="category"
+                                   placeholder="Enter Restaurant Category" maxlength="100"
+                                   ng-model="vm.newLead.category" ng-fade ng-required="true">
+                            <div class="alert alert-danger ng-hide alert-reg-position"
+                                 ng-show="vm.createForm.category.$error.required
+                                 && (vm.createForm.category.$faded || vm.newLead.submit)"
+                                 role="alert">
+                                Category is required.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Ordering Type</label>
+                        <div class="col-md-8">
+                            <div class="select input-large">
+                                <select name="service"
+                                        class="form-control"
+                                        ng-model="vm.newLead.service" ng-fade
+                                        ng-required="true"
+                                        ng-options="service for service in vm.services">
+                                    <option class="placeholder-color" value="" selected disabled>
+                                        Select Ordering Type
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="alert alert-danger ng-hide alert-reg-position"
+                                 ng-show="vm.createForm.service.$error.required && (vm.createForm.service.$faded || vm.newLead.submit)"
+                                 role="alert">
+                                Ordering Type is required.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Payment Type</label>
+                        <div class="col-md-8">
+                            <div class="select input-large">
+                                <select name="payment"
+                                        class="form-control"
+                                        ng-model="vm.newLead.payment" ng-fade
+                                        ng-required="true"
+                                        ng-options="payment for payment in vm.payments">
+                                    <option class="placeholder-color" value="" selected disabled>
+                                        Select Payment Type
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="alert alert-danger ng-hide alert-reg-position"
+                                 ng-show="vm.createForm.payment.$error.required && (vm.createForm.payment.$faded || vm.newLead.submit)"
+                                 role="alert">
+                                A Payment Type is required.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Ordering Site URL</label>
+                        <div class="col-md-8">
+                            <div class="input-group input-large">
+                                <input type="text" class="form-control" name="subdomain"
+                                       placeholder="Subdomain" maxlength="60"
+                                       ng-pattern="/^[a-zA-Z0-9][a-zA-Z0-9.-]+[a-zA-Z0-9]$/"
+                                       ng-model="vm.newLead.subdomain" ng-fade ng-required="true">
+                                <span class="input-group-addon">.splickit.com</span>
+                            </div>
+
+                        </div>
+                        <div class="col-md-8 col-md-offset-3">
+                            <div class="alert alert-danger ng-hide alert-reg-position"
+                                 ng-show="vm.createForm.subdomain.$error.required
+                                 && (vm.createForm.subdomain.$faded || vm.newLead.submit)"
+                                 role="alert">
+                                Ordering Site URL is required.
+                            </div>
+                            <div class="alert alert-danger ng-hide alert-reg-position"
+                                 ng-show="vm.createForm.subdomain.$error.pattern && !vm.createForm.subdomain.$error.required
+                                 && (vm.createForm.subdomain.$faded || vm.newLead.submit)"
+                                 role="alert">
+                                Ordering Site URL must have a valid subdomain format.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Subscription Type</label>
+                        <div class="col-md-8">
+                            <div angucomplete-alt
+                                 placeholder="Type the name or description"
+                                 pause="100"
+                                 selected-object="vm.newLead.offer"
+                                 remote-url="/offers?search_params=name,description&search="
+                                 remote-url-data-field="data"
+                                 title-field="name"
+                                 description-field="description"
+                                 minlength="1"
+                                 field-required="true"
+                                 input-name="offer"
+                                 input-class="input-large form-control"></div>
+                            <div class="alert alert-danger ng-hide alert-reg-position"
+                                 ng-show="vm.createForm.offer.$error['autocomplete-required']
+                                 && (vm.createForm.offer.$faded || vm.newLead.submit)"
+                                 role="alert">
+                                Subscription Type is required.
+                            </div>
+                        </div>
+                    </div>
+
+                    <h4 class="dark-grey">Online Activity</h4>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Restaurant URL</label>
+                        <div class="col-md-8">
+                            <input type="url" class="input-large form-control" name="web_url"
+                                   placeholder="Enter Restaurant URL" maxlength="100"
+                                   ng-pattern="/(http|ftp|https)://[a-z0-9\-_]+(\.[a-z0-9\-_]+)+([a-z0-9\-\.,@\?^=%&;:/~\+#]*[a-z0-9\-@\?^=%&;/~\+#])?/"
+                                   ng-model="vm.newLead.web_url" ng-fade>
+                            <div class="alert alert-danger ng-hide alert-reg-position"
+                                 ng-show="(vm.createForm.web_url.$error.url || vm.createForm.web_url.$error.pattern)
+                                 && (vm.createForm.web_url.$faded || vm.newLead.submit)"
+                                 role="alert">
+                                Restaurant URL must be valid.
+                            </div>
+                        </div>
+                    </div>
+                    <h5 class="dark-grey">Currently Use</h5>
+                    <!-- Checkboxes -->
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">GrubHub</label>
+                        <div class="col-md-2 m-t-5">
+                            <toggle-switch name="grubbub"
+                                           on-label="Yes"
+                                           off-label="No"
+                                           ng-model="vm.newLead.grubbub">
+                            </toggle-switch>
+                        </div>
+                        <label class="col-md-2 control-label">Eat24</label>
+                        <div class="col-md-5 m-t-5">
+                            <toggle-switch name="eat24"
+                                           on-label="Yes"
+                                           off-label="No"
+                                           ng-model="vm.newLead.eat24">
+                            </toggle-switch>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">DoorDash</label>
+                        <div class="col-md-2 m-t-5">
+                            <toggle-switch name="doordash"
+                                           on-label="Yes"
+                                           off-label="No"
+                                           ng-model="vm.newLead.doordash">
+                            </toggle-switch>
+                        </div>
+                        <label class="col-md-2 control-label">Postmates</label>
+                        <div class="col-md-5 m-t-5">
+                            <toggle-switch name="postmates"
+                                           on-label="Yes"
+                                           off-label="No"
+                                           ng-model="vm.newLead.postmates">
+                            </toggle-switch>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Facebook</label>
+                        <div class="col-md-2 m-t-5">
+                            <toggle-switch name="facebook"
+                                           on-label="Yes"
+                                           off-label="No"
+                                           ng-model="vm.newLead.facebook">
+                            </toggle-switch>
+                        </div>
+                        <label class="col-md-2 control-label">ChowNow</label>
+                        <div class="col-md-5 m-t-5">
+                            <toggle-switch name="chownum"
+                                           on-label="Yes"
+                                           off-label="No"
+                                           ng-model="vm.newLead.chownum">
+                            </toggle-switch>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Yelp</label>
+                        <div class="col-md-2 m-t-5">
+                            <toggle-switch name="yelp"
+                                           on-label="Yes"
+                                           off-label="No"
+                                           ng-model="vm.newLead.yelp">
+                            </toggle-switch>
+                        </div>
+                        <label class="col-md-2 control-label">Google Places</label>
+                        <div class="col-md-5 m-t-5">
+                            <toggle-switch name="google_places"
+                                           on-label="Yes"
+                                           off-label="No"
+                                           ng-model="vm.newLead.google_places">
+                            </toggle-switch>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Groupon</label>
+                        <div class="col-md-2 m-t-5">
+                            <toggle-switch name="groupon"
+                                           on-label="Yes"
+                                           off-label="No"
+                                           ng-model="vm.newLead.groupon">
+                            </toggle-switch>
+                        </div>
+                        <label class="col-md-2 control-label">UberEATS</label>
+                        <div class="col-md-5 m-t-5">
+                            <toggle-switch name="ubereats"
+                                           on-label="Yes"
+                                           off-label="No"
+                                           ng-model="vm.newLead.ubereats">
+                            </toggle-switch>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div ng-show="vm.processing" class="form-loader">
+                            <div class="line"></div>
+                            <div class="line"></div>
+                            <div class="line"></div>
+                            <div class="line"></div>
+                        </div>
+                    </div>
+
+                    <div class="submit-contain pull-right">
+                        <button class='btn-success btn'>Submit</button>
+                    </div>
+                </form>
+            </div><!-- panel-body -->
+        </div> <!-- panel -->
+    </div> <!-- col-->
+</div>

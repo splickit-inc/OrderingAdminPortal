@@ -1,0 +1,119 @@
+<div id="lookup-select-modal" class="modal fade promo-merchant-select-modal" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">Select {{brand_lookup.name}} Options</h4>
+            </div>
+            <div class="modal-body">
+                <div class="container">
+                    <!--<div class="col-md-12 form-group">-->
+                        <!--<input type="text" class="input-med form-control" name="merchants_filter"-->
+                               <!--ng-enter="merchant_search_service.merchantSearch()"-->
+                               <!--ng-model="merchant_search_service.search_text" ng-fade placeholder="Filter">-->
+
+                        <!--<div class="col-md-12 button-select" ng-show="merchant_search_service.processing">-->
+                            <!--<div class="filter-loader-contain">-->
+                                <!--<div class="filter-loader"></div>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                    <!--</div>-->
+
+                    <div class="col-md-6 m-t-15">
+                        <div class="form-group">
+                            <label class="control-label">Unselected</label>
+                            <div>
+                                <div class="m-t-20">
+                                    <table class="table table-hover" style="margin-bottom: -1px">
+                                        <thead>
+                                        <tr>
+                                            <!--<th style="width: 85px" ng-click="sortBy('merchant_id')">-->
+                                                <!--ID <span class="sort-order" ng-show="propertyName === 'merchant_id'" ng-class="{reverse: reverse}"></span>-->
+                                            <!--</th>-->
+                                            <!--<th ng-click="sortBy('name')">-->
+                                                <!--Name-->
+                                                <!--<span class="sort-order" ng-show="propertyName === 'name'" ng-class="{reverse: reverse}"></span>-->
+                                            <!--</th>-->
+                                            <!--<th ng-click="sortBy('address1')">-->
+                                                <!--Address-->
+                                                <!--<span class="sort-order" ng-show="propertyName === 'address1'" ng-class="{reverse: reverse}"></span>-->
+                                            <!--</th>-->
+                                            <th></th>
+                                            <th>{{brand_lookup.name}} Name</th>
+                                        </tr>
+                                        </thead>
+                                    </table>
+                                    <div class="table-fixed-with-scroll">
+                                        <table class="table table-hover">
+                                            <tbody>
+                                            <tr class="pointer"
+                                                ng-repeat="lookup in brand_lookup.un_selected | orderBy:'type_id_name'"
+                                                ng-click="brand_lookup.addLookup(lookup)"
+                                                >
+                                                <td>
+                                                    <i class="fa fa-plus-circle" aria-hidden="true"></i>
+                                                </td>
+                                                <td>{{lookup.type_id_name}}</td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 m-t-15">
+                        <div class="form-group">
+                            <label class="control-label">Selected</label>
+
+                            <div class="m-t-20">
+                                <table class="table table-hover" style="margin-bottom: -1px">
+                                    <thead>
+                                    <tr class="pointer">
+                                        <!--<th style="width: 85px" ng-click="sortBy('merchant_id')">-->
+                                            <!--ID <span class="sort-order" ng-show="propertyName === 'merchant_id'" ng-class="{reverse: reverse}"></span>-->
+                                        <!--</th>-->
+                                        <!--<th ng-click="sortBy('name')">-->
+                                            <!--Name-->
+                                            <!--<span class="sort-order" ng-show="propertyName === 'name'" ng-class="{reverse: reverse}"></span>-->
+                                        <!--</th>-->
+                                        <!--<th ng-click="sortBy('address1')">-->
+                                            <!--Address-->
+                                            <!--<span class="sort-order" ng-show="propertyName === 'address1'" ng-class="{reverse: reverse}"></span>-->
+                                        <!--</th>-->
+                                        <th></th>
+                                        <th>{{brand_lookup.name}} Name</th>
+                                    </tr>
+                                    </thead>
+                                </table>
+                                <div class="table-fixed-with-scroll">
+                                    <table class="table table-hover">
+                                        <tbody>
+                                        <tr ng-repeat="lookup in brand_lookup.selected | orderBy:'type_id_name'"
+                                            ng-click="brand_lookup.removeLookup(lookup)">
+                                            <td>
+                                                <i class="fa fa-minus-circle" aria-hidden="true"></i>
+                                            </td>
+                                            <td>{{lookup.type_id_name}}</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" ng-disabled class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button class="btn btn-success pointer" ng-disabled data-dismiss="modal" ng-click="setLookupValues()">
+                    Submit
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

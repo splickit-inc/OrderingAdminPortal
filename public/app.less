@@ -1,0 +1,29 @@
+/* Component LESS */
+@import "modules/shared/shared.less";
+@import "modules/merchant/admin-portal.merchant.less";
+@import "modules/menu/admin-portal.menu.less";
+@import "modules/promo/admin-portal.promo.less";
+@import "modules/customer-service/admin-portal.customer-service.less";
+@import "modules/web-skin/admin-portal.web-skin.less";
+@import "modules/brand/admin-portal.brand.less";
+@import "modules/reports/admin-portal.reports.less";
+@import "modules/customer/admin-portal.customer.less";
+@import "modules/user/admin-portal.user.less";
+@import "modules/value-added-reseller/admin-portal.value-added-reseller.less";
+@import "modules/operator/admin-portal.operator.less";
+/* Add Component LESS Above */
+
+/* Required for Angular UI Bootstrap */
+.nav, .pagination, .carousel, .panel-title a { cursor: pointer; }
+
+/* Personal preference for BS modal.  The LESS below makes the backdrop white and
+   causes the modal to fade in rather than slide in. */
+//@modal-backdrop-bg: white;
+//.modal {
+//	&.fade {
+//		.transition(opacity .3s);
+//	}
+//	&.fade .modal-dialog {
+//		.translate(0,0);
+//	}
+//}

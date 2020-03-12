@@ -1,0 +1,41 @@
+<div id="reports-by-menu-item-page">
+
+    <div class="col-md-6 col-lg-4">
+        <div class="form-horizontal">
+            <div class="form-group">
+                <label class="col-md-4" style="text-align: end;"><i class="fa fa-calendar" style="margin-top: 8px"></i></label>
+                <div class="col-md-8">
+                    <input date-range-picker class="form-control input-large date-picker" type="text"
+                           ng-model="vm.datePicker.date" options="vm.datePicker.options"/>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 col-lg-4">
+        <div class="form-horizontal">
+            <div class="form-group">
+                <label class="col-md-4 control-label" style="padding-top: 5px;">Group By</label>
+                <div class="col-md-8">
+                    <div class="input-large">
+                        <button type="button" class="btn btn-success"
+                                ng-click="vm.reports_group_by_selections.resetSelections(vm.groupBy, 'sales_menu')">
+                            Select Group By
+                        </button>
+                    </div>
+                    <div class="col-md-12 m-t-10">
+                        {{vm.utility.convertArrayToGrammarList(vm.utility.convertObjectToSimpleArray(vm.reports_group_by_selections.selected_group_bys, 'desc'))}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <default-report-view-component selected-group-by="vm.selectedGroupBy"
+                                   custom-brand-filter="vm.customBrandFilter"
+                                   custom-reports-filter-type="vm.customReportsFilterType"
+                                   start-date="vm.datePicker.date.startDate.format('YYYY-MM-DD')" end-date="vm.datePicker.date.endDate.format('YYYY-MM-DD')"
+                                   processing="vm.processing" merchant-search="vm.merchantSearch"
+                                   schedule-option="1"
+                                   exporting="vm.exporting"
+                                   selected-report-type="vm.selectedReportType"></default-report-view-component>
+</div>

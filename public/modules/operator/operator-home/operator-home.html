@@ -1,0 +1,486 @@
+<div class="row">
+    <div class="col-sm-12">
+        <div class="page-header-title menu-bg white-text">
+            <h4 class="page-title">Dashboard</h4>
+        </div>
+    </div>
+</div>
+
+
+<div class="row" ng-show="oh.loading_page">
+    <div class="col-md-12">
+        <div class="panel panel-primary">
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="filter-loader-contain-full">
+                            <div class="filter-loader-full"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="row" ng-show="!oh.loading_page">
+    <div class="col-md-12">
+        <div class="panel panel-primary">
+            <div class="panel-heading pointer">
+                <h1 class="panel-title">
+                    Today
+                </h1>
+            </div>
+            <div class="panel-body">
+                <div class="col-md-3">
+                    <!--<div class="panel panel-primary" >-->
+                    <!--<div class="panel-default pointer">-->
+                    <!--<h1 class="panel-title text-center">-->
+                    <!--SALES-->
+                    <!--</h1>-->
+                    <!--</div>-->
+                    <!--<div class="panel-body row-table">-->
+                    <!--<div class="row">-->
+                    <!--<div class="col-md-12 text-center">-->
+                    <!--<h3>${{oh.current_day.order_total}}</h3>-->
+                    <!--</div>-->
+                    <!--</div>-->
+                    <!--</div>-->
+                    <!--</div>-->
+
+                    <div class="panel panel-body dash-table">
+                        <div>
+                            <h5 class="bold text-center">
+                                SALES
+                            </h5>
+                        </div>
+                        <h1 class="text-center">
+                            ${{oh.current_day.order_total}}
+                        </h1>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="panel panel-body dash-table">
+                        <div>
+                            <h5 class="bold text-center">
+                                ORDERS
+                            </h5>
+                        </div>
+                        <h1 class="text-center">
+                            {{oh.current_day.order_count}}
+                        </h1>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="panel panel-body dash-table">
+                        <div>
+                            <h5 class="bold text-center">
+                                AVERAGE TICKET SIZE
+                            </h5>
+                        </div>
+                        <h1 class="text-center">
+                            ${{oh.current_day.order_average}}
+                        </h1>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="panel panel-body dash-table">
+                        <div>
+                            <h5 class="bold text-center">
+                                PROMO DISCOUNTS
+                            </h5>
+                        </div>
+                        <h1 class="text-center">
+                            ${{oh.current_day.promo_total}}
+                        </h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row" ng-show="!oh.loading_page">
+    <div class="col-md-12">
+        <div class="panel panel-primary">
+            <div class="panel-heading pointer">
+                <h1 class="panel-title">
+                    This Week
+                </h1>
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-2"></div>
+                    <div class="col-md-5">
+                        <canvas id="bar" class="chart chart-bar" chart-data="oh.weekly_sales_data"
+                                chart-labels="oh.weekly_sales_labels">
+                        </canvas>
+                    </div>
+                    <div class="m-t-40 col-md-3">
+                        <canvas id="doughnut2" class="chart chart-doughnut"
+                                chart-data="oh.device_type_data" chart-labels="oh.device_type_labels">
+                        </canvas>
+                        <h3 class="bottom-center-chart-label">Customer Devices</h3>
+                    </div>
+                    <div class="col-md-2"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row order-summary" ng-show="!oh.loading_page">
+    <div class="col-md-12">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">Order Summary</h3>
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <table class="table table-hover content-table" ng-class="customer_service.fiftyOpacityOffset()">
+                            <thead>
+                            <tr>
+                                <th></th>
+                                <th class="fix-table-wrap">Date</th>
+                                <th class="fix-table-wrap"># Orders</th>
+                                <th class="fix-table-wrap"># Items</th>
+                                <th>Order Total</th>
+                                <th>Tax</th>
+                                <th>Tip</th>
+                                <th>Promo Total</th>
+                                <th>Delivery Charges</th>
+                                <th>Grand Total</th>
+                            </tr>
+                            </thead>
+                            <tbody ng-repeat="day in oh.daily_summary_data">
+                            <tr ng-click="oh.showDailyOrders($index, day.date_day)">
+                                <td>
+                                    <i ng-show="!day.show_orders" class="fa fa-plus-square" aria-hidden="true"></i>
+                                    <i ng-show="day.show_orders" class="fa fa-minus-square" aria-hidden="true"></i>
+                                </td>
+                                <td class="fix-table-wrap">{{day.date_day}}</td>
+                                <td>{{day.order_count}}</td>
+                                <td>{{day.item_count}}</td>
+                                <td>{{day.order_total}}</td>
+                                <td>{{day.tax_total}}</td>
+                                <td>{{day.total_tip}}</td>
+                                <td>{{day.promo_total}}</td>
+                                <td>{{day.delivery_total}}</td>
+                                <td>{{day.total_grand_total}}</td>
+                            </tr>
+                            <tr ng-show="day.show_orders" class="row-hover-fix">
+                                <th></th>
+                                <th>Order ID</th>
+                                <th>Pickup Time</th>
+                                <th>Name</th>
+                                <th>Phone No.</th>
+                                <th># Items</th>
+                                <th>Tip</th>
+                                <th>Grand Total</th>
+                                <th>Tasks</th>
+                                <th></th>
+                            </tr>
+                            <tr ng-repeat="order in day.orders" ng-show="day.show_orders" ng-class="{successeffect: order.refund_success}"
+                                ng-click="$event.stopPropagation(); oh.viewOrder(order);">
+                                <td></td>
+                                <td>{{order.order_id}}</td>
+                                <td>{{order.pickup_time}}</td>
+                                <td>{{order.first_name}} {{order.last_name}}</td>
+                                <td>{{order.phone_no}}</td>
+                                <td>{{order.order_qty}}</td>
+                                <td>{{order.tip_amt}}</td>
+                                <td>{{order.grand_total}}</td>
+                                <td colspan="2">
+                                    <button ng-if="!order.refund_id" type="button" data-toggle="modal" ng-click="$event.stopPropagation(); oh.openRefundOrder(order, $parent.$index, $index);"
+                                            class="btn btn-sm btn-danger waves-effect waves-light">Refund
+                                    </button>
+                                    <div ng-if="order.refund_id">Refunded: {{order.refund_note}}</div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <div class="content-responsive">
+                            <div ng-repeat="day in oh.daily_summary_data">
+                                <div class="panel panel-body row-table" ng-click="oh.showDailyOrders($index, day.date_day)">
+                                    <div class="name">
+                                        <h5 class="dark-grey" style="margin: 7px 0px;"><b>
+                                            <i ng-show="!day.show_orders" class="fa fa-plus-square inline" aria-hidden="true"></i>
+                                            <i ng-show="day.show_orders" class="fa fa-minus-square inline" aria-hidden="true"></i>
+                                            {{day.date_day}}
+                                        </b></h5>
+                                    </div>
+                                    <div class="id">
+                                        <h5 class="dark-grey id-title">Order Count #<span class="id-number">{{day.order_count}}</span>
+                                        </h5>
+                                    </div>
+                                    <div class="description clear">
+                                        <div>
+                                            {{day.item_count}} Item(s)
+                                        </div>
+                                        <div>
+                                            Order Total: {{day.order_total}}
+                                        </div>
+                                        <div>
+                                            Tax: {{day.tax_total}} - Total Tip: {{day.total_tip}}
+                                        </div>
+                                        <div>
+                                            Promo Total: {{day.promo_total}}
+                                        </div>
+                                        <div>
+                                            Delivery Total: {{day.delivery_total}}
+                                        </div>
+
+                                        <div class="pull-right">
+                                            Grant Total: {{day.total_grand_total}}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="line-box-container" ng-show="day.show_orders">
+                                    <div class="line-border">
+                                        <span class="text">
+                                            Orders
+                                        </span>
+                                    </div>
+                                </div>
+                                <div ng-show="day.show_orders" ng-repeat="order in day.orders">
+                                    <div class="panel panel-body row-table" ng-click="$event.stopPropagation(); oh.viewOrder(order);">
+                                        <div class="name">
+                                            <h5 class="dark-grey" style="margin: 7px 0px;"><b>
+                                                Pickup Time: {{order.pickup_time}}
+                                            </b></h5>
+                                        </div>
+                                        <div class="id">
+                                            <h5 class="dark-grey id-title">Order ID
+                                                <span class="id-number">{{order.order_id}}</span>
+                                            </h5>
+                                        </div>
+                                        <div class="description clear">
+                                            <div>
+                                                {{order.first_name}} {{order.last_name}}
+                                            </div>
+                                            <div>
+                                                Phone: {{order.phone_no}}
+                                            </div>
+                                            <div>
+                                                {{order.order_qty}} Item(s)
+                                            </div>
+                                            <div class="pull-right">
+                                                <b>Tip:</b> {{order.tip_amt}} -
+                                                <b>Grant Total:</b> {{order.grand_total}}
+                                            </div>
+                                            <div class="clear refund-button">
+                                                <button ng-if="!order.refund_id" type="button" data-toggle="modal" ng-click="$event.stopPropagation(); oh.openRefundOrder(order, $parent.$index, $index);"
+                                                        class="btn btn-sm btn-danger waves-effect waves-light">Refund
+                                                </button>
+                                                <div ng-if="order.refund_id">Refunded: {{order.refund_note}}</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="line-box-container" ng-show="day.show_orders">
+                                    <div class="line-border">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="order-detail-modal" class="modal fade" tabindex="1000" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">Order Detail {{!!oh.order_detail.order_id ? '#'+oh.order_detail.order_id: ''}}</h4>
+            </div>
+            <div class="modal-body" ng-show="!oh.order_detail_loading">
+                <h5 class="pre-load-text" ng-if="!!!oh.order_detail.order_id">The order doesn't exist</h5>
+                <div ng-if="!!oh.order_detail.order_id">
+                    <div>
+                        <h4 class="dark-grey">{{oh.order_detail.customer_full_name}}</h4>
+                        <div>Phone: {{oh.order_detail.user_phone_no}}</div>
+                        <div>Loyalty No: {{oh.order_detail.loyalty_number}}</div>
+                    </div>
+
+                    <div>
+                        <h4 class="dark-grey">Store Info</h4>
+                        <div>{{oh.order_detail.merchant_name}}</div>
+                        <div>{{oh.order_detail.merchant_addr}}</div>
+                        <div>{{oh.order_detail.merchant_city_st_zip}}</div>
+                        <div>Merchant ID: {{oh.order_detail.merchant_id}}</div>
+                    </div>
+
+                    <div ng-show="oh.order_detail.order_type == 'd'">
+                        <h4 class="dark-grey">Delivery</h4>
+                        <div class="well">
+                            <div>Delivery To: {{oh.order_detail.delivery_info.name}}</div>
+                            <div>{{oh.order_detail.delivery_info.address1}}</div>
+                            <div>{{oh.order_detail.delivery_info.city}},
+                                {{oh.order_detail.delivery_info.state}}
+                                {{oh.order_detail.delivery_info.zip}}
+                            </div>
+                            <div>{{oh.formatPhone(oh.order_detail.delivery_info.phone_no)}}</div>
+                            <div>{{oh.order_detail.delivery_info.instructions}}</div>
+                        </div>
+                    </div>
+
+                    <h4 class="dark-grey">Items</h4>
+                    <div class="row" ng-repeat="order_item in oh.order_detail.order_details">
+                        <hr/>
+                        <div class="item">
+                            <strong>{{order_item.quantity}} {{order_item.size_name}}
+                                {{order_item.item_name}}</strong>
+                            <div>{{order_item.price}}</div>
+                        </div>
+
+                        <div ng-show="order_item.order_detail_hold_it_modifiers.length > 0 || order_item.order_detail_added_modifiers.length > 0">
+                            <div ng-show="order_item.order_detail_hold_it_modifiers.length > 0"
+                                 class="dark-grey-2 m-l-10">HOLD THE:
+                            </div>
+                            <div class="m-l-20"
+                                 ng-show="order_item.order_detail_hold_it_modifiers.length > 0">
+                            <span
+                                    ng-repeat="hold_modifier in order_item.order_detail_hold_it_modifiers">
+                                {{hold_modifier.mod_name}},
+                            </span>
+                            </div>
+                            <div ng-show="order_item.order_detail_added_modifiers.length > 0"
+                                 class="dark-grey-2 m-l-10">WITH:
+                            </div>
+                            <div class="m-l-20"
+                                 ng-show="order_item.order_detail_added_modifiers.length > 0">
+                            <span
+                                    ng-repeat="add_modifier in order_item.order_detail_added_modifiers">
+                                {{add_modifier.mod_name}},
+                            </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="total-container">
+                        <div class="payment-numbers">
+                            <div>Sales Total:</div>
+                            <div class="amount">{{oh.order_detail.order_amt}}</div>
+                        </div>
+                        <div class="payment-numbers">
+                            <div>Total Tax:</div>
+                            <div class="amount">{{oh.order_detail.total_tax_amt}}</div>
+                        </div>
+                        <div class="payment-numbers">
+                            <div>Grand Total:</div>
+                            <div class="amount">{{oh.order_detail.grand_total}}</div>
+                        </div>
+                        <div class="payment-numbers">
+                            <div>Tip:</div>
+                            <div class="amount">{{oh.order_detail.tip_amt}}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div ng-show="oh.order_detail_loading" class="modal-body">
+                <div class="filter-loader-contain">
+                    <div class="filter-loader"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" ng-disabled class="btn btn-primary" data-dismiss="modal">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="refund-order-modal" class="modal fade" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">Refund Order #{{oh.current_order.order_id}}</h4>
+            </div>
+            <form name="oh.refund_order_form" novalidate ng-submit="oh.refundOrder()">
+                <div class="modal-body">
+                    <div class="form-group m-l-10">
+                        <label class="block">Refund Amount</label>
+                        <div class="input-large">
+                            <input type="text" class="form-control" name="refund_amount"
+                                   ng-model="oh.refund_order.refund_amount" ng-fade
+                                   currency-format amount="oh.refund_order.refund_amount"
+                                   validate-max="oh.current_order.grand_total"
+                                   ng-required="true" ng-max="oh.refund_amount_max"
+                                   ng-required="true"
+                                   placeholder="Enter Amount">
+                            <div class="alert alert-danger ng-hide alert-reg-position"
+                                 ng-show="oh.refund_order_form.refund_amount.$error.required
+                                     && (oh.refund_order_form.refund_amount.$faded
+                                     || oh.refund_order_form.$submitted)"
+                                 role="alert">
+                                Refund Amount is required.
+                            </div>
+                            <div class="alert alert-danger alert-reg-position"
+                                 ng-show="oh.refund_order_form.refund_amount.$error.invalidMaxValue && (oh.refund_order_form.refund_amount.$faded
+                                     || oh.refund_order_form.$submitted)"
+                                 role="alert">
+                                Refund Amount cannot be greater than the original order grand total.
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="form-group m-l-10">
+                        <label class="block">Employee Name</label>
+                        <div class="input-large">
+                            <input type="text" class="form-control" name="employee_name"
+                                   ng-model="oh.refund_order.employee_name" ng-fade
+                                   ng-required="true"
+                                   placeholder="For Notes">
+
+                            <div class="alert alert-danger ng-hide alert-reg-position"
+                                 ng-show="oh.refund_order_form.employee_name.$error.required
+                                     && (oh.refund_order_form.employee_name.$faded
+                                     || oh.refund_order_form.$submitted)"
+                                 role="alert">
+                                Employee Name is required.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group m-l-10">
+                        <label class="block">Note</label>
+                        <div class="input-large">
+                            <textarea class="form-control" rows="2"
+                                      name="note" ng-model="oh.refund_order.note"
+                                      ng-required="true"
+                                      required="required"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group m-l-10">
+                        <div class="alert alert-danger ng-hide alert-reg-position"
+                             ng-show="oh.refund_error"
+                             role="alert">
+                            Unsuccessful Refund - API Server Response: {{order.refund_error_message}}
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" ng-disabled class="btn btn-default"
+                            data-dismiss="modal">Cancel
+                    </button>
+                    <button class="btn btn-success">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

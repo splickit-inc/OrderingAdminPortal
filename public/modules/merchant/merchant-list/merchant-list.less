@@ -1,0 +1,32 @@
+#Merchant-Filter {
+  @max-small-cards: 529px;
+  @min-medium-cards: 530px;
+  @max-medium-cards: 924px;
+  @min-table-screen: 925px;
+
+  .content-table {
+    .content-table(@min-table-screen);
+  }
+
+  .content-responsive {
+    .content-responsive(@max-small-cards, @min-medium-cards, @max-medium-cards);
+  }
+  .disabledPaginationLink {
+    color: #6f6f6f;
+    cursor: default;
+  }
+
+  .pagination > li > .disabledPaginationLink:hover {
+    color: #6f6f6f;
+    cursor: default;
+    background: @pagination-bg;
+  }
+
+  .pagination > li > .active{
+    z-index: 2;
+    color: white;
+    background-color: @pagination-active-bg;
+    border-color: transparent;
+  }
+}
+

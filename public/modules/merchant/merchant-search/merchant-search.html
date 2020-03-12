@@ -1,0 +1,44 @@
+<div class="row">
+    <div class="col-sm-12">
+        <div class="page-header-title merchant-bg">
+            <h4 class="page-title">{{ 'MERCHANT.SEARCH.SEARCH' | translate }}</h4>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">{{ 'MERCHANT.SEARCH.RESULTS' | translate }}</h3>
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <table class="table table-hover">
+                            <thead>
+                            <tr>
+                                <th>{{ 'MESSAGE.SHARE.MERCHANTID' | translate }}</th>
+                                <th>{{ 'MESSAGE.SHARE.BUSINESSNAME' | translate }}</th>
+                                <th>{{ 'MESSAGE.SHARE.ADDRESS' | translate }}</th>
+                                <th>{{ 'MESSAGE.SHARE.PHONENUMBER' | translate }}</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="merchant in search_results.search_results" ng-click="viewMerchant(merchant)">
+                                <td>{{merchant.merchant_id}}</td>
+                                <td>{{merchant.name}}</td>
+                                <td>
+                                    {{merchant.address1}}<BR>
+                                    {{merchant.city}}, {{merchant.state}} {{merchant.zip}}
+                                </td>
+                                <td>{{formatPhone(merchant.phone_no)}}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

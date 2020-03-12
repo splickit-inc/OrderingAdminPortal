@@ -1,0 +1,70 @@
+.order-summary {
+  @max-small-cards: 375px;
+  @min-medium-cards: 376px;
+  @max-medium-cards: @screen-md-min - 1;
+  @min-table-screen: @screen-md-min;
+
+  .content-table {
+    .content-table(@min-table-screen);
+  }
+
+  .content-responsive {
+    .content-responsive(@max-small-cards, @min-medium-cards, @max-medium-cards);
+  }
+}
+
+.line-box-container {
+  height: 36px;
+  margin-top: 15px;
+  .line-border {
+    width: 100%;
+    height: 16px;
+    border-bottom: 1px solid #616161;
+    text-align: center;
+  }
+  .text {
+    font-size: 20px;
+    box-shadow: 0 0px 0px rgba(0, 0, 0, 0.19), 0 2px 5px rgba(0, 0, 0, 0.23);
+    background: @panel-primary-heading-bg;
+    padding: 0 7px;
+    border-radius: 5px;
+  }
+}
+
+.refund-button {
+  text-align: center;
+  float: right;
+  margin: 5px 0;
+}
+
+.operator-order-mgmt-neworder {
+  background: black;
+  animation: color-me-in 2s infinite; /* other keywords like "infinite alternate" can be useful here */
+}
+
+.new-order-backdrop {
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+  z-index: 100000;
+  animation: blue-wave 2s linear infinite;
+}
+
+@keyframes blue-wave {
+  /* You could think of as "step 1" */
+  0% {
+    background: #25e4e9;
+  }
+  /* You could think of as "step 2" */
+  20% {
+    background: #2582e9 ;
+  }
+  80% {
+    background: #2a25e9;
+  }
+  100% {
+    background: #25e4e9;
+  }
+}

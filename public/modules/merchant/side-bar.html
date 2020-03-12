@@ -1,0 +1,397 @@
+<div class="left side-menu">
+    <div class="sidebar-inner slimscrollleft">
+        <!-- Divider -->
+        <div id="sidebar-menu" ng-controller="SideNavController">
+
+            <div class="user-details hidden-xs">
+                <div class="user-info">
+                    Welcome {{user_name}}!
+                </div>
+            </div>
+
+            <ul>
+                <!-- Operator Home Link, Only for Operators -->
+                <li ng-show="user_info.hasPermission('op_nav')">
+                    <a id="side-nav-home" href="#/operator/home" class="waves-effect home"
+                       ng-click="set_hover('home')" ng-class="{'active':active.home}">
+                        <i class="fa fa-home merchant-text home" aria-hidden="true"></i>
+                        <span>
+                        Home
+                    </span>
+                    </a>
+                </li>
+
+                <!-- Accounts Link -->
+                <li class="has_sub">
+                    <!-- Accounts Link, High Level Merchant/Accounts Access for Search-->
+                    <a id="side-nav-merchants" href="#/merchants" class="waves-effect accounts"
+                       ng-click="open('merchant')" ng-class="{'active':active.merchant}"
+                       ng-show="user_info.hasPermission('accounts_nav')">
+                        <div id="account" class="main-icon"
+                             ng-include="'assets/icons/sidebar_icons/accounts.html'"></div>
+                        <span>
+                            Accounts
+                        </span>
+                        <span class="pull-right"></span>
+                    </a>
+                    <!-- Navigate to Accounts Screen For Operators who have more than one store-->
+                    <!--<a id="account" href="#/merchants" class="waves-effect accounts" ng-click="open('merchant')" ng-class="{'active':active.merchant}"-->
+                    <!--ng-show="user_info.hasPermission('operator_settings') && user_info.operator_merchant_count > 1">-->
+                    <!--&lt;!&ndash;<i class="fa fa-university merchant-text" aria-hidden="true"></i>&ndash;&gt;-->
+
+                    <!--<div class="main-icon"-->
+                    <!--ng-include="'assets/icons/sidebar_icons/accounts.html'"></div>-->
+                    <!--<span>-->
+                    <!--Locations-->
+                    <!--</span>-->
+                    <!--<span class="pull-right"></span>-->
+                    <!--</a>-->
+
+                    <!-- Settings Link For Operators w/ only one Location-->
+                    <a href="#/merchant/general_info" class="waves-effect settings"
+                       ng-class="{'active':active.merchant}"
+                       ng-click="open('merchant')" ng-if="user_info.hasPermission('operator_settings')">
+                        <div id="settings" class="main-icon"
+                             ng-include="'assets/icons/sidebar_icons/settings.html'"></div>
+                        <span>
+                            Settings
+                        </span>
+                        <span class="pull-right"></span>
+                    </a>
+
+                    <ul ng-cloak class="list-unstyled" ng-show="parent_nav.merchant.open">
+                        <li>
+                            <a href="#/merchant/general_info" class="waves-effect">
+                                <i class="fa info-icon small-icon" aria-hidden="true"></i>
+                                <span> Info </span>
+                                <span class="pull-right"></span>
+                            </a>
+                        </li>
+                        <li>
+                            <a id="side-nav-merchant-contact" href="#/merchant/contact" class="waves-effect">
+                                <i class="fa contact-icon small-icon" aria-hidden="true"></i>
+                                <span> Contact </span>
+                                <span class="pull-right"></span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#/merchant/hours" class="waves-effect">
+                                <i class="fa hours-icon small-icon" aria-hidden="true"></i>
+                                <span> Hours </span>
+                                <span class="pull-right"></span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#/merchant/tax" class="waves-effect">
+                                <i class="fa tax-icon small-icon" aria-hidden="true"></i>
+                                <span> Tax </span>
+                                <span class="pull-right"></span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#/merchant/ordering" class="waves-effect">
+                                <i class="fa ordering-icon small-icon" aria-hidden="true"></i>
+                                <span> Ordering </span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#/merchant/delivery" class="waves-effect">
+                                <i class="fa delivery-icon small-icon" aria-hidden="true"></i>
+                                <span> Delivery </span>
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="#/merchant/statements" class="waves-effect">
+                                <i class="fa statements-icon small-icon" aria-hidden="true"></i>
+                                <span> Statements </span>
+                            </a>
+                        </li>
+
+                        <li>
+                            <a class="waves-effect" ng-click="merchantQuickEditMenu()" ng-if="user_info.visibility != 'operator'">
+                                <i class="fa quick-edit-icon small-icon" aria-hidden="true"></i>
+                                <span> Edit Menu</span> <span class="pull-right"></span>
+                            </a>
+                        </li>
+
+                        <!--<li>-->
+                        <!--<a href="javascript:void(0);" class="waves-effect">-->
+                        <!--<i class="fa payment-icon small-icon" aria-hidden="true"></i>-->
+                        <!--<span> Payment </span>-->
+                        <!--</a>-->
+                        <!--</li>-->
+
+                        <li>
+                            <a href="#/merchant/catering" class="waves-effect">
+                                <i class="fa catering-icon small-icon" aria-hidden="true"></i>
+                                <span> Catering </span>
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="#/merchant/payment" class="waves-effect">
+                                <i class="fa payment-icon small-icon" aria-hidden="true"></i>
+                                <span> Payment SVCS </span>
+                            </a>
+                        </li>
+
+
+                        <li>
+                            <a href="javascript:void(0);" class="waves-effect">
+                                <span>{{merchantNavDisplay()}}</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="has_sub" ng-show="user_info.hasPermission('cs_nav')">
+                    <a href="#customer_service" class="waves-effect customersrv"
+                       ng-class="{'active':active.customer_service}"
+                       ng-click="open('customer_service')">
+                        <div id="customersrv" class="main-icon"
+                             ng-include="'assets/icons/sidebar_icons/customersrv.html'"></div>
+                        <span>
+                            Customer Service
+                        </span>
+                        <span class="pull-right"></span>
+                    </a>
+                    <ul ng-cloak class="list-unstyled" ng-show="parent_nav.customer_service.open">
+                        <li ng-show="showOrder()">
+                            <a href="#/customer_service/order" class="waves-effect">
+                                <i class="fa fa-weixin" aria-hidden="true"></i>
+                                <span> Order</span> <span class="pull-right"></span>
+                            </a>
+                        </li>
+                        <li ng-show="showOrder()" class="hide-order">
+                            <a href="javascript:void(0);" class="waves-effect">
+                                <span>{{orderDisplay()}}</span>
+                            </a>
+                        </li>
+                        <li ng-show="user_info.hasPermission('show_live_orders')">
+                            <a href="#/customer_service/live_orders" class="waves-effect">
+                                <i class="fa ordering-icon small-icon" aria-hidden="true"></i>
+                                <span> Live Orders </span> <span class="pull-right"></span>
+                            </a>
+                        </li>
+                        <li ng-show="user_info.hasPermission('customer_service_users')">
+                            <a href="#/customer_service/users" class="waves-effect">
+                                <i class="fa user-icon small-icon" aria-hidden="true"></i>
+                                <span> Users </span> <span class="pull-right"></span>
+                            </a>
+                        </li>
+                        <li ng-show="user_info.hasPermission('pk_lot_users')">
+                            <a href="#/customer_service/tbd" class="waves-effect">
+                                <i class="fa parking-lot-icon small-icon" aria-hidden="true"></i>
+                                <span> Loyalty Parking Lot </span> <span class="pull-right"></span>
+                            </a>
+                        </li>
+                        <li ng-show="user_info.hasPermission('future_orders')">
+                            <a href="#/customer_service/future_orders" class="waves-effect">
+                                <i class="fa ordering-icon small-icon" aria-hidden="true"></i>
+                                <span> Future Orders </span> <span class="pull-right"></span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="has_sub"
+                    ng-show="user_info.hasPermission('menu_full_nav') || user_info.hasPermission('menu_full_direct_nav')">
+                    <a href="#/menus" class="waves-effect menus" ng-click="open('menu')"
+                       ng-class="{'active':active.menu}"
+                       ng-show="user_info.hasPermission('menu_full_nav')">
+                        <div id="menus" class="main-icon"
+                             ng-include="'assets/icons/sidebar_icons/menus.html'"></div>
+                        <span>
+                            Menu
+                        </span>
+                        <span class="pull-right"></span>
+                    </a>
+
+                    <a href="#/menu/items" class="waves-effect menus" ng-click="open('menu')"
+                       ng-class="{'active':active.menu}"
+                       ng-show="user_info.hasPermission('menu_full_direct_nav')">
+                        <div id="menus" class="main-icon"
+                             ng-include="'assets/icons/sidebar_icons/menus.html'"></div>
+                        <span>
+                            Menu
+                        </span>
+                        <span class="pull-right"></span>
+                    </a>
+                    <ul ng-cloak class="list-unstyled" ng-show="parent_nav.menu.open">
+                        <li>
+                            <a href="#/menu/items" class="waves-effect" ng-click="set_hover_submenu('menu');">
+                                <i class="fa full-mg-icon small-icon" aria-hidden="true"></i>
+                                <span> Full Management</span> <span class="pull-right"></span>
+                            </a>
+                        </li>
+                        <li>
+                            <a ng-href="{{menuQuickEdit()}}" class="waves-effect" ng-click="set_hover_submenu('menu');">
+                                <i class="fa quick-edit-icon small-icon" aria-hidden="true"></i>
+                                <span> Quick Edit</span> <span class="pull-right"></span>
+                            </a>
+                        </li>
+
+                        <li ng-show="user_info.hasPermission('nutrition')">
+                            <a href="#/menu/nutrition" class="waves-effect" ng-click="set_hover_submenu('menu');">
+                                <i class="fa nutrition-icon small-icon" aria-hidden="true"></i>
+                                <span>Nutrition</span> <span class="pull-right"></span>
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="#/menu/category_upsells" class="waves-effect"
+                               ng-click="set_hover_submenu('menu');">
+                                <i class="fa upsells-icon small-icon" aria-hidden="true"></i>
+                                <span>Category Upsells</span> <span class="pull-right"></span>
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="#/menu/cart_upsells" class="waves-effect" ng-click="set_hover_submenu('menu');">
+                                <i class="fa card-upsells-icon small-icon" aria-hidden="true"></i>
+                                <span>Cart Upsells</span> <span class="pull-right"></span>
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="#/menu/export" class="waves-effect" ng-click="set_hover_submenu('menu');">
+                                <i class="fa card-upsells-icon small-icon" aria-hidden="true"></i>
+                                <span>Menu Export</span> <span class="pull-right"></span>
+                            </a>
+                        </li>
+
+                        <li ng-show="!menu_factory.menu_merchant">
+                            <a href="javascript:void(0);" class="waves-effect">
+                                <span>{{menu_factory.current_menu.name}}</span>
+                            </a>
+                        </li>
+                        <li ng-show="menu_factory.menu_merchant">
+                            <a href="javascript:void(0);" class="waves-effect">
+                                <div class="waves-effect regular-case">
+                                    <span>{{menu_factory.menu_merchant.merchant_id}} - {{menu_factory.menu_merchant.name}}</span><BR>
+                                    <span>{{menu_factory.menu_merchant.address1}}</span><BR>
+                                    <span>{{menu_factory.menu_merchant.city}}, {{menu_factory.menu_merchant.state}}</span>
+                                </div>
+                            </a>
+                        </li>
+
+                    </ul>
+                </li>
+
+                <li ng-show="user_info.hasPermission('menu_quick_nav')">
+                    <a href="#/menu/edit" class="waves-effect menus" ng-click="set_hover('menu')"
+                       ng-class="{'active':active.menu}">
+                        <div id="menus" class="main-icon"
+                             ng-include="'assets/icons/sidebar_icons/menus.html'"></div>
+                        <span> Menu</span> <span class="pull-right"></span>
+                    </a>
+                </li>
+
+                <!--Order Management is Only For Operators-->
+                <li ng-show="user_info.hasPermission('order_mgmt_nav')">
+                    <a href="#/operator/order_management" class="waves-effect orders"
+                       ng-click="set_hover('order_management')" ng-class="{'active':active.order_management}">
+                        <div id="orders" class="main-icon"
+                             ng-include="'assets/icons/sidebar_icons/orders.html'"></div>
+                        <span> Orders </span>
+                    </a>
+                </li>
+
+                <li ng-show="user_info.hasPermission('order_on_off')">
+                    <a href="#/merchant/operator_ordering_on_off" class="waves-effect ordering_on_off"
+                       ng-click="set_hover('ordering_on_off');" ng-class="{'active': active.ordering_on_off}">
+                        <div id="ordering_on_off" class="main-icon"
+                             ng-include="'assets/icons/sidebar_icons/ordering_on_off.html'"></div>
+                        <span> Ordering On/Off </span>
+                    </a>
+                </li>
+
+                <li ng-show="user_info.hasPermission('reports_nav')">
+                    <a href="#/reports" class="waves-effect reports" ng-click="open('reports')"
+                       ng-class="{'active':active.reports}">
+                        <div id="reports" class="main-icon"
+                             ng-include="'assets/icons/sidebar_icons/reports.html'"></div>
+                        <span> Reports </span>
+                    </a>
+                    <ul ng-cloak class="list-unstyled" ng-show="parent_nav.reports.open">
+
+                    </ul>
+                </li>
+
+                <li ng-show="user_info.hasPermission('marketing_nav')">
+                    <a href="#/promos" class="waves-effect marketing" ng-click="set_hover('marketing')"
+                       ng-class="{'active':active.marketing}">
+                        <div id="marketing" class="main-icon"
+                             ng-include="'assets/icons/sidebar_icons/marketing.html'"></div>
+                        <span> Marketing</span> <span class="pull-right"></span>
+                    </a>
+                    <ul ng-cloak class="list-unstyled" ng-show="parent_nav.marketing.open">
+                        <li ng-show="user_info.hasPermission('loyalty')">
+                            <a href="#/promos/loyalty" class="waves-effect">
+                                <i class="fa loyalty-icon small-icon" aria-hidden="true"></i>
+                                <span> Loyalty </span>
+                                <span class="pull-right"></span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li ng-show="user_info.hasPermission('sites_nav') && !user_info.hasPermission('order_mgmt_nav')">
+                    <a href="#/web_skin/create" class="waves-effect sites" ng-click="set_hover('sites')"
+                       ng-class="{'active':active.sites}">
+                        <div id="sites" class="main-icon"
+                             ng-include="'assets/icons/sidebar_icons/sites.html'"></div>
+                        <span> Sites </span>
+                    </a>
+                </li>
+
+                <li class="has_sub" ng-if="user_info.hasPermission('brand_nav')">
+                    <a href="#/brands" class="waves-effect brands" ng-click="open_brand()"
+                       ng-class="{'active':active.brand}">
+                        <div id="brands" class="main-icon"
+                             ng-include="'assets/icons/sidebar_icons/brands.html'"></div>
+                        <span> Brands </span>
+                    </a>
+                    <ul ng-cloak class="list-unstyled" ng-show="parent_nav.brand.open">
+                        <li>
+                            <a href="#/brands/merchant_groups" class="waves-effect">
+                                <i class="fa fa-weixin" aria-hidden="true"></i>
+                                <span> Merchant Groups</span> <span class="pull-right"></span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="has_sub" ng-if="user_info.hasPermission('brand_direct_nav')">
+                    <a href="#/brand" class="waves-effect brands" ng-click="open_brand()"
+                       ng-class="{'active':active.brand}">
+                        <div id="brands" class="main-icon"
+                             ng-include="'assets/icons/sidebar_icons/brands.html'"></div>
+                        <span> Brand Manager </span>
+                    </a>
+                    <ul ng-cloak class="list-unstyled" ng-show="parent_nav.brand.open">
+                        <li>
+                            <a href="#/brands/merchant_groups" class="waves-effect">
+                                <i class="fa fa-weixin" aria-hidden="true"></i>
+                                <span> Merchant Groups</span> <span class="pull-right"></span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+
+            <div class="user-details hidden-xs" ng-show="user_info.hasPermission('op_nav')">
+                <div class="user-info">
+
+                    {{user_info.operator_merchant.merchant_id}} - {{user_info.operator_merchant.name}}<BR>
+                    {{user_info.operator_merchant.address1}}<BR>
+                    {{user_info.operator_merchant.city}}, {{user_info.operator_merchant.state}}
+
+                </div>
+            </div>
+
+        </div>
+        <div class="clearfix"></div>
+    </div>
+</div>

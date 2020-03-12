@@ -1,0 +1,50 @@
+<div id="merchant-operator-select-modal" class="modal fade" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Select Current Merchant</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <input type="text" class="input-large form-control" name="merchant_filter" placeholder="Filter Merchants"
+                                                                                 ng-model="operator_factory.merchant_filter" ng-required="true">
+                </div>
+
+                    <div class="row">
+                        <div class="col-xs-12 create-promo-view">
+                            <div class="filter-loader-contain" ng-show="search.processing">
+                                <div class="filter-loader"></div>
+                            </div>
+                            <table class="big-screen table table-hover">
+                                <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Name</th>
+                                    <th>Address</th>
+                                    <th>City</th>
+                                    <th>State</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr ng-repeat="merchant in operator_factory.operator_merchants | filter:operator_factory.filterMerchantSelect"
+                                    ng-click="setMerchant(merchant)">
+                                    <td>{{merchant.merchant_id}}</td>
+                                    <td>{{merchant.name}}</td>
+                                    <td>{{merchant.address1}}</td>
+                                    <td>{{merchant.city}}</td>
+                                    <td>{{merchant.state}}</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            <div class="modal-footer">
+                <button type="button" ng-disabled class="btn btn-default" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>

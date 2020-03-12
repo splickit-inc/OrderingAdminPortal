@@ -1,0 +1,21 @@
+<div class="merchant-nav-bar-container" ng-controller="MerchantNavBarCtrl">
+    <div class="merchant-progress-bar-box" ng-show="showMerchant()">
+        <div class="title">{{merchant.merchant_id}} - {{merchant.name}}</div>
+        <div>
+            <div class="progress progress-lg">
+                <div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="96"
+                     aria-valuemin="0" aria-valuemax="100"
+                     ng-style="{width: percent_complete+'%'}">
+                    {{percent_complete}}
+                </div>
+            </div>
+        </div>
+    </div>
+    <button type="button" ng-disabled="" class="btn btn-success pull-right"
+            ng-show="users.hasPermission('op_merch_select')"
+            ng-click="selectOperatorMerchant()">
+        Change Location
+    </button>
+</div>
+
+<merchant-operator-selector close-merchant-select="setMenuMerchant(merchant)" ></merchant-operator-selector>

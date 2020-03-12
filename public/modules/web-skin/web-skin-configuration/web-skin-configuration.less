@@ -1,0 +1,157 @@
+@import "../../shared/styles/flex";
+
+.style-guide-content{
+  float: right;
+}
+.medium-text-skin{
+  top:35px;
+  left: -14px;
+}
+.site-image-drop-box{
+  background: none !important;
+  cursor: pointer;
+}
+.breadcrumb-container, .buttons-container{
+  float: left;
+}
+.page-header-title .breadcrumb-margin{
+  margin: 18px 10px 10px 0
+}
+.skin-location-list{
+  .merchant-buttons{
+    .btn-default{
+      border-radius: 3px;
+      margin-left: 5px !important;
+      border: none;
+      box-shadow: none;
+    }
+    .checkbox{
+      margin-left: 5px;
+    }
+  }
+}
+.skin-config-img .drop-box{
+  width: 97%;
+}
+.angular-color-picker{
+  float: left;
+  margin-left: 35px;
+  margin-right: 35px;
+}
+.picker-value{
+  float: left;
+}
+#color-picker-modal .modal-dialog{
+  width: 600px;
+  margin: 30px auto;
+}
+
+@media (max-width: @screen-md){
+  .style-guide-content{
+    width: 100%;
+  }
+  .config-label{
+    width: 300px;
+  }
+  .skin-config{
+    float: left;
+    width: 100%;
+  }
+  .medium-text-skin{
+   // top: -3px;
+  }
+  .page-header-title .flex-init .m-l-5{
+    margin-left: 5px !important;
+  }
+}
+.skin-boulder-map{
+  width: 100%;
+  height: 320px;
+  margin-top: -40px;
+}
+@media (max-width: @screen-lg-1477){
+  .merchant-box{
+    width: 100%;
+  }
+  .merchant-labels, .merchant-buttons{
+    width: 50%;
+    float: left;
+    height:auto;
+  }
+  .skin-boulder-map{
+    object-fit: none;
+    width: 100%;
+    margin-top: 0;
+  }
+  .map-section{
+    width: 100%;
+    height: auto;
+    margin-bottom: 15px;
+  }
+  .skin-location-list{
+    clear: both;
+  }
+}
+.merchant-labels, .merchant-buttons{
+  padding: 0;
+}
+.merchant-labels, .merchant-buttons{
+  @media (max-width: @screen-md-850){
+    clear: both;
+    width: 100%;
+  }
+}
+@media (max-width: @screen-sm-600){
+  #color-picker-modal .modal-dialog{
+    width: 350px;
+    margin-top: 30px;
+  }
+  .angular-color-picker{
+    margin: 15px 35px;
+  }
+  .picker-value{
+    margin: 15px 70px;
+  }
+  .skin-config-img .drop-box{
+    font-size: 28px;
+  }
+}
+
+.banner-container
+{
+  .flex-init;
+  .flex-direction-row;
+  flex: 1;
+  .child-column
+  {
+    width: 100%;
+  }
+  .child-row
+  {
+    height: 100%;
+  }
+
+  .menu-text{
+    display: inline;
+    text-transform: uppercase;
+    text-decoration: none;
+    font-weight: bold;
+    color: inherit;
+    padding: 1rem 0 1rem 1.5rem;
+  }
+}
+
+.nav-bar-background
+{
+  height: 55px;
+  width: 100%;
+  z-index:  0;
+}
+
+.position-relative{
+  position: relative;
+}
+
+.display-none{
+  display: none;
+}

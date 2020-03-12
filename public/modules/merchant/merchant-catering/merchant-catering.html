@@ -1,0 +1,268 @@
+<div class="page-header-title white-text">
+    <h4 class="page-title">Catering</h4>
+    <ol class="breadcrumb">
+        <li><a href="#/merchants">{{ 'MESSAGE.SHARE.MERCHANT' | translate }}</a></li>
+        <li><a href="#/merchant/catering">Catering</a>
+        </li>
+    </ol>
+</div>
+
+<div id="merchant-catering-page">
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title">Catering Configurations</h3>
+        </div>
+        <div class="panel-body">
+            <div class="filter-loader-contain" ng-if="vm.config_processing">
+                <div class="filter-loader"></div>
+            </div>
+            <div ng-if="!vm.config_processing">
+                <form name="vm.configuration_form" novalidate class="form-horizontal"
+                      ng-submit="vm.updateConfiguration('config_processing_success')">
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="col-md-5 control-label">Allow Catering</label>
+                            <div class="col-md-7">
+                                <toggle-switch name="advance_ordering"
+                                               ng-model="vm.catering_info.active"
+                                               ng-init="vm.catering_info.active = false">
+                                </toggle-switch>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-md-5 control-label">Minimum Pickup Order</label>
+                            <div class="col-md-7">
+                                <input type="text" class="input-med form-control" name="min_order_pickup"
+                                       ng-model="vm.catering_info.minimum_pickup_amount" ng-fade min="0" step="0.01"
+                                       ui-money-mask="2" placeholder="$ 0.00"
+                                       id="min_order_pickup" required>
+                                <div class="alert alert-danger ng-hide alert-reg-position"
+                                     ng-show="vm.configuration_form.min_order_pickup.$error.required && (vm.configuration_form.min_order_pickup.$faded || vm.configuration_form.$submitted)"
+                                     role="alert">
+                                    The Minimum Pickup Order is required.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-md-5 control-label">Minimum Delivery Order</label>
+                            <div class="col-md-7">
+                                <input type="text" class="input-med form-control" name="min_order_delivery"
+                                       ng-model="vm.catering_info.minimum_delivery_amount" ng-fade min="0"
+                                       step="0.01"
+                                       ui-money-mask="2" placeholder="$ 0.00"
+                                       id="min_order_delivery" required>
+                                <div class="alert alert-danger ng-hide alert-reg-position"
+                                     ng-show="vm.configuration_form.min_order_delivery.$error.required && (vm.configuration_form.min_order_delivery.$faded || vm.configuration_form.$submitted)"
+                                     role="alert">
+                                    The Minimum Delivery Order is required.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-5 control-label">Minimum Tip %</label>
+                            <div class="col-md-7">
+                                <input type="text" class="input-med form-control" name="min_tip_percentage"
+                                       ng-model="vm.catering_info.minimum_tip_percent" ng-fade min="0"
+                                       step="1"
+                                       ui-percentage-mask="0" placeholder="0 %" ui-percentage-value
+                                       id="min_tip_percentage">
+                                <div class="alert alert-danger ng-hide alert-reg-position"
+                                     ng-show="vm.configuration_form.min_tip_percentage.$error.required && (vm.configuration_form.min_tip_percentage.$faded || vm.configuration_form.$submitted)"
+                                     role="alert">
+                                    The Minimum Tip Percentage is required.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-md-5 control-label">Pad Time from Open (in hours)</label>
+                            <div class="col-md-7">
+                                <input type="text" class="input-med form-control currency" name="pad_time_from_open"
+                                       ng-model="vm.catering_info.min_lead_time_in_hours_from_open_time" ng-fade min="0"
+                                       step="1"
+                                       ui-number-mask="0" placeholder="0"
+                                       id="pad_time_from_open">
+                                <div class="alert alert-danger ng-hide alert-reg-position"
+                                     ng-show="vm.configuration_form.pad_time_from_open.$error.required && (vm.configuration_form.pad_time_from_open.$faded || vm.configuration_form.$submitted)"
+                                     role="alert">
+                                    The Pad Time from Open value is required.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-md-5 control-label">Lead Time (in hours)</label>
+                            <div class="col-md-7">
+                                <input type="text" class="input-med form-control" name="lead_time"
+                                       ng-model="vm.catering_info.lead_time_in_hours" ng-fade min="0" step="1"
+                                       ui-number-mask="0" placeholder="0"
+                                       id="lead_time" required>
+                                <div class="alert alert-danger ng-hide alert-reg-position"
+                                     ng-show="vm.configuration_form.lead_time.$error.required && (vm.configuration_form.lead_time.$faded || vm.configuration_form.$submitted)"
+                                     role="alert">
+                                    The Lead Time Value is required.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-md-5 control-label">Available Time Increments</label>
+                            <div class="col-md-7">
+                                <select name="available_time_increments"
+                                        class="input-med form-control"
+                                        ng-required="true"
+                                        ng-model="vm.catering_info.time_increment_in_minutes"
+                                        ng-options="item for item in [15,30,60]">
+                                </select>
+                                <div class="alert alert-danger ng-hide alert-reg-position"
+                                     ng-show="vm.configuration_form.available_time_increments.$error.required && (vm.configuration_form.available_time_increments.$touched || vm.configuration_form.$submitted)"
+                                     role="alert">
+                                    Available Time Increment is required.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="col-md-5 control-label">Max Orders per Day</label>
+                            <div class="col-md-7">
+                                <input type="text" class="input-med form-control currency" name="max_order_per_day"
+                                       ng-model="vm.catering_info.maximum_number_of_catering_orders_per_day_part"
+                                       ng-fade min="0"
+                                       step="1"
+                                       ui-number-mask="0" placeholder="0"
+                                       id="max_order_per_day" required>
+                                <div class="alert alert-danger ng-hide alert-reg-position"
+                                     ng-show="vm.configuration_form.max_order_per_day.$error.required && (vm.configuration_form.max_order_per_day.$faded || vm.configuration_form.$submitted)"
+                                     role="alert">
+                                    The Max Orders per Day Value is required.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-md-5 control-label">Has Delivery?</label>
+                            <div class="col-md-7">
+                                <toggle-switch name="advance_ordering"
+                                               ng-model="vm.catering_info.delivery_active"
+                                               ng-init="vm.catering_info.delivery_active = false">
+                                </toggle-switch>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-md-5 control-label"># of Advance Days</label>
+                            <div class="col-md-7">
+                                <input type="text" class="input-med form-control currency"
+                                       name="advance_days_amount"
+                                       ng-model="vm.catering_info.max_days_out" ng-fade min="0"
+                                       step="1"
+                                       ui-number-mask="0" placeholder="Enter # of Days"
+                                       id="advance_days_amount" required>
+                                <div class="alert alert-danger ng-hide alert-reg-position"
+                                     ng-show="vm.configuration_form.advance_days_amount.$error.required && (vm.configuration_form.advance_days_amount.$faded || vm.configuration_form.$submitted)"
+                                     role="alert">
+                                    The # of Advance Days Value is required.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-md-5 control-label">Payment Type</label>
+                            <div class="col-md-7">
+                                <select name="payment_type"
+                                        class="input-med form-control"
+                                        ng-required="true"
+                                        ng-model="vm.catering_info.accepted_payment_types"
+                                        ng-options="item for item in vm.payment_types">
+                                </select>
+                                <div class="alert alert-danger ng-hide alert-reg-position"
+                                     ng-show="vm.configuration_form.payment_type.$error.required && (vm.configuration_form.payment_type.$touched || vm.configuration_form.$submitted)"
+                                     role="alert">
+                                    Payment Type is Required.
+                                </div>
+                            </div>
+                        </div>
+                        <!-- <div class="form-group">
+                             <label class="col-xs-6 control-label">Use Loyalty</label>
+                             <div class="col-xs-6">
+                                 <input class="fix-checkbox" type="checkbox" name="use_loyalty"
+                                        ng-model="vm.payment_types.use_loyalty">
+                             </div>
+                         </div>-->
+                        <div class="form-group">
+                            <label class="col-md-5 control-label">Order Destination (if different)</label>
+                            <div class="col-md-7">
+                                <input type="text" class="input-med form-control" name="destination"
+                                       ng-model="vm.catering_info.special_merchant_message_destination" ng-fade>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-md-5 control-label">Email or Fax</label>
+                            <div class="col-md-7">
+                                <div class="input-group">
+                                    <select name="format"
+                                            class="input-med form-control"
+                                            ng-model="vm.catering_info.special_merchant_message_format">
+                                        <option ng-repeat="item in vm.destination_format" value="{{item.id}}">
+                                            {{item.name}}
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <h5>CATERING MESSAGE (may use plain text, or use the interface to create HTML)</h5>
+                        </div>
+                        <div class="form-group">
+                            <div class="mt-5">
+                                <text-angular
+                                    ta-toolbar="[
+                                        ['h1','h2','h3','h4','h5','h6'],
+                                        ['p','pre', 'quote'],['bold','italics','underline'],
+                                        ['ul','ol'],
+                                        ['undo', 'redo', 'clear'],['insertImage','insertLink'],['wordcount'],['html']
+                                    ]"
+                                    ng-model="vm.catering_info.catering_message_to_user_on_create_order"
+                                    data-ng-required="true"
+                                    data-name="catering_message"
+                                >
+                                </text-angular>
+                            </div>
+
+                            <div class="alert alert-danger ng-hide alert-reg-position"
+                                 ng-show="vm.configuration_form.catering_message.$error.required && (vm.configuration_form.catering_message.$touched || vm.configuration_form.$submitted)"
+                                 role="alert">
+                                The catering message field is required.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group" ng-if="vm.config_processing_success">
+                        <div class="col-md-5"></div>
+                        <div class="col-md-7">
+                            <div class="alert alert-success alert-reg-position form-submit-success fade-effect"
+                                 role="alert">
+                                <i class="fa fa-check-circle m-r-5" aria-hidden="true"></i>Configuration Saved
+                                Successfully.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex-align-self-end">
+                        <button class='btn-soft-blue btn pull-right' type="submit">{{
+                            'MESSAGE.SHARE.SUBMIT' | translate }}
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

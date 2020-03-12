@@ -1,0 +1,149 @@
+@import "../../shared/styles/flex.less";
+@mobile-m-max-width: 400px;
+
+@mobile-l-max-width: 626px;
+@mobile-xl-min-width: 627px;
+
+@desktop-max-res: 833px;
+@desktop-min-res: 628px;
+
+@desktop-lg-max-res: 1200px;
+@desktop-lg-min-res: 992px;
+
+.modal-scroll-table {
+  height: auto;
+}
+
+.fix-margin-table {
+  @media (max-width: @mobile-m-max-width) {
+    margin: -12px;
+  }
+}
+
+th {
+  @media (max-width: @mobile-m-max-width) {
+    font-size: 12px;
+  }
+}
+
+.fix-date-title {
+  @media (min-width: @mobile-m-max-width) {
+    float: left;
+  }
+}
+
+.fix-date-wrap {
+  @media (min-width: @mobile-m-max-width) {
+    display: inline;
+  }
+}
+
+.fix-order-btn-small-screen {
+  .flex-init;
+  width: 100%;
+  flex-direction: row;
+  .flex-justify-content-start;
+  @media (max-width: 433px) {
+    flex-direction: column;
+  }
+}
+
+.fix-button-wrap-text {
+  white-space: normal;
+}
+
+.promo-edit-view {
+  .margin-button-12 {
+    margin-bottom: 12px;
+  }
+
+  .panel .panel-body .row-table {
+    padding: 6px 12px 3px 12px;
+  }
+
+  .input-med {
+    float: none;
+  }
+  .alert-danger {
+    margin: 5px 0px;
+  }
+  .padding-fix {
+    @media (max-width: 992px) {
+      padding: 0px 10px;
+    }
+  }
+
+  .big-screen {
+    @media (max-width: @mobile-l-max-width) {
+      display: none;
+    }
+
+    @media (max-width: @desktop-max-res) and (min-width: @desktop-min-res) {
+      display: none;
+    }
+    @media (max-width: @desktop-lg-max-res) and (min-width: @desktop-lg-min-res) {
+      display: none;
+    }
+  }
+
+  .small-screen {
+    @media (max-width: @mobile-l-max-width) {
+      display: block;
+      margin-top: 10px;
+    }
+    @media (min-width: @mobile-xl-min-width) {
+      display: none;
+    }
+
+    @media (max-width: @desktop-max-res) and (min-width: @desktop-min-res) {
+      display: block;
+      margin-top: 10px;
+    }
+    @media (max-width: @desktop-lg-max-res) and (min-width: @desktop-lg-min-res) {
+      display: block;
+      margin-top: 10px;
+    }
+  }
+
+  .delete-icon-small-screen {
+    color: #FF4040;
+    font-size: 25px;
+    float: right;
+    margin-top: -9px;
+    margin-right: -10px;
+    width: 35px;
+    height: 32px;
+  }
+
+  .merchant-scroll-contain {
+    height: 250px;
+    overflow-y: scroll;
+  }
+
+  .name {
+    float: left;
+    width: 60%;
+    h5 {
+      line-height: 21px;
+      margin: 4px 0px;
+    }
+  }
+  i {
+    font-style: normal;
+  }
+  .id {
+
+    float: right;
+    width: 40%;
+    text-align: right;
+    h5 {
+      margin: 7px 0px;
+    }
+  }
+}
+
+.bootstrap-datetimepicker-widget.dropdown-menu{
+  @media (max-width: @mobile-l-max-width) {
+    width: 15.5em;
+  }
+}

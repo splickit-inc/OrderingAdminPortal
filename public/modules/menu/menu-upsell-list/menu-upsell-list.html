@@ -1,0 +1,45 @@
+<div class="row">
+    <div class="col-sm-12">
+        <div class="page-header-title menu-bg">
+            <h4 class="page-title">Category Upsells</h4>
+            <button type="button" ng-disabled class="btn btn-info" ng-click="upsells.createNew()">
+                Create New Upsell
+            </button>
+        </div>
+    </div>
+</div>
+
+<div class="text-center" ng-if="!upsells.menu.upsells || (!!upsells.menu.upsells && upsells.menu.upsells.length == 0)">
+    <h5 class="pre-load-text">No Upsells Found</h5>
+</div>
+
+<div ng-repeat="upsell in upsells.menu.upsells" ng-if="!!upsells.menu.upsells && upsells.menu.upsells.length > 0">
+    <div class="panel panel-primary">
+        <div class="panel-heading section-select">
+            <h3 class="panel-title">
+                {{upsell.menu_type_name}}
+            </h3>
+        </div>
+        <div class="panel-body">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th class="fix-table-wrap">Upsell ID</th>
+                    <th>Name</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="upsell_item in upsell.upsells">
+                    <td class="fix-table-wrap">{{upsell_item.item_id}}</td>
+                    <td>{{upsell_item.item_name}}</td>
+                    <td class="delete-icon">
+                        <i class="fa fa-times" aria-hidden="true"
+                           ng-click="upsells.deleteUpsellConfirmation(upsell_item, $parent.$index, $index)"></i>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

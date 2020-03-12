@@ -1,0 +1,373 @@
+<div class="row">
+    <div class="col-sm-12">
+        <div class="page-header-title menu-bg">
+            <h4 class="page-title">Menu - Sections & Modifiers</h4>
+            <ol class="breadcrumb">
+                <li><a href="#/menus">Menus</a></li>
+                <li><a href="javascript:void(0);">{{sec_mod.menu_name}} Sections & Modifiers</a></li>
+            </ol>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-primary">
+            <div class="panel-heading"><h3 class="panel-title">Sections</h3></div>
+            <div class="panel-body">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>External</th>
+                        <th>Name</th>
+                        <th>Category</th>
+                        <th class="center-head">Active</th>
+                        <th>Priority</th>
+                        <!--<th></th>-->
+                        <!--<th></th>-->
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="section in sec_mod.sections">
+                        <td>
+                            {{section.menu_type_id}}
+                        </td>
+                        <td>
+                            {{section.external_menu_id}}
+                        </td>
+                        <td>
+                            {{section.menu_type_name}}
+                        </td>
+                        <td>
+                            {{sec_mod.decodeCategory(section.cat_id)}}
+                        </td>
+                        <td class="boolean-table-field">
+                            <i class="fa fa-check-square-o" aria-hidden="true" ng-show="section.active"></i>
+                            <i class="fa fa-ban" aria-hidden="true" ng-show="!section.active"></i>
+                        </td>
+                        <td>
+                            {{section.priority}}
+                        </td>
+                        <!--<td class="edit-icon">-->
+                        <!--<i class="fa fa-pencil-square-o" aria-hidden="true" data-toggle="modal"-->
+                        <!--data-target="#edit-section-modal" ng-click="sec_mod.editSectionDialog(section, $index)"></i>-->
+                        <!--</td>-->
+                        <!--<td class="delete-icon" >-->
+                        <!--<i class="fa fa-times" aria-hidden="true" ng-click="sec_mod.deleteMenuTypeConfirmation(section, $index)"></i>-->
+                        <!--</td>-->
+                    </tr>
+                    </tbody>
+                </table>
+                <div class="alert alert-success alert-reg-position"
+                     ng-show="sec_mod.new_section.success"
+                     role="alert">
+                    <i class="fa fa-check-circle" aria-hidden="true"></i> New Menu Section <strong>{{sec_mod.new_section.menu_type_name}}</strong> has been created!
+                </div>
+                <button type="button" ng-disabled class="btn btn-success pull-right" data-toggle="modal" data-target="#add-section-modal">
+                    <i class="fa fa-plus" aria-hidden="true"></i> Create New Section
+                </button>
+            </div><!-- panel-body -->
+        </div> <!-- panel -->
+    </div> <!-- col-->
+</div>
+<!-- End row -->
+
+
+<div class="row">
+    <!-- Basic example -->
+    <div class="col-md-12">
+        <div class="panel panel-primary">
+            <div class="panel-heading"><h3 class="panel-title">Modifiers</h3></div>
+            <div class="panel-body">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>External</th>
+                        <th>Modifier Group</th>
+                        <th>Type</th>
+                        <th class="center-head">Active</th>
+                        <th>Priority</th>
+                        <!--<th></th>-->
+                        <!--<th></th>-->
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="modifier in sec_mod.modifier_groups">
+                        <td>
+                            {{modifier.modifier_group_id}}
+                        </td>
+                        <td>
+                            {{modifier.external_modifier_group_id}}
+                        </td>
+                        <td>
+                            {{modifier.modifier_group_name}}
+                        </td>
+                        <td>
+                            {{sec_mod.decodeModifierType(modifier.modifier_type)}}
+                        </td>
+                        <td class="boolean-table-field">
+                            <i class="fa fa-check-square-o" aria-hidden="true" ng-show="modifier.active"></i>
+                            <i class="fa fa-ban" aria-hidden="true" ng-show="!modifier.active"></i>
+                        </td>
+                        <td>
+                            {{modifier.priority}}
+                        </td>
+                        <!--<td class="edit-icon">-->
+                        <!--<i class="fa fa-pencil-square-o" aria-hidden="true" data-toggle="modal"-->
+                        <!--data-target="#edit-section-modal" ng-click="sec_mod.editModifierGroupDialog(admin_phone, $index)"></i>-->
+                        <!--</td>-->
+                        <!--<td class="delete-icon" >-->
+                        <!--<i class="fa fa-times" aria-hidden="true" data-toggle="modal" data-target="#delete-section-modal"-->
+                        <!--ng-click="sec_mod.deleteModifierGroupConfirmDialog(admin_phone, $index)"></i>-->
+                        <!--</td>-->
+                    </tr>
+                    </tbody>
+                </table>
+
+                <div class="alert alert-success alert-reg-position"
+                     ng-show="sec_mod.new_modifier_group.success"
+                     role="alert">
+                    <i class="fa fa-check-circle" aria-hidden="true"></i> Modifier Group <strong>{{sec_mod.new_modifier_group.modifier_group_name}}</strong> has been created!
+                </div>
+                <button type="button" ng-disabled class="btn btn-success pull-right" data-toggle="modal" data-target="#add-new-modifier-modal">
+                    <i class="fa fa-plus" aria-hidden="true"></i> Create New Modifier Group
+                </button>
+            </div><!-- panel-body -->
+        </div> <!-- panel -->
+        <button type="button" ng-disabled class="btn btn-lg btn-primary pull-right" ng-click="sec_mod.changeRoute('items_modifiers')">
+            Continue
+            <i class="fa fa-arrow-right" aria-hidden="true"></i>
+        </button>
+    </div> <!-- col-->
+</div>
+
+<div id="add-section-modal" class="modal fade" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Create Section</h4>
+            </div>
+            <div class="modal-body">
+                <form name="sec_mod.new_section_form" class="form-horizontal" novalidate ng-submit="sec_mod.createSection()">
+                    <div class="form-group">
+                        <label class="col-md-3 control-label">Name</label>
+                        <div class="col-md-9 m-t-5">
+                            <input type="text" class="input-med form-control" name="menu_type_name"
+                                   ng-model="sec_mod.new_section.menu_type_name" ng-fade>
+                            <div class="alert alert-danger ng-hide alert-reg-position"
+                                 ng-show="sec_mod.new_section_form.menu_type_name.$error.required
+                                 && (sec_mod.new_section_form.menu_type_name.$faded || sec_mod.new_section.submit)"
+                                 role="alert">
+                                Name is required.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-3 control-label">Description</label>
+                        <div class="col-md-9 m-t-5">
+                            <textarea class="form-control" rows="2"
+                                      name="menu_type_description" ng-model="sec_mod.new_section.menu_type_description"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-3 control-label">Category</label>
+                        <div class="col-md-9 m-t-5">
+                            <div class="select input-med inline margin-left-five"><select name="cat_id" class="form-control" ng-required="true"
+                                    ng-model="sec_mod.new_section.cat_id"
+                                    ng-options="category.type_id_value as category.type_id_name for category in sec_mod.categories">
+                                <option class="placeholder-color" value="" selected disabled>CATEGORY</option>
+                            </select></div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-3 control-label">Priority</label>
+                        <div class="col-md-9 m-t-5">
+                            <input type="number" class="input-med form-control" priority="priority"
+                                   ng-model="sec_mod.new_section.priority" ng-fade>
+                            <div class="alert alert-danger ng-hide alert-reg-position"
+                                 ng-show="sec_mod.new_section_form.priority.$error.required
+                                 && (sec_mod.new_section_form.priority.$faded || sec_mod.new_section.submit)"
+                                 role="alert">
+                                Priority is required.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-3 control-label">Active</label>
+                        <div class="col-md-9 m-t-10">
+                            <toggle-switch name="active"
+                                           on-label="Active"
+                                           off-label="Inactive"
+                                           ng-model="sec_mod.new_section.active">
+                            </toggle-switch>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-3 control-label">Items</label>
+                        <div class="col-md-9 m-t-5">
+                            <input type="text" class="input-x-large form-control" name="items"
+                                   ng-model="sec_mod.new_section.items" ng-fade ng-required="true">
+                            <div class="alert alert-danger ng-hide alert-reg-position"
+                                 ng-show="sec_mod.new_section_form.items.$error.required
+                                 && (sec_mod.new_section_form.items.$faded || sec_mod.new_section.submit)"
+                                 role="alert">
+                                Items are required.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-3 control-label">Sizes</label>
+                        <div class="col-md-9 m-t-5">
+                            <input type="text" class="input-x-large form-control" name="sizes"
+                                   ng-model="sec_mod.new_section.sizes" ng-fade ng-required="true">
+                            <div class="alert alert-danger ng-hide alert-reg-position"
+                                 ng-show="sec_mod.new_section_form.sizes.$error.required
+                                 && (sec_mod.new_section_form.sizes.$faded || sec_mod.new_section.submit)"
+                                 role="alert">
+                                Sizes are required.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <div ng-show="sec_mod.new_section.processing" class="form-loader">
+                            <div class="line"></div>
+                            <div class="line"></div>
+                            <div class="line"></div>
+                            <div class="line"></div>
+                        </div>
+                        <button type="button" ng-disabled class="btn btn-default" data-dismiss="modal">Cancel</button>
+                        <button class="btn btn-success">Submit</button>
+                    </div>
+
+                    {{sec_mod.new_section_form.$error}}
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div id="add-new-modifier-modal" class="modal fade" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Create Modifier Group</h4>
+            </div>
+            <div class="modal-body">
+                <form name="sec_mod.new_mod_group_form" class="form-horizontal" novalidate ng-submit="sec_mod.createModifierGroup()">
+                    <div class="form-group">
+                        <label class="col-md-3 control-label">Name</label>
+                        <div class="col-md-9 m-t-5">
+                            <input type="text" class="input-med form-control" name="modifier_group_name"
+                                   ng-model="sec_mod.new_modifier_group.modifier_group_name" ng-fade>
+                            <div class="alert alert-danger ng-hide alert-reg-position"
+                                 ng-show="sec_mod.new_mod_group_form.modifier_group_name.$error.required
+                                 && (sec_mod.new_mod_group_form.modifier_group_name.$faded || sec_mod.new_modifier_group.submit)"
+                                 role="alert">
+                                Name is required.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-3 control-label">Description</label>
+                        <div class="col-md-9 m-t-5">
+                            <textarea class="form-control" rows="2"
+                                      name="modifier_description" ng-model="sec_mod.new_modifier_group.modifier_description"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-3 control-label">Modifier Type</label>
+                        <div class="col-md-9 m-t-5">
+                            <div class="select input-med inline margin-left-five"><select name="cat_id" class="form-control" ng-required="true"
+                                    ng-model="sec_mod.new_modifier_group.modifier_type"
+                                    ng-options="mod_type.type_id_value as mod_type.type_id_name for mod_type in sec_mod.modifier_types">
+                                <option class="placeholder-color" value="" selected disabled>MODIFIER TYPE</option>
+                            </select></div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-3 control-label">Priority</label>
+                        <div class="col-md-9 m-t-5">
+                            <input type="number" class="input-med form-control" priority="priority"
+                                   ng-model="sec_mod.new_modifier_group.priority" ng-fade>
+                            <div class="alert alert-danger ng-hide alert-reg-position"
+                                 ng-show="sec_mod.new_mod_group_form.priority.$error.required
+                                 && (sec_mod.new_mod_group_form.priority.$faded || sec_mod.new_menu_type.submit)"
+                                 role="alert">
+                                Priority is required.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-3 control-label">Active</label>
+                        <div class="col-md-9 m-t-10">
+                            <toggle-switch name="active"
+                                           on-label="Active"
+                                           off-label="Inactive"
+                                           ng-model="sec_mod.new_modifier_group.active">
+                            </toggle-switch>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-3 control-label">Modifier Items</label>
+                        <div class="col-md-9 m-t-5">
+                            <input type="text" class="input-x-large form-control" name="item_list"
+                                   ng-model="sec_mod.new_modifier_group.item_list" ng-fade ng-required="true">
+                            <div class="alert alert-danger ng-hide alert-reg-position"
+                                 ng-show="sec_mod.new_mod_group_form.item_list.$error.required
+                                 && (sec_mod.new_mod_group_form.item_list.$faded || sec_mod.new_modifier_group.submit)"
+                                 role="alert">
+                                Items are required.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-3 control-label">Default Item Price</label>
+                        <div class="col-md-9 m-t-5">
+                            <input type="number" class="input-med form-control" name="default_item_price"
+                                   ng-model="sec_mod.new_modifier_group.default_item_price" ng-fade>
+
+                            <div class="alert alert-danger ng-hide alert-reg-position"
+                                 ng-show="sec_mod.new_mod_group_form.default_item_price.$error.number
+                                    && (sec_mod.new_mod_group_form.default_item_price.$faded || sec_mod.new_modifier_group.submit)"
+                                 role="alert">
+                                Default Item Price must be numeric.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-3 control-label">Default Item Max</label>
+                        <div class="col-md-9 m-t-5">
+                            <input type="number" class="input-med form-control" name="default_item_max"
+                                   ng-model="sec_mod.new_modifier_group.default_item_max" ng-fade>
+
+                            <div class="alert alert-danger ng-hide alert-reg-position"
+                                 ng-show="sec_mod.new_mod_group_form.default_item_max.$error.number
+                                    && (sec_mod.new_mod_group_form.default_item_max.$faded || sec_mod.new_modifier_group.submit)"
+                                 role="alert">
+                                Default Item Max must be numeric.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <div ng-show="sec_mod.new_modifier_group.processing" class="form-loader">
+                            <div class="line"></div>
+                            <div class="line"></div>
+                            <div class="line"></div>
+                            <div class="line"></div>
+                        </div>
+
+                        <button type="button" ng-disabled class="btn btn-default" data-dismiss="modal">Cancel</button>
+                        <button class="btn btn-success">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

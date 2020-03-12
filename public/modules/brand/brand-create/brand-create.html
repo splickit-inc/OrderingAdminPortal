@@ -1,0 +1,167 @@
+<div class="row">
+    <div class="col-sm-12">
+        <div class="page-header-title">
+            <h4 class="page-title">Brand</h4>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="panel panel-primary">
+            <div class="panel-heading"><h3 class="panel-title">Create New Brand</h3></div>
+            <div class="panel-body">
+                <form name="brand.new_brand_form" class="form-horizontal" novalidate ng-submit="brand.createNewBrand()">
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Brand Name</label>
+                        <div class="col-md-8 m-t-5-sm">
+                            <input type="text" class="input-large form-control" name="name" ng-keyup="brand.updateDefaultUrl()"
+                                   ng-model="brand.new_brand.name" ng-fade ng-required="true">
+                            <div class="error-large error-large alert alert-danger ng-hide alert-reg-position"
+                                 ng-show="brand.new_brand_form.name.$error.required
+                                            && (brand.new_brand_form.name.$touched || brand.new_brand_form.$submitted)"
+                                 role="alert">
+                                Name is required.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Active</label>
+                        <div class="col-md-8 m-t-5">
+                            <toggle-switch name="active"
+                                           ng-model="brand.new_brand.active">
+                            </toggle-switch>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Default URL</label>
+                        <div class="col-md-8 m-t-5-sm">
+                            <input type="text" class="input-large form-control" name="default_url" ng-keyup="brand.new_brand.default_url_customized = true"
+                                   ng-model="brand.new_brand.default_url" ng-fade>
+                            <div class="error-large alert alert-danger ng-hide alert-reg-position"
+                                 ng-show="brand.new_brand_form.default_url.$error.required
+                                            && (brand.new_brand_form.default_url.$touched || brand.new_brand_form.$submitted)"
+                                 role="alert">
+                                Default URL is required.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Allow Tipping</label>
+                        <div class="col-md-8 m-t-5">
+                            <toggle-switch name="allows_tipping"
+                                           ng-model="brand.new_brand.allows_tipping">
+                            </toggle-switch>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-4 control-label double-line-md">Allow In Store Payments</label>
+                        <div class="col-md-8 m-t-5">
+                            <toggle-switch name="allows_in_store_payments"
+                                           ng-model="brand.new_brand.allows_in_store_payments">
+                            </toggle-switch>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Nutrition Flag</label>
+                        <div class="col-md-8 m-t-5">
+                            <toggle-switch name="nutrition_flag"
+                                           ng-model="brand.new_brand.nutrition_flag">
+                            </toggle-switch>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Support Email</label>
+                        <div class="col-md-8 m-t-5-sm">
+                            <input type="text" class="input-large form-control" name="support_email"
+                                   ng-model="brand.new_brand.support_email" ng-fade>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Production</label>
+                        <div class="col-md-8 m-t-5">
+                            <toggle-switch name="production"
+                                           ng-model="brand.new_brand.production">
+                            </toggle-switch>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Order Delivery Methods</label>
+                        <div class="col-md-8 m-t-5">
+                            <button class="btn btn-success btn-sm" type="button"
+                                    ng-click="brand.selectOrderDeliveryMethods()"
+                            >Select Order Delivery Methods</button>
+                            <div class="col-md-12 m-t-10">{{brand.brand_lookup.all_selections.order_del_type.display_list}}</div>
+                            <div class="input-med alert alert-danger ng-hide alert-reg-position"
+                                 ng-show="brand.new_brand_form.production.$error.order_del_types && brand.brand_lookup.all_selections.order_del_type.selected.length == 0"
+                                 role="alert">
+                                You must select at least one Order Delivery Method.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Payment Types</label>
+                        <div class="col-md-8 m-t-5">
+                            <button class="btn btn-success btn-sm" type="button"
+                                    ng-click="brand.selectPaymentTypes()"
+                            >Select Payment Types</button>
+                            <div class="col-md-12 m-t-10">{{brand.brand_lookup.all_selections.Splickit_Accepted_Payment_Types.display_list}}</div>
+                            <div class="input-med alert alert-danger ng-hide alert-reg-position"
+                                 ng-show="brand.new_brand_form.production.$error.payment_types && brand.brand_lookup.all_selections.Splickit_Accepted_Payment_Types.selected.length == 0"
+                                 role="alert">
+                                You must select at least one Payment Type.
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Last Orders Displayed</label>
+                        <div class="col-md-8 m-t-5-sm">
+                            <input type="number" class="input-small form-control" name="last_orders_displayed"
+                                   ng-model="brand.new_brand.last_orders_displayed" ng-fade min="0">
+                            <div class="error-large alert alert-danger ng-hide alert-reg-position"
+                                 ng-show="brand.new_brand_form.last_orders_displayed.$error.required && brand.new_brand_form.last_orders_displayed.$error.number
+                                            && (brand.new_brand_form.last_orders_displayed.$touched || brand.new_brand_form.$submitted)"
+                                 role="alert">
+                                Last Orders Displayed is required.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div ng-show="brand.new_brand.processing" class="form-loader">
+                        <div class="line"></div>
+                        <div class="line"></div>
+                        <div class="line"></div>
+                        <div class="line"></div>
+                    </div>
+
+                    <div class="flex-init flex-justify-content-space-between">
+                        <div>
+                            <div class="error-large alert alert-danger ng-hide alert-reg-position"
+                                 ng-show="brand.error"
+                                 role="alert">
+                                The brand is already registered.
+                            </div>
+                        </div>
+                        <div class="submit-contain">
+                            <button type="button" class="btn btn-default m-r-10" back-button>Cancel</button>
+                            <button id="brand-create-submit" class='btn-success btn'>Submit</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<lookup-selector></lookup-selector>

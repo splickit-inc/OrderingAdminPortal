@@ -1,0 +1,145 @@
+<!--Menu Items Search Results-->
+<div class="menu-upsell-create" ng-show="create_upsell.showSearch()">
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title">
+                Select Item for Upsell
+            </h3>
+        </div>
+        <div class="panel-body">
+            <div class="form-group">
+                <label class="m-l-2">
+                    Search
+                    <i class="fa fa-question-circle tooltip-help" aria-hidden="true">
+                        <span class="tool-tip-text-responsive">{{ 'MENU.TOOLTIP.UPSELL.SEARCH' | translate }}</span>
+                    </i>
+                </label>
+                <div class="search-box input-med ">
+                    <input type="text" class="form-control" name="search_text"
+                           placeholder="Enter Name"
+                           ng-model="create_upsell.menu.search_text" ng-required="true" ng-fade>
+                </div>
+            </div>
+            <div class="panel-body"
+                 ng-show="create_upsell.menu.search_text.length > 2 && resultItems.length == 0">
+                <h5 class="pre-load-text">No Items Found</h5>
+            </div>
+            <div class="m-b-20" ng-show="create_upsell.menu.search_text.length > 2 && resultItems.length > 0">
+                <table class="table table-hover content-table">
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>External</th>
+                        <th>Name</th>
+                        <th>Description</th>
+                        <th>Priority</th>
+                        <th>Active</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="item in create_upsell.menu.all_items | filter: create_upsell.filterItems as resultItems"
+                        ng-click="create_upsell.setUpsellItem(item.section,item)">
+                        <td>{{item.item_id}}</td>
+                        <td>{{item.external_item_id}}</td>
+                        <td>{{item.item_name}}</td>
+                        <td>{{item.description}}</td>
+                        <td>
+                            {{item.priority}}
+                        </td>
+                        <td>{{item.active}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+                <div class="content-responsive">
+                    <div ng-repeat="item in create_upsell.menu.all_items | filter: create_upsell.filterItems"
+                         ng-click="create_upsell.setUpsellItem(item.section,item)">
+                        <div class="panel panel-body row-table">
+                            <div class="name">
+                                <h5 class="dark-grey"><b>{{item.item_name}}</b></h5>
+                            </div>
+                            <div class="id">
+                                <h5 class="dark-grey id-title">ID <span class="id-number">{{item.item_id}}</span>
+                                </h5>
+                            </div>
+                            <div class="description clear">
+                                <div ng-show="!!item.external_item_id">External ID:
+                                    {{item.external_item_id}}
+                                </div>
+                                <div>Priority: {{item.priority}} - Active: {{item.active}}</div>
+                                <div>
+                                    {{item.description}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <button type="button" class="btn btn-default" back-button>Cancel</button>
+        </div>
+    </div>
+</div>
+
+<div class="menu-upsell-create" ng-show="!create_upsell.showSearch()">
+    <div class="panel panel-primary">
+        <div class="panel-heading flex-init flex-justify-content-space-between">
+            <h3 class="panel-title">
+                Menu Sections for Upsell - {{create_upsell.selected_item.item_id}} -
+                {{create_upsell.selected_item.item_name}}
+            </h3>
+            <button type="button" class="btn btn-default" style="margin: 0px;" back-button>Cancel</button>
+        </div>
+        <div class="panel-body">
+            <h5 class="m-l-10 dark-grey bold">Unselected Sections
+                <i class="fa fa-question-circle tooltip-help" aria-hidden="true">
+                    <span class="tool-tip-text-responsive">{{ 'MENU.TOOLTIP.UPSELL.UNSELECTED_SECTION' | translate }}</span>
+                </i>
+            </h5>
+            <div ng-show="create_upsell.unselected_menu_types.length == 0">
+                <h5 class="pre-load-text m-tb-20">No sections</h5>
+            </div>
+            <div class="half-table-scroll" ng-show="create_upsell.unselected_menu_types.length > 0">
+                <table class="table table-hover">
+                    <tbody>
+                    <tr ng-repeat="section in create_upsell.unselected_menu_types"
+                        ng-click="create_upsell.addMenuTypeSelected($index, section)">
+                        <td>{{section.menu_type_id}}</td>
+                        <td>-</td>
+                        <td>{{section.menu_type_name}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <h5 class="m-l-10 bold dark-grey">Selected Sections
+                <i class="fa fa-question-circle tooltip-help" aria-hidden="true">
+                    <span class="tool-tip-text-responsive">{{ 'MENU.TOOLTIP.UPSELL.SELECT_SECTION' | translate }}</span>
+                </i>
+            </h5>
+            <div ng-show="create_upsell.selected_menu_types.length == 0">
+                <h5 class="pre-load-text m-t-20">Select at least one section</h5>
+            </div>
+            <div class="m-b-30" ng-show="create_upsell.selected_menu_types.length > 0">
+                <table class="table table-hover">
+                    <tbody>
+                    <tr ng-repeat="section in create_upsell.selected_menu_types"
+                        ng-click="create_upsell.removeMenuTypeSelected($index, section)">
+                        <td>{{section.menu_type_id}}</td>
+                        <td>-</td>
+                        <td>{{section.menu_type_name}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div ng-show="create_upsell.processing" class="form-loader">
+                <div class="line"></div>
+                <div class="line"></div>
+                <div class="line"></div>
+                <div class="line"></div>
+            </div>
+            <button ng-show="create_upsell.selected_menu_types.length > 0"
+                    type="button" ng-disabled class="btn btn-soft-blue pull-right m-t-20 m-b-10"
+                    ng-click="create_upsell.create()">
+                Create Upsell
+            </button>
+        </div>
+    </div>

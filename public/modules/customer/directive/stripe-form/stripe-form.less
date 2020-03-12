@@ -1,0 +1,65 @@
+@import "../../../shared/styles/flex.less";
+
+.input-control {
+  padding: 6px;
+}
+
+.input-third {
+  width: 103px;
+}
+
+.invalid {
+  border: 1px solid #B23426;
+}
+
+.submit-margins {
+  margin-top: 42px;
+  margin-bottom: 20px;
+  -webkit-align-self: center;
+  align-self: center;
+  @media (max-width: @screen-xs-max) {
+    margin-top: 30px;
+  }
+}
+
+.inline-flex-row-start {
+  .flex-init-inline;
+  .flex-direction-row;
+  .flex-justify-content-start;
+}
+
+.inline-flex-column-start {
+  .flex-init-inline;
+  .flex-direction-column;
+  .flex-justify-content-start;
+}
+
+.payment-row {
+  .inline-flex-row-start;
+  .flex-wrap;
+  .flex-justify-content-center;
+}
+
+.payment-errors {
+  .flex-init;
+  .flex-direction-row;
+  .flex-justify-content-start;
+  .flex-wrap;
+  @media (max-width: 512px) {
+    .flex-justify-content-center;
+    margin-left: 0px;
+  }
+  margin-left: 6px;
+}
+
+@media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+  .placeholder-fix:-ms-input-placeholder { /* IE 10+ */
+    color: #BCBBC3 !important;
+  }
+}
+
+@supports (-ms-accelerator:true) {
+  .placeholder-fix:-ms-input-placeholder { /* IE 10+ */
+    color: #BCBBC3 !important;
+  }
+}

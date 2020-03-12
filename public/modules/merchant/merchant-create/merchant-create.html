@@ -1,0 +1,312 @@
+<div class="row">
+    <div class="col-sm-12">
+        <div class="page-header-title">
+            <h4 class="page-title">{{ 'MERCHANT.CREATE.CREATE' | translate }}</h4>
+            <ol class="breadcrumb">
+                <li><a href="#/">{{ 'MESSAGE.SHARE.HOME' | translate }}</a></li>
+            </ol>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Basic example -->
+    <div class="col-md-6">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">{{ 'MERCHANT.CREATE.NEWMERCHANT' | translate }}</h3></div>
+            <div class="panel-body">
+                <div class="filter-loader-contain" ng-show="loading">
+                    <div class="filter-loader"></div>
+                </div>
+                <form name="new_merchant_form" class="form-horizontal" ng-show="!loading" novalidate ng-submit="create()">
+                    <div class="form-group">
+                        <label class="col-md-3 control-label">{{ 'MESSAGE.SHARE.NAME' | translate }}</label>
+                        <div class="col-md-9">
+                            <input type="text" class="input-large form-control" name="name" placeholder="Enter Merchant Name"
+                                   ng-model="new_merchant.name" ng-fade ng-required="true">
+                            <div class="input-large alert alert-danger ng-hide alert-reg-position"
+                                 ng-show="new_merchant_form.name.$error.required
+                                 && (new_merchant_form.name.$faded || new_merchant.submit)"
+                                 role="alert">
+                                {{ 'MESSAGE.SHARE.NAMEREQUIRED' | translate }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group" ng-if="can_select_brands">
+                        <label class="col-md-3 control-label">{{ 'MERCHANT.CREATE.BRAND' | translate }}</label>
+                        <div class="col-md-9">
+                            <div class="select input-large margin-top-five">
+                                <select name="brand" class="form-control"
+                                        ng-model="new_merchant.brand" ng-show="user_service.hasPermission('brands_filter')" ng-required="user_service.hasPermission('brands_filter')"
+                                        ng-options="brand.brand_id as brand.brand_name for brand in brands">
+                                    <option class="placeholder-color" value="" selected disabled>{{ 'MERCHANT.CREATE.BRAND' | translate }}</option>
+                                </select></div>
+                            <div class="input-large alert alert-danger ng-hide alert-reg-position"
+                                 ng-show="new_merchant_form.brand.$error.required
+                                 && (new_merchant_form.brand.$faded || new_merchant.submit)"
+                                 role="alert">
+                                {{ 'MERCHANT.CREATE.BRANDREQUIRED' | translate }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-3 control-label">{{ 'MESSAGE.SHARE.PHONENUMBER' | translate }}</label>
+                        <div class="col-md-9">
+                            <input type="text" class="input-large form-control" name="phone_no" placeholder="Phone" ng-fade
+                                   ng-model="new_merchant.phone_no" ng-required="true" maxlength="10">
+                            <div class="input-large alert alert-danger ng-hide alert-reg-position"
+                                 ng-show="new_merchant_form.phone_no.$error.required
+                                 && (new_merchant_form.phone_no.$faded || new_merchant.submit)"
+                                 role="alert">
+                                {{ 'MESSAGE.SHARE.PHONENUMBERREQUIRED' | translate }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-3 control-label">{{ 'MERCHANT.CREATE.SHOPEMAIL' | translate }}</label>
+                        <div class="col-md-9">
+                            <input type="email" class="input-large form-control" name="shop_email" placeholder="Enter Email Address"
+                                   ng-model="new_merchant.shop_email" ng-fade ng-required="true">
+                            <div class="input-large alert alert-danger ng-hide alert-reg-position"
+                                 ng-show="(new_merchant_form.shop_email.$error.required || new_merchant_form.shop_email.$error.email)
+                                 && (new_merchant_form.shop_email.$faded || new_merchant.submit)"
+                                 role="alert">
+                                {{ 'MERCHANT.CREATE.SHOPREQUIRED' | translate }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-3 control-label">{{ 'MESSAGE.SHARE.ADDRESS' | translate }}</label>
+                        <div class="col-md-9 mt-5">
+                            <input type="text" class="input-large form-control" name="address1" placeholder="Address Line 1"
+                                   ng-model="new_merchant.address1" ng-required="true" ng-fade>
+
+                            <div class="input-large alert alert-danger ng-hide alert-reg-position"
+                                 ng-show="new_merchant_form.addressline1.$error.required
+                                 && (new_merchant_form.addressline1.$faded || new_merchant.submit)"
+                                 role="alert">
+                                {{ 'MESSAGE.SHARE.ADDRESSREQUIRED' | translate }}
+                            </div>
+
+                            <input type="text" class="input-large form-control margin-top-five" name="address2" placeholder="Address Line 2"
+                                   ng-model="new_merchant.address2" ng-fade>
+
+                            <input type="text" class="input-large form-control margin-top-five" name="city"
+                                   placeholder="City"
+                                   ng-model="new_merchant.city" ng-required="true" ng-fade>
+
+
+                            <div class="select input-small inline m-t-5">
+                                <select id="fix-small-screen-inline" name="state" class="form-control"
+                                        ng-required="true"
+                                        ng-model="new_merchant.state"
+                                        ng-options="state.type_id_value as state.type_id_value for state in lookup.states">
+                                    <option class="placeholder-color" value="" selected disabled>ST</option>
+                                </select></div>
+
+                            <input type="text" class="input-small form-control m-t-5 inline" name="zip"
+                                   placeholder="Zip Code"
+                                   ng-model="new_merchant.zip" ng-required="true" ng-fade>
+
+                            <div class="input-large alert alert-danger ng-hide alert-reg-position"
+                                 ng-show="new_merchant_form.city.$error.required && (new_merchant_form.city.$faded || new_merchant.submit)"
+                                 role="alert">
+                                {{ 'MESSAGE.SHARE.CITYREQUIRED' | translate }}
+                            </div>
+
+                            <div class="input-large alert alert-danger ng-hide alert-reg-position"
+                                 ng-show="new_merchant_form.state.$error.required && (new_merchant_form.state.$faded || new_merchant.submit)"
+                                 role="alert">
+                                {{ 'MESSAGE.SHARE.STATEREQUIRED' | translate }}
+                            </div>
+
+                            <div class="input-large alert alert-danger ng-hide alert-reg-position"
+                                 ng-show="new_merchant_form.zip.$error.required && (new_merchant_form.zip.$faded || new_merchant.submit)"
+                                 role="alert">
+                                {{ 'MESSAGE.SHARE.ZIPREQUIRED' | translate }}
+                            </div>
+
+                            <div class="select input-large margin-top-five" ng-hide="true">
+                                <select name="country" class="form-control" ng-required="true"
+                                        ng-model="new_merchant.country"
+                                        ng-init="new_merchant.country = 'US'"
+                                        ng-options="country.type_id_value as country.type_id_name for country in lookup.countries" ng-readonly="true">
+                                    <option class="placeholder-color" value="" selected disabled>{{ 'MESSAGE.SHARE.COUNTRY' | translate }}</option>
+                                </select>
+                            </div>
+
+                            <div class="input-large alert alert-danger ng-hide alert-reg-position"
+                                 ng-show="new_merchant_form.country.$error.required && (new_merchant_form.country.$faded || new_merchant.submit)"
+                                 role="alert">
+                                {{ 'MESSAGE.SHARE.COUNTRYREQUIRED' | translate }}
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-3 control-label">{{ 'MESSAGE.SHARE.TIMEZONE' | translate }}</label>
+                        <div class="col-md-9 col-lg-6 mt-5">
+                            <div class="select input-x-large margin-top-five">
+                                <select name="time_zone" class="form-control" ng-required="true"
+                                        ng-model="new_merchant.time_zone"
+                                        ng-options="item as item.type_id_name for item in lookup.time_zones track by item.type_id_value">
+                                    <option class="placeholder-color" value="" disabled>Time Zone</option>
+                                </select></div>
+                            <div class="input-x-large alert alert-danger ng-hide alert-reg-position"
+                                 ng-show="new_merchant_form.timezone.$error.required && (new_merchant_form.timezone.$faded || info.location.submit)"
+                                 role="alert">
+                                {{ 'MESSAGE.SHARE.TIMEZONEREQUIRED' | translate }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-12 col-lg-6 col-lg-offset-3">
+                            <div class="alert alert-danger ng-hide alert-reg-position"
+                                 ng-show="merchant_exist_error"
+                                 role="alert">
+                                <!--todo refactor link into constand-->
+                                {{ 'MERCHANT.CREATE.MERCHANTALREADYSTORED' | translate }}
+                                <a href="#/merchant">Click here</a> to view the previously created merchant.
+                            </div>
+                        </div>
+                        <div class="col-md-12 col-lg-6 col-lg-offset-3">
+                            <div class="alert alert-success alert-reg-position form-submit-success"
+                                 ng-show="tax.sales_tax.success"
+                                 role="alert">
+                                <i class="fa fa-check-circle" aria-hidden="true"></i> {{ 'MERCHANT.CREATE.MERCHANTCREATED' | translate }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12">
+                        <div ng-show="new_merchant.processing" class="form-loader">
+                            <div class="line"></div>
+                            <div class="line"></div>
+                            <div class="line"></div>
+                            <div class="line"></div>
+                        </div>
+                    </div>
+
+                    <div class="submit-contain pull-right">
+                        <button id="submit-create-merchant" class='btn-success btn'>{{ 'MESSAGE.SHARE.SUBMIT' | translate }}</button>
+                    </div>
+                </form>
+            </div><!-- panel-body -->
+        </div> <!-- panel -->
+    </div> <!-- col-->
+
+    <div class="col-md-6">
+        <div class="panel panel-primary">
+            <div class="panel-heading flex-justify-content-space-between">
+                <h3 class="panel-title">Upload Multiple Merchants</h3>
+
+                <div class="pull-right">
+                    <form method="get" action="/example_multi_merchant_create.csv">
+
+                        <button class="btn btn-danger" type="submit">CSV Example</button>
+
+
+                    </form>
+                </div>
+
+            </div>
+            <div class="panel-body">
+                <form name="upload_multiple_merchants_form" class="form-horizontal" novalidate ng-submit="uploadMultipleMerchants()">
+                    <div class="form-group" ng-if="can_select_brands">
+                        <label class="col-md-3 control-label">Brand</label>
+                        <div class="col-md-9">
+                            <div class="select input-large margin-top-five">
+                                <select name="multi_brand" class="form-control"
+                                        ng-model="multi_merchant_create.brand"
+                                        ng-show="user_service.hasPermission('brands_filter')" ng-required="user_service.hasPermission('brands_filter')"
+                                        ng-options="brand.brand_id as brand.brand_name for brand in brands">
+                                    <option class="placeholder-color" value="" selected disabled>{{ 'MERCHANT.CREATE.BRAND' | translate }}</option>
+                                </select></div>
+
+                            <div class="input-large alert alert-danger ng-hide alert-reg-position"
+                                 ng-show="upload_multiple_merchants_form.multi_brand.$error.required
+                                 && (upload_multiple_merchants_form.multi_brand.$faded || submit_multi)"
+                                 role="alert">
+                                {{ 'MERCHANT.CREATE.BRANDREQUIRED' | translate }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-3 control-label">CSV Merchant File</label>
+                        <div class="col-md-9 col-lg-6 mt-5">
+                            <div class="select input-x-large margin-top-five">
+                                <button type="button" ng-show="!file_selected" ng-disabled class='btn-success btn' data-toggle="modal"
+                                        data-target="#select-file-modal">
+                                    Select CSV File
+                                </button>
+                                <button type="button" ng-show="file_selected" ng-disabled class='btn-success btn' data-toggle="modal"
+                                        data-target="#select-file-modal">
+                                    Change Selected File
+                                </button>
+                            </div>
+                        </div>
+                        <div class="col-md-3"></div>
+                        <div class="col-md-9">
+                            <div class="input-large alert alert-danger ng-hide alert-reg-position"
+                                 ng-show="!multi_file_selected && submit_multi"
+                                 role="alert">
+                                You must select file.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12">
+                        <div ng-show="new_merchant.multi_processing" class="form-loader">
+                            <div class="line"></div>
+                            <div class="line"></div>
+                            <div class="line"></div>
+                            <div class="line"></div>
+                        </div>
+                    </div>
+
+                    <div class="submit-contain pull-right">
+                        <button class='btn-success btn'>Submit</button>
+                    </div>
+                </form>
+            </div><!-- panel-body -->
+        </div> <!-- panel -->
+    </div> <!-- col-->
+</div>
+
+
+<div id="select-file-modal" class="modal fade" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Select CSV File</h4>
+            </div>
+            <div class="modal-body">
+                <div class="col-md-12" ng-show="image_stage == 'processing'">
+                    <div class="filter-loader-contain">
+                        <div class="filter-loader"></div>
+                    </div>
+                </div>
+
+                <form name="csv_file_form" class="skin-config-img">
+                    <div ngf-drop ngf-select ng-model="csv_file" class="drop-box site-image-drop-box"
+                         ngf-max-size="5MB" ngf-drag-over-class="'dragover'" ngf-multiple="true"
+                         ngf-allow-dir="true" ngf-pattern="'.csv'"
+                         accept=".csv">
+                        Drop csv file here or click to upload
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" ng-disabled class="btn btn-default" data-dismiss="modal">
+                    Cancel
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

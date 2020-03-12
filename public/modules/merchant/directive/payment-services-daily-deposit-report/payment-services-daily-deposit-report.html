@@ -1,0 +1,41 @@
+<div class="col-md-12">
+    <div class="panel panel-primary">
+        <div class="panel-heading flex-init flex-justify-content-space-between" ng-click="searchParams.load_report = true">
+            <h3 class="panel-title">Bank Deposits</h3>
+        </div>
+        <div class="panel-body">
+            <div id="Merchant-Filter">
+                <paginated-table container-id="'payment-services-daily-deposit-results-table'"
+                                 field-names="fieldNames" params="searchParams"
+                                 endpoint-string="'/merchant/payment/daily_deposit_report'">
+                    <content-responsive>
+                        <div class="panel panel-body row-table">
+                            <div class="name">
+                                <h5 class="dark-grey"><b>{{$parent.item.report_date}}</b></h5>
+                            </div>
+
+                            <div class="id">
+                                <h5 class="dark-grey id-title">{{ 'MESSAGE.SHARE.MERCHANTID' | translate }}
+                                    <span
+                                            class="id-number">{{$parent.item.merchant_id}}</span>
+                                </h5>
+                            </div>
+                            <div class="description">
+                                <div class="clear">
+                                    <b>{{ 'MESSAGE.SHARE.DISPLAYNAME' | translate }}:</b>
+                                    {{$parent.item.display_name}}
+                                </div>
+                                <div class="clear merchant-address">
+                                    {{$parent.item.address1}}
+                                </div>
+                                <div>
+                                    <b>{{ 'MERCHANT.LIST.PHONEDOTS' | translate }}</b> {{$parent.item.phone_no}}
+                                </div>
+                            </div>
+                        </div>
+                    </content-responsive>
+                </paginated-table>
+            </div>
+        </div>
+    </div>
+</div>

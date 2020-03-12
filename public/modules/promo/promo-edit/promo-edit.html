@@ -1,0 +1,515 @@
+<div class="row">
+    <div class="col-sm-12">
+        <div class="page-header-title">
+            <h4 class="page-title">Edit Promo</h4>
+            <ol class="breadcrumb">
+                <li><a href="#/">Home</a></li>
+            </ol>
+        </div>
+    </div>
+</div>
+
+<div class="row promo-edit-view promo-views">
+    <!-- Basic example -->
+    <div class="col-md-7">
+        <div class="panel panel-primary">
+            <div class="panel-heading"><h3 class="panel-title">Edit Promo #
+                {{edit_promo.promo_data.promo_id}}</h3></div>
+            <div class="panel-body">
+                <form name="edit_promo.update_promo_form" class="form-horizontal" novalidate
+                      ng-submit="edit_promo.updatePromo()">
+                    <div class="form-group">
+                        <label class="col-md-3 col-lg-3 control-label">Description</label>
+                        <div class="col-md-9 col-lg-9">
+                            <input type="text" class="input-large form-control" name="description"
+                                   placeholder="For Your Reference"
+                                   ng-model="edit_promo.promo_data.description" ng-fade ng-required="true">
+                            <div class="input-large alert alert-danger ng-hide alert-reg-position"
+                                 ng-show="edit_promo.edit_form.description.$error.required
+                                 && (edit_promo.edit_form.description.$faded || edit_promo.promo_data.submit)"
+                                 role="alert">
+                                Description is required.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-3 col-lg-3 control-label">Active</label>
+                        <div class="col-md-9 col-lg-9 m-t-5">
+                            <toggle-switch class="fix-margin2" name="active"
+                                           ng-model="edit_promo.promo_data.active"></toggle-switch>
+                        </div>
+                    </div>
+
+                    <date-range-to-from-picker saved-start-date="edit_promo.promo_data.start_date"
+                                               saved-end-date="edit_promo.promo_data.end_date"
+                                               loaded-dates="true" set-initial-dates="edit_promo"
+                                               date-options="edit_promo.date_options"
+                                               on-period-changed="edit_promo.onPeriodChanged(startDate, endDate)"></date-range-to-from-picker>
+
+                    <div class="form-group">
+                        <label class="col-md-3 col-lg-3 control-label">First Order</label>
+                        <div class="col-md-9 col-lg-9 m-t-5">
+                            <toggle-switch name="valid_on_first_order_only"
+                                           ng-model="edit_promo.promo_data.valid_on_first_order_only"></toggle-switch>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-3 col-lg-3 control-label">Order Type</label>
+                        <div class="col-md-9 col-lg-9">
+                            <select name="order_type" class="form-control input-large margin-top-five"
+                                    ng-change="edit_promo.loadMenuOptions(edit_promo.promo_data.brand)"
+                                    ng-model="edit_promo.promo_data.order_type"
+                                    ng-fade
+                                    ng-options="order_type.code as order_type.value for order_type in edit_promo.order_types">
+                                <option class="placeholder-color" value="" selected disabled>Order Type</option>
+                            </select>
+                            <div class="input-large alert alert-danger ng-hide alert-reg-position"
+                                 ng-show="edit_promo.edit_form.order_type.$error.required
+                                 && (edit_promo.edit_form.order_type.$faded || edit_promo.promo_data.submit)"
+                                 role="alert">
+                                Order Type is required.
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--<div class="form-group">-->
+                    <!--<label class="col-md-3 col-lg-3 control-label">Uses Per Customer</label>-->
+                    <!--<div class="col-md-9 col-lg-9">-->
+                    <!--<toggle-switch class="fix-margin" style="margin-top: 2px;" name="customer_uses" ng-model="edit_promo.promo_data.customer_uses" ></toggle-switch>-->
+                    <!--<div ng-show="!edit_promo.promo_data.customer_uses" class="secondary-text m-t-5">-->
+                    <!--Leave Off for Unlimited Customer Uses</div>-->
+
+                    <!--<input type="number" class="m-t-5 input-med form-control"-->
+                    <!--name="max_use" placeholder="Enter Max Uses" min="1" max="1000"-->
+                    <!--ng-max="1000" ng-min="1"-->
+                    <!--ng-model="edit_promo.promo_data.max_use" ng-show="edit_promo.promo_data.customer_uses" ng-fade ng-required="edit_promo.promo_data.customer_uses">-->
+
+                    <!--<div class="input-med alert alert-danger ng-hide alert-reg-position"-->
+                    <!--ng-show="(edit_promo.edit_form.max_use.$error.required || edit_promo.edit_form.max_use.$error.number)-->
+                    <!--&& (edit_promo.edit_form.max_use.$faded || edit_promo.promo_data.submit)"-->
+                    <!--role="alert">-->
+                    <!--If turned on, a value for the number of customer total uses is required.-->
+                    <!--</div>-->
+                    <!--</div>-->
+                    <!--</div>-->
+
+                    <div class="form-group">
+                        <label class="col-md-3 col-lg-3 control-label">Max Uses Per Campaign</label>
+                        <div class="col-md-9 col-lg-9">
+                            <toggle-switch class="fix-margin" name="campaign_uses"
+                                           ng-model="edit_promo.promo_data.campaign_uses"></toggle-switch>
+                            <div ng-show="!edit_promo.promo_data.campaign_uses" class="secondary-text m-t-5">
+                                Maximum promo redemptions by all users collectively. (Example: I only want this Promo
+                                used100 times.) Leave off if you do not want to limit the number of collective
+                                redemptions
+                            </div>
+
+                            <input type="number" class="m-t-5 input-med form-control"
+                                   name="max_redemptions" placeholder="Enter Max Uses" min="0" max="1000"
+                                   ng-max="1000" ng-min="0"
+                                   ng-model="edit_promo.promo_data.max_redemptions"
+                                   ng-show="edit_promo.promo_data.campaign_uses" ng-fade
+                                   ng-required="edit_promo.promo_data.campaign_uses">
+
+                            <div class="input-med alert alert-danger ng-hide alert-reg-position"
+                                 ng-show="(edit_promo.edit_form.max_redemptions.$error.required || edit_promo.edit_form.max_redemptions.$error.number)
+                                 && (edit_promo.edit_form.max_redemptions.$faded || edit_promo.promo_data.submit)"
+                                 role="alert">
+                                If turned on, a value for the number of campaign total uses is required.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group" ng-show="new_promo.promo_data.promo_type == 1">
+                        <label class="col-md-3 col-lg-3 control-label">Max Amount Off</label>
+                        <div class="col-md-9 col-lg-9">
+                            <input type="text" class="input-med form-control" name="max_amount_off" placeholder="$$"
+                                   currency-format
+                                   ng-model="edit_promo.promo_data.max_amount_off" amount="edit_promo.promo_data.max"
+                                   ng-fade>
+                            <!--<div class="input-med alert alert-danger ng-hide alert-reg-position"-->
+                            <!--ng-show="edit_promo.edit_form.max_amount_off.$error.required-->
+                            <!--&& (edit_promo.edit_form.max_amount_off.$faded || edit_promo.promo_data.submit)"-->
+                            <!--role="alert">-->
+                            <!--Max Amount Off is Required.-->
+                            <!--</div>-->
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-3 col-lg-3 control-label">Multiple Uses Per Order</label>
+                        <div class="col-md-9 col-lg-9 m-t-5">
+                            <toggle-switch class="fix-margin2" name="allow_multiple_use_per_order"
+                                           ng-model="edit_promo.promo_data.allow_multiple_use_per_order"></toggle-switch>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-3 col-lg-3 control-label">Min Order Amount</label>
+                        <div class="col-md-9 col-lg-9">
+                            <input type="text" class="input-med form-control" name="qualifying_amt"
+                                   placeholder="Qualifying Cart Subtotal"
+                                   ng-model="edit_promo.promo_data.qualifying_amt"
+                                   amount="edit_promo.promo_data.qualifying_amt" -format ng-fade>
+                            <!--<div class="input-med alert alert-danger ng-hide alert-reg-position"-->
+                            <!--ng-show="edit_promo.edit_form.qualifying_amt.$error.required-->
+                            <!--&& (edit_promo.edit_form.qualifying_amt.$faded || edit_promo.promo_data.submit)"-->
+                            <!--role="alert">-->
+                            <!--Minimum Order Amount is Required.-->
+                            <!--</div>-->
+                        </div>
+                    </div>
+
+                    <div ng-show="edit_promo.promo_data.fixed_amount_off > 0" class="form-group">
+                        <label class="col-md-3 col-lg-3 control-label">Dollars Off</label>
+                        <div class="col-md-9 col-lg-9">
+                            <input type="text" class="input-med form-control" name="qualifying_amt"
+                                   placeholder="Dollars Off"
+                                   ng-model="edit_promo.promo_data.fixed_amount_off" ng-fade>
+                            <!--<div class="input-med alert alert-danger ng-hide alert-reg-position"-->
+                            <!--ng-show="edit_promo.edit_form.qualifying_amt.$error.required-->
+                            <!--&& (edit_promo.edit_form.qualifying_amt.$faded || edit_promo.promo_data.submit)"-->
+                            <!--role="alert">-->
+                            <!--Minimum Order Amount is Required.-->
+                            <!--</div>-->
+                        </div>
+                    </div>
+
+                    <div class="form-group" ng-show="edit_promo.promo_data.percent_off > 0">
+                        <label class="col-md-3 col-lg-3 control-label">Percent Off</label>
+                        <div class="col-md-9 col-lg-9">
+                            <input type="text" class="input-med form-control" name="qualifying_amt"
+                                   placeholder="Dollars Off"
+                                   ng-model="edit_promo.promo_data.percent_off" ng-fade>
+                            <!--<div class="input-med alert alert-danger ng-hide alert-reg-position"-->
+                            <!--ng-show="edit_promo.edit_form.qualifying_amt.$error.required-->
+                            <!--&& (edit_promo.edit_form.qualifying_amt.$faded || edit_promo.promo_data.submit)"-->
+                            <!--role="alert">-->
+                            <!--Minimum Order Amount is Required.-->
+                            <!--</div>-->
+                        </div>
+                    </div>
+
+                    <div class="form-group" ng-show="edit_promo.promo_data.promo_type == 1">
+                        <label class="col-md-3 col-lg-3 control-label">Discount Type</label>
+                        <div class="col-md-9 col-lg-9">
+                            <select name="discount_type" class="form-control input-large margin-top-five"
+                                    ng-model="edit_promo.promo_data.discount_type" ng-fade
+                                    ng-change="edit_promo.zeroOutUnselectedDiscountTypes()"
+                                    ng-options="discount_type.code as discount_type.value for discount_type in edit_promo.discount_types">
+                                <option class="placeholder-color" value="" selected disabled>Discount Type</option>
+                            </select>
+                        </div>
+                    </div>
+
+
+                    <div class="form-group"
+                         ng-show="(edit_promo.promo_data.promo_type == 1 && edit_promo.promo_data.discount_type == 'percent_off') || edit_promo.promo_data.promo_type == 300">
+                        <label class="col-md-3 col-lg-3 control-label">% Off</label>
+                        <div class="col-md-9 col-lg-9">
+                            <input type="number" class="input-med form-control" name="percent_off"
+                                   placeholder="Enter Promo % Off" min="0" max="1000"
+                                   ng-max="1000" ng-min="0"
+                                   ng-model="edit_promo.promo_data.percent_off" ng-fade
+                                   ng-required="edit_promo.promo_data.discount_type == 'percent_off' || edit_promo.promo_data.promo_type == 300">
+                            <div class="input-med alert alert-danger ng-hide alert-reg-position"
+                                 ng-show="edit_promo.update_promo_form.percent_off.$error.required
+                                 && (edit_promo.update_promo_form.percent_off.$faded || edit_promo.promo_data.submit)"
+                                 role="alert">
+                                Percent Off is Required.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group"
+                         ng-show="edit_promo.promo_data.promo_type == 1 && edit_promo.promo_data.discount_type == 'dollars_off'">
+                        <label class="col-md-3 col-lg-3 control-label">Dollars Off</label>
+                        <div class="col-md-9 col-lg-9">
+                            <input class="input-med form-control" name="promo_amt" placeholder="Enter Promo $ Off"
+                                   amount="edit_promo.promo_data.promo_amt"
+                                   ng-model="edit_promo.promo_data.promo_amt" ng-fade
+                                   ng-required="edit_promo.promo_data.discount_type == 'promo_amt'">
+                            <div class="input-med alert alert-danger ng-hide alert-reg-position"
+                                 ng-show="edit_promo.update_promo_form.promo_amt.$error.required
+                                 && (edit_promo.update_promo_form.promo_amt.$faded || edit_promo.promo_data.submit)"
+                                 role="alert">
+                                Dollars Off is Required.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group" ng-show="edit_promo.promo_data.qualifying_object_name_list.length > 0">
+                        <label class="col-md-3 col-lg-3 control-label">Qualifying Menu Objects</label>
+                        <div class="col-md-9 col-lg-9 m-t-5">
+                            {{edit_promo.utility.convertArrayToGrammarList(edit_promo.promo_data.qualifying_object_name_list)}}
+                        </div>
+                    </div>
+
+                    <div class="form-group" ng-show="edit_promo.promo_data.promotional_object_name_list.length > 0">
+                        <label class="col-md-3 col-lg-3 control-label">Promo Menu Objects</label>
+                        <div class="col-md-9 col-lg-9 m-t-5">
+                            {{edit_promo.utility.convertArrayToGrammarList(edit_promo.promo_data.promotional_object_name_list)}}
+                        </div>
+                    </div>
+
+                    <div class="form-group" ng-repeat="promo_message in edit_promo.promo_data.promo_messages_to_edit">
+                        <label class="col-md-3 col-lg-3 control-label">Message {{promo_message.number}}</label>
+                        <div class="col-md-9 col-lg-9">
+                            <textarea class="form-control" rows="3" maxlength="255" name="promo_message"
+                                      ng-model="promo_message.text"></textarea>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div ng-show="edit_promo.promo_data.processing" class="form-loader">
+                            <div class="line"></div>
+                            <div class="line"></div>
+                            <div class="line"></div>
+                            <div class="line"></div>
+                        </div>
+                    </div>
+                    <div class="submit-contain pull-right">
+                        <button type="button" class="btn btn-default m-r-10" back-button>Cancel</button>
+                        <button class='btn-success btn'>Submit</button>
+                    </div>
+                </form>
+            </div><!-- panel-body -->
+        </div> <!-- panel -->
+    </div> <!-- col-->
+
+    <div class="col-md-5">
+        <div class="panel panel-primary">
+            <div class="panel-heading"><h3 class="panel-title">Edit Promo Keywords</h3></div>
+            <div class="panel-body">
+                <table class="table table-hover m-t-30 content-table">
+                    <thead>
+                    <tr>
+
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="promo_keyword in edit_promo.promo_data.promo_key_words">
+                        <td>
+                            {{promo_keyword.promo_key_word}}
+                        </td>
+                        <td class="delete-icon" style="padding: 0px;">
+                            <i class="fa fa-times" aria-hidden="true"
+                               ng-click="edit_promo.deletePromoKeywordDialog(promo_keyword, $index)"></i>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <div class="submit-contain flex-init flex-justify-content-end">
+                    <button id="open-delivery-zone-create" type="button" ng-disabled
+                            class="btn btn-soft-blue pull-right"
+                            data-toggle="modal" data-target="#add-promo-keyword-modal">
+                        <i class="fa fa-plus" aria-hidden="true"></i>
+                        Add Promo Keyword
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-5" ng-show="edit_promo.userService.hasPermission('multi_merchs_filter')">
+        <div class="panel panel-primary">
+            <div class="panel-heading"><h3 class="panel-title">Edit Promo Merchants</h3></div>
+            <div class="panel-body">
+                <div class="form-group">
+                    <input type="text" class="input-med form-control m-r-10" name="merchants_filter"
+                           ng-model="edit_promo.merchant_search_text" ng-fade
+                           placeholder="Filter">
+                </div>
+                <div class="row">
+                    <div class="col-md-12 merchant-scroll-contain">
+                        <table class="table table-hover">
+                            <tbody>
+                            <tr ng-repeat="merchant in edit_promo.promo_data.promo_merchant_maps | filter: edit_promo.selectedMerchantFilter">
+                                <td>
+                                    <i class="fa fa-minus-circle" aria-hidden="true"></i>
+                                </td>
+                                <td>{{merchant.full_merchant.merchant_id}}</td>
+                                <td>{{merchant.full_merchant.name}}</td>
+                                <td>
+                                    {{merchant.full_merchant.address1}}<BR>
+                                    {{merchant.full_merchant.city}}, {{merchant.full_merchant.state}}
+                                    {{merchant.full_merchant.zip}}
+                                </td>
+                                <td class="delete-icon" style="padding: 0px; margin-top: 6px">
+                                    <i class="fa fa-times" aria-hidden="true"
+                                       ng-click="edit_promo.deletePromoMerchant(merchant, $index)"></i>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="submit-contain flex-init flex-justify-content-end">
+                    <button id="open-add-merchant-dialog" type="button" ng-disabled class="btn btn-soft-blue pull-right"
+                            data-toggle="modal" data-target="#add-merchant-select-modal">
+                        <i class="fa fa-plus" aria-hidden="true"></i>
+                        Add Merchant
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-5">
+        <div class="panel panel-primary">
+            <div class="panel-heading"><h3 class="panel-title">Promo Stats</h3></div>
+            <div class="panel-body">
+                <table class="table table-hover">
+                    <thead>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>
+                            <strong>Total Uses</strong>
+                        </td>
+                        <td>
+                            {{edit_promo.promo_data.current_number_of_redemptions}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <strong>Total Discounted Amount</strong>
+                        </td>
+                        <td>
+                            ${{edit_promo.promo_data.current_dollars_spent}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <strong>Total Cart Sales</strong>
+                        </td>
+                        <td>
+                            ${{edit_promo.promo_data.total_cart_amounts}}
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="add-promo-keyword-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <form name="edit_promo.add_promo_keyword_form" novalidate ng-submit="edit_promo.addKeyword()">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title">Add Keyword</h4>
+                </div>
+                <div class="modal-body">
+                    <input type="text" class="input-med form-control" name="new_promo_keyword"
+                           placeholder="Enter Keyword"
+                           ng-model="edit_promo.new_promo_keyword"
+                           ng-fade="true"
+                           ng-required="true">
+                    <div class="alert alert-danger alert-reg-position ng-hide"
+                         ng-show="edit_promo.add_promo_keyword_form.new_promo_keyword.$error.required
+                         && (edit_promo.add_promo_keyword_form.new_promo_keyword.$faded || edit_promo.add_promo_keyword_form.new_promo_keyword.$submitted)">
+                        Keyword cannot be blank.
+                    </div>
+
+                    <div class="input-large alert alert-danger ng-hide alert-reg-position"
+                         ng-show="edit_promo.add_promo_keyword_form.keywords.$error.key_word_new
+                                 && (edit_promo.add_promo_keyword_form.keywords.$faded || edit_promo.add_promo_keyword_form.new_promo_keyword.$submitted)"
+                         role="alert">
+                        {{new_promo.key_word_date_error}}
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" ng-disabled class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <button class="btn btn-danger">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<div id="add-merchant-select-modal" class="modal fade" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Add Merchant</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <div class="col-md-9 col-lg-9">
+                        <label for="search_text">Filter</label>
+                        <input type="text" class="input-large form-control"
+                               name="search_text" placeholder=""
+                               ng-model="edit_promo.add_merchant_filter_text" ng-required="true">
+                    </div>
+
+                    <div class="row">
+                        <div class="col-xs-12 create-promo-view">
+                            <div class="filter-loader-contain"
+                                 ng-show="edit_promo.merchantSearchService.selectable_merchants.length == 0">
+                                All brand merchants are already tied to promo.
+                            </div>
+                            <div class="m-t-20 table-fixed-with-scroll">
+                                <table class="content-table table table-hover"
+                                       ng-show="edit_promo.merchantSearchService.selectable_merchants.length > 0">
+                                    <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Name</th>
+                                        <th>Address</th>
+                                        <th>City</th>
+                                        <th>State</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr ng-repeat="merchant in edit_promo.merchantSearchService.selectable_merchants | filter: edit_promo.selectableMerchantFilter"
+                                        ng-click="edit_promo.addMerchant(merchant)">
+                                        <td>{{merchant.merchant_id}}</td>
+                                        <td>{{merchant.name}}</td>
+                                        <td>{{merchant.address1}}</td>
+                                        <td>{{merchant.city}}</td>
+                                        <td>{{merchant.state}}</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+
+                                <div class="content-responsive">
+                                    <div ng-repeat="merchant in edit_promo.merchantSearchService.selectable_merchants | filter: edit_promo.selectableMerchantFilter"
+                                         ng-click="edit_promo.addMerchant(merchant)">
+                                        <div class="panel panel-body row-table">
+                                            <div class="name">
+                                                <h5 class="dark-grey"><b>{{merchant.name}}</b></h5>
+                                            </div>
+                                            <div class="id">
+                                                <h5 class="dark-grey id-title">Merchant ID <span class="id-number">{{merchant.merchant_id}}</span>
+                                                </h5>
+                                            </div>
+                                            <div class="description clear">
+                                                <div class="merchant-address">
+                                                    {{merchant.address1}} {{merchant.city}}, {{merchant.state}}
+                                                    {{merchant.zip}}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" ng-disabled class="btn btn-default" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
